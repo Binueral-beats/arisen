@@ -73,7 +73,7 @@ After `docker-compose up -d`, two services named `aosd` and `awallet` will be st
 You can run the `arisecli` commands via a bash alias.
 
 ```bash
-alias arisecli='docker-compose exec awallet /opt/arisen/bin/arisecli -u http://aosd:12618 --wallet-url http://localhost:8900'
+alias arisecli='docker-compose exec awallet /opt/arisen/bin/arisecli -u http://aosd:12618 --wallet-url http://localhost:6621'
 arisecli get info
 arisecli get account inita
 ```
@@ -154,7 +154,7 @@ services:
 
   awallet:
     image: arisen/arisen:latest
-    command: /opt/arisen/bin/awallet --wallet-dir /opt/arisen/bin/data-dir --http-server-address=127.0.0.1:8900 --http-alias=localhost:8900 --http-alias=awallet:8900
+    command: /opt/arisen/bin/awallet --wallet-dir /opt/arisen/bin/data-dir --http-server-address=127.0.0.1:6621 --http-alias=localhost:6621 --http-alias=awallet:6621
     hostname: awallet
     links:
       - aosd
