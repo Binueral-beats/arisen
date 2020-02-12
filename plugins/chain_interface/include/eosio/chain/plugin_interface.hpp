@@ -1,19 +1,19 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
 #include <appbase/channel.hpp>
 #include <appbase/method.hpp>
 
-#include <eosio/chain/block.hpp>
-#include <eosio/chain/block_state.hpp>
-#include <eosio/chain/transaction_metadata.hpp>
-#include <eosio/chain/trace.hpp>
+#include <arisen/chain/block.hpp>
+#include <arisen/chain/block_state.hpp>
+#include <arisen/chain/transaction_metadata.hpp>
+#include <arisen/chain/trace.hpp>
 
-namespace eosio { namespace chain { namespace plugin_interface {
-   using namespace eosio::chain;
+namespace arisen { namespace chain { namespace plugin_interface {
+   using namespace arisen::chain;
    using namespace appbase;
 
    template<typename T>

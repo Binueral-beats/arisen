@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/transaction.hpp>
-#include <eosio/chain/contract_table_objects.hpp>
+#include <arisen/chain/controller.hpp>
+#include <arisen/chain/transaction.hpp>
+#include <arisen/chain/contract_table_objects.hpp>
 #include <fc/utility.hpp>
 #include <sstream>
 #include <algorithm>
@@ -13,7 +13,7 @@
 
 namespace chainbase { class database; }
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 class controller;
 class transaction_context;
@@ -594,6 +594,6 @@ class apply_context {
 
 using apply_handler = std::function<void(apply_context&)>;
 
-} } // namespace eosio::chain
+} } // namespace arisen::chain
 
-//FC_REFLECT(eosio::chain::apply_context::apply_results, (applied_actions)(deferred_transaction_requests)(deferred_transactions_count))
+//FC_REFLECT(arisen::chain::apply_context::apply_results, (applied_actions)(deferred_transaction_requests)(deferred_transactions_count))

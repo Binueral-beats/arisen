@@ -11,7 +11,7 @@ import re
 
 ###############################################################
 # nodeos_run_test
-# --dump-error-details <Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
+# --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
 
@@ -54,7 +54,7 @@ try:
         pnodes=4
         if cluster.launch(pnodes=pnodes, totalNodes=pnodes) is False:
             cmdError("launcher")
-            errorExit("Failed to stand up eos cluster.")
+            errorExit("Failed to stand up rsn cluster.")
     else:
         walletMgr.killall(allInstances=killAll)
         walletMgr.cleanup()
@@ -64,7 +64,7 @@ try:
         print("Stand up walletd")
         if walletMgr.launch() is False:
             cmdError("%s" % (WalletdName))
-            errorExit("Failed to stand up eos walletd.")
+            errorExit("Failed to stand up rsn walletd.")
 
     Print("Validating system accounts after bootstrap")
     cluster.validateAccounts(None)
@@ -122,7 +122,7 @@ try:
     Print("Validating accounts before user accounts creation")
     cluster.validateAccounts(None)
 
-    # create accounts via eosio as otherwise a bid is needed 
+    # create accounts via arisen as otherwise a bid is needed 
     Print("Create new account %s via %s" % (testeraAccount.name, cluster.eosioAccount.name))
     transId=node.createInitializeAccount(testeraAccount, cluster.eosioAccount, stakedDeposit=0, waitForTransBlock=False, exitOnError=True)
 
@@ -211,17 +211,17 @@ try:
     Print("Bouncing nodes #00 and #01")
     if cluster.bounce("00,01") is False:
         cmdError("launcher bounce")
-        errorExit("Failed to bounce eos node.")
+        errorExit("Failed to bounce rsn node.")
 
     Print("Taking down node #02")
     if cluster.down("02") is False:
         cmdError("launcher down command")
-        errorExit("Failed to take down eos node.")
+        errorExit("Failed to take down rsn node.")
 
     Print("Using bounce option to re-launch node #02")
     if cluster.bounce("02") is False:
         cmdError("launcher bounce")
-        errorExit("Failed to bounce eos node.")
+        errorExit("Failed to bounce rsn node.")
 
     p = re.compile('Assert')
     errFileName="var/lib/node_00/stderr.txt"

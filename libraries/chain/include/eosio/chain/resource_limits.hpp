@@ -1,12 +1,12 @@
 #pragma once
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/snapshot.hpp>
+#include <arisen/chain/exceptions.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/chain/config.hpp>
+#include <arisen/chain/snapshot.hpp>
 #include <chainbase/chainbase.hpp>
 #include <set>
 
-namespace eosio { namespace chain { namespace resource_limits {
+namespace arisen { namespace chain { namespace resource_limits {
    namespace impl {
       template<typename T>
       struct ratio {
@@ -99,8 +99,8 @@ namespace eosio { namespace chain { namespace resource_limits {
       private:
          chainbase::database& _db;
    };
-} } } /// eosio::chain
+} } } /// arisen::chain
 
-FC_REFLECT( eosio::chain::resource_limits::account_resource_limit, (used)(available)(max) )
-FC_REFLECT( eosio::chain::resource_limits::ratio, (numerator)(denominator))
-FC_REFLECT( eosio::chain::resource_limits::elastic_limit_parameters, (target)(max)(periods)(max_multiplier)(contract_rate)(expand_rate))
+FC_REFLECT( arisen::chain::resource_limits::account_resource_limit, (used)(available)(max) )
+FC_REFLECT( arisen::chain::resource_limits::ratio, (numerator)(denominator))
+FC_REFLECT( arisen::chain::resource_limits::elastic_limit_parameters, (target)(max)(periods)(max_multiplier)(contract_rate)(expand_rate))

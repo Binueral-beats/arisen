@@ -38,7 +38,7 @@ testSuccessful=False
 def runNodeosAndGetOutput(myTimeout=3):
     """Startup nodeos, wait for timeout (before forced shutdown) and collect output. Stdout, stderr and return code are returned in a dictionary."""
     Print("Launching nodeos process.")
-    cmd="programs/nodeos/nodeos --config-dir etc/eosio/node_bios --data-dir var/lib/node_bios --verbose-http-errors --http-validate-host=false"
+    cmd="programs/nodeos/nodeos --config-dir etc/arisen/node_bios --data-dir var/lib/node_bios --verbose-http-errors --http-validate-host=false"
     Print("cmd: %s" % (cmd))
     proc=subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if debug: Print("Nodeos process launched.")
@@ -75,7 +75,7 @@ try:
 
     Print("Stand up cluster")
     if cluster.launch(pnodes=pnodes, totalNodes=total_nodes, topo=topo, delay=delay, dontBootstrap=True) is False:
-        errorExit("Failed to stand up eos cluster.")
+        errorExit("Failed to stand up rsn cluster.")
 
     node=cluster.getNode(0)
 

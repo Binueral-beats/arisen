@@ -1,17 +1,17 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/database_utils.hpp>
-#include <eosio/chain/contract_types.hpp>
-#include <eosio/chain/multi_index_includes.hpp>
+#include <arisen/chain/database_utils.hpp>
+#include <arisen/chain/contract_types.hpp>
+#include <arisen/chain/multi_index_includes.hpp>
 
 #include <array>
 #include <type_traits>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    /**
     * @brief The table_id_object class tracks the mapping of (scope, code, table) to an opaque identifier
@@ -286,25 +286,25 @@ namespace config {
 
 } // namespace config
 
-} }  // namespace eosio::chain
+} }  // namespace arisen::chain
 
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::table_id_object, eosio::chain::table_id_multi_index)
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::key_value_object, eosio::chain::key_value_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::table_id_object, arisen::chain::table_id_multi_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::key_value_object, arisen::chain::key_value_index)
 
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::index64_object, eosio::chain::index64_index)
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::index128_object, eosio::chain::index128_index)
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::index256_object, eosio::chain::index256_index)
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::index_double_object, eosio::chain::index_double_index)
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::index_long_double_object, eosio::chain::index_long_double_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::index64_object, arisen::chain::index64_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::index128_object, arisen::chain::index128_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::index256_object, arisen::chain::index256_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::index_double_object, arisen::chain::index_double_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::index_long_double_object, arisen::chain::index_long_double_index)
 
-FC_REFLECT(eosio::chain::table_id_object, (code)(scope)(table)(payer)(count) )
-FC_REFLECT(eosio::chain::key_value_object, (primary_key)(payer)(value) )
+FC_REFLECT(arisen::chain::table_id_object, (code)(scope)(table)(payer)(count) )
+FC_REFLECT(arisen::chain::key_value_object, (primary_key)(payer)(value) )
 
 #define REFLECT_SECONDARY(type)\
   FC_REFLECT(type, (primary_key)(payer)(secondary_key) )
 
-REFLECT_SECONDARY(eosio::chain::index64_object)
-REFLECT_SECONDARY(eosio::chain::index128_object)
-REFLECT_SECONDARY(eosio::chain::index256_object)
-REFLECT_SECONDARY(eosio::chain::index_double_object)
-REFLECT_SECONDARY(eosio::chain::index_long_double_object)
+REFLECT_SECONDARY(arisen::chain::index64_object)
+REFLECT_SECONDARY(arisen::chain::index128_object)
+REFLECT_SECONDARY(arisen::chain::index256_object)
+REFLECT_SECONDARY(arisen::chain::index_double_object)
+REFLECT_SECONDARY(arisen::chain::index_long_double_object)

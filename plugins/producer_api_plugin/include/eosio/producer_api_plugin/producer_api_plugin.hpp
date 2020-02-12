@@ -1,15 +1,15 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/producer_plugin/producer_plugin.hpp>
-#include <eosio/http_plugin/http_plugin.hpp>
+#include <arisen/producer_plugin/producer_plugin.hpp>
+#include <arisen/http_plugin/http_plugin.hpp>
 
 #include <appbase/application.hpp>
 
-namespace eosio {
+namespace arisen {
 
 using namespace appbase;
 

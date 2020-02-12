@@ -1,15 +1,15 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
-#include <eosio/chain_plugin/chain_plugin.hpp>
-#include <eosio/http_plugin/http_plugin.hpp>
+#include <arisen/chain_plugin/chain_plugin.hpp>
+#include <arisen/http_plugin/http_plugin.hpp>
 
 #include <appbase/application.hpp>
-#include <eosio/chain/controller.hpp>
+#include <arisen/chain/controller.hpp>
 
-namespace eosio {
+namespace arisen {
 
 class login_plugin : public plugin<login_plugin> {
  public:
@@ -82,17 +82,17 @@ class login_plugin : public plugin<login_plugin> {
    unique_ptr<class login_plugin_impl> my;
 };
 
-} // namespace eosio
+} // namespace arisen
 
-FC_REFLECT(eosio::login_plugin::start_login_request_params, (expiration_time))
-FC_REFLECT(eosio::login_plugin::start_login_request_results, (server_ephemeral_pub_key))
-FC_REFLECT(eosio::login_plugin::finalize_login_request_params,
+FC_REFLECT(arisen::login_plugin::start_login_request_params, (expiration_time))
+FC_REFLECT(arisen::login_plugin::start_login_request_results, (server_ephemeral_pub_key))
+FC_REFLECT(arisen::login_plugin::finalize_login_request_params,
            (server_ephemeral_pub_key)(client_ephemeral_pub_key)(permission)(data)(signatures))
-FC_REFLECT(eosio::login_plugin::finalize_login_request_results, (digest)(recovered_keys)(permission_satisfied)(error))
+FC_REFLECT(arisen::login_plugin::finalize_login_request_results, (digest)(recovered_keys)(permission_satisfied)(error))
 
-FC_REFLECT_EMPTY(eosio::login_plugin::do_not_use_gen_r1_key_params)
-FC_REFLECT(eosio::login_plugin::do_not_use_gen_r1_key_results, (pub_key)(priv_key))
-FC_REFLECT(eosio::login_plugin::do_not_use_sign_params, (priv_key)(data))
-FC_REFLECT(eosio::login_plugin::do_not_use_sign_results, (sig))
-FC_REFLECT(eosio::login_plugin::do_not_use_get_secret_params, (pub_key)(priv_key))
-FC_REFLECT(eosio::login_plugin::do_not_use_get_secret_results, (secret))
+FC_REFLECT_EMPTY(arisen::login_plugin::do_not_use_gen_r1_key_params)
+FC_REFLECT(arisen::login_plugin::do_not_use_gen_r1_key_results, (pub_key)(priv_key))
+FC_REFLECT(arisen::login_plugin::do_not_use_sign_params, (priv_key)(data))
+FC_REFLECT(arisen::login_plugin::do_not_use_sign_results, (sig))
+FC_REFLECT(arisen::login_plugin::do_not_use_get_secret_params, (pub_key)(priv_key))
+FC_REFLECT(arisen::login_plugin::do_not_use_get_secret_results, (secret))

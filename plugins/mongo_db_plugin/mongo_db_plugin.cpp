@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/mongo_db_plugin/mongo_db_plugin.hpp>
-#include <eosio/chain/eosio_contract.hpp>
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/transaction.hpp>
-#include <eosio/chain/types.hpp>
+#include <arisen/mongo_db_plugin/mongo_db_plugin.hpp>
+#include <arisen/chain/eosio_contract.hpp>
+#include <arisen/chain/config.hpp>
+#include <arisen/chain/exceptions.hpp>
+#include <arisen/chain/transaction.hpp>
+#include <arisen/chain/types.hpp>
 
 #include <fc/io/json.hpp>
 #include <fc/log/logger_config.hpp>
@@ -35,7 +35,7 @@
 
 namespace fc { class variant; }
 
-namespace eosio {
+namespace arisen {
 
 using chain::account_name;
 using chain::action_name;
@@ -627,7 +627,7 @@ optional<abi_serializer> mongo_db_plugin_impl::get_abi_serializer( account_name 
                entry.last_accessed = fc::time_point::now();
                abi_serializer abis;
                if( n == chain::config::system_account_name ) {
-                  // redefine eosio setabi.abi from bytes to abi_def
+                  // redefine arisen setabi.abi from bytes to abi_def
                   // Done so that abi is stored as abi_def in mongo instead of as bytes
                   auto itr = std::find_if( abi.structs.begin(), abi.structs.end(),
                                            []( const auto& s ) { return s.name == "setabi"; } );
@@ -1457,7 +1457,7 @@ void mongo_db_plugin_impl::init() {
 
          try {
             // MongoDB administrators (to enable sharding) :
-            //   1. enableSharding database (default to EOS)
+            //   1. enableSharding database (default to RSN)
             //   2. shardCollection: blocks, action_traces, transaction_traces, especially action_traces
             //   3. Compound index with shard key (default to _id below), to improve query performance.
 
@@ -1557,8 +1557,8 @@ void mongo_db_plugin::set_program_options(options_description& cli, options_desc
          "If specified then only abi data pushed to mongodb until specified block is reached.")
          ("mongodb-uri,m", bpo::value<std::string>(),
          "MongoDB URI connection string, see: https://docs.mongodb.com/master/reference/connection-string/."
-               " If not specified then plugin is disabled. Default database 'EOS' is used if not specified in URI."
-               " Example: mongodb://127.0.0.1:27017/EOS")
+               " If not specified then plugin is disabled. Default database 'RSN' is used if not specified in URI."
+               " Example: mongodb://127.0.0.1:27017/RSN")
          ("mongodb-update-via-block-num", bpo::value<bool>()->default_value(false),
           "Update blocks/block_state with latest via block number so that duplicates are overwritten.")
          ("mongodb-store-blocks", bpo::value<bool>()->default_value(true),
@@ -1574,7 +1574,7 @@ void mongo_db_plugin::set_program_options(options_description& cli, options_desc
          ("mongodb-expire-after-seconds", bpo::value<uint32_t>()->default_value(0),
           "Enables expiring data in mongodb after a specified number of seconds.")
          ("mongodb-filter-on", bpo::value<vector<string>>()->composing(),
-          "Track actions which match receiver:action:actor. Receiver, Action, & Actor may be blank to include all. i.e. eosio:: or :transfer:  Use * or leave unspecified to include all.")
+          "Track actions which match receiver:action:actor. Receiver, Action, & Actor may be blank to include all. i.e. arisen:: or :transfer:  Use * or leave unspecified to include all.")
          ("mongodb-filter-out", bpo::value<vector<string>>()->composing(),
           "Do not track actions which match receiver:action:actor. Receiver, Action, & Actor may be blank to exclude all.")
          ;
@@ -1593,7 +1593,7 @@ void mongo_db_plugin::plugin_initialize(const variables_map& options)
                my->wipe_database_on_startup = true;
             } else if( options.count( "mongodb-block-start" ) == 0 ) {
                EOS_ASSERT( false, chain::plugin_config_exception, "--mongodb-wipe required with --replay-blockchain, --hard-replay-blockchain, or --delete-all-blocks"
-                                 " --mongodb-wipe will remove all EOS collections from mongodb." );
+                                 " --mongodb-wipe will remove all RSN collections from mongodb." );
             }
          }
 
@@ -1674,7 +1674,7 @@ void mongo_db_plugin::plugin_initialize(const variables_map& options)
          mongocxx::uri uri = mongocxx::uri{uri_str};
          my->db_name = uri.database();
          if( my->db_name.empty())
-            my->db_name = "EOS";
+            my->db_name = "RSN";
          my->mongo_pool.emplace(uri);
 
          // hook up to signals on controller
@@ -1704,7 +1704,7 @@ void mongo_db_plugin::plugin_initialize(const variables_map& options)
          }
          my->init();
       } else {
-         wlog( "eosio::mongo_db_plugin configured, but no --mongodb-uri specified." );
+         wlog( "arisen::mongo_db_plugin configured, but no --mongodb-uri specified." );
          wlog( "mongo_db_plugin disabled." );
       }
    } FC_LOG_AND_RETHROW()
@@ -1724,4 +1724,4 @@ void mongo_db_plugin::plugin_shutdown()
    my.reset();
 }
 
-} // namespace eosio
+} // namespace arisen

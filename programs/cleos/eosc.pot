@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ARISEN 1.0\n"
-"Report-Msgid-Bugs-To: https://github.com/ARISEN/eos/issues"
+"Report-Msgid-Bugs-To: https://github.com/ARISEN/rsn/issues"
 "POT-Creation-Date: 2017-09-28 11:40-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -136,10 +136,10 @@ msgstr ""
 msgid "the port where eosd is running"
 msgstr ""
 
-msgid "the host where eos-walletd is running"
+msgid "the host where rsn-walletd is running"
 msgstr ""
 
-msgid "the port where eos-walletd is running"
+msgid "the port where rsn-walletd is running"
 msgstr ""
 
 msgid "output verbose messages on error"
@@ -499,7 +499,7 @@ msgstr ""
 msgid "Failed to connect to eosd at ${ip}:${port}; is eosd running?"
 msgstr ""
 
-msgid "Failed to connect to eos-walletd at ${ip}:${port}; is eos-walletd running?"
+msgid "Failed to connect to rsn-walletd at ${ip}:${port}; is rsn-walletd running?"
 msgstr ""
 
 msgid "Failed to connect"

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <eosio/chain/authority.hpp>
-#include <eosio/chain/chain_config.hpp>
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/types.hpp>
+#include <arisen/chain/authority.hpp>
+#include <arisen/chain/chain_config.hpp>
+#include <arisen/chain/config.hpp>
+#include <arisen/chain/types.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
-using action_name    = eosio::chain::action_name;
+using action_name    = arisen::chain::action_name;
 
 struct newaccount {
    account_name                     creator;
@@ -154,14 +154,14 @@ struct onerror {
    }
 };
 
-} } /// namespace eosio::chain
+} } /// namespace arisen::chain
 
-FC_REFLECT( eosio::chain::newaccount                       , (creator)(name)(owner)(active) )
-FC_REFLECT( eosio::chain::setcode                          , (account)(vmtype)(vmversion)(code) )
-FC_REFLECT( eosio::chain::setabi                           , (account)(abi) )
-FC_REFLECT( eosio::chain::updateauth                       , (account)(permission)(parent)(auth) )
-FC_REFLECT( eosio::chain::deleteauth                       , (account)(permission) )
-FC_REFLECT( eosio::chain::linkauth                         , (account)(code)(type)(requirement) )
-FC_REFLECT( eosio::chain::unlinkauth                       , (account)(code)(type) )
-FC_REFLECT( eosio::chain::canceldelay                      , (canceling_auth)(trx_id) )
-FC_REFLECT( eosio::chain::onerror                          , (sender_id)(sent_trx) )
+FC_REFLECT( arisen::chain::newaccount                       , (creator)(name)(owner)(active) )
+FC_REFLECT( arisen::chain::setcode                          , (account)(vmtype)(vmversion)(code) )
+FC_REFLECT( arisen::chain::setabi                           , (account)(abi) )
+FC_REFLECT( arisen::chain::updateauth                       , (account)(permission)(parent)(auth) )
+FC_REFLECT( arisen::chain::deleteauth                       , (account)(permission) )
+FC_REFLECT( arisen::chain::linkauth                         , (account)(code)(type)(requirement) )
+FC_REFLECT( arisen::chain::unlinkauth                       , (account)(code)(type) )
+FC_REFLECT( arisen::chain::canceldelay                      , (canceling_auth)(trx_id) )
+FC_REFLECT( arisen::chain::onerror                          , (sender_id)(sent_trx) )

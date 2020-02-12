@@ -1,10 +1,10 @@
 #pragma once
 
-#include <eosio/chain/wasm_eosio_binary_ops.hpp>
-#include <eosio/chain/wasm_eosio_constraints.hpp>
-#include <eosio/chain/webassembly/common.hpp>
+#include <arisen/chain/wasm_eosio_binary_ops.hpp>
+#include <arisen/chain/wasm_eosio_constraints.hpp>
+#include <arisen/chain/webassembly/common.hpp>
 #include <fc/exception/exception.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include <iostream>
 #include <functional>
 #include <vector>
@@ -17,7 +17,7 @@
 #include "WASM/WASM.h"
 
 
-namespace eosio { namespace chain { namespace wasm_injections {
+namespace arisen { namespace chain { namespace wasm_injections {
    using namespace IR;
    // helper functions for injection
 
@@ -276,7 +276,7 @@ namespace eosio { namespace chain { namespace wasm_injections {
       }
       static void accept( wasm_ops::instr* inst, wasm_ops::visitor_arg& arg ) {
          if ( global_idx == -1 ) {
-            arg.module->globals.defs.push_back({{ValueType::i32, true}, {(I32) eosio::chain::wasm_constraints::maximum_call_depth}});
+            arg.module->globals.defs.push_back({{ValueType::i32, true}, {(I32) arisen::chain::wasm_constraints::maximum_call_depth}});
          }
 
          global_idx = arg.module->globals.size()-1;
@@ -458,7 +458,7 @@ namespace eosio { namespace chain { namespace wasm_injections {
             return u8"_eosio_ui64_to_f64";
 
          default:
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, unknown opcode in injection ${op}", ("op", opcode));
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, unknown opcode in injection ${op}", ("op", opcode));
       }
    }
 
@@ -839,4 +839,4 @@ namespace eosio { namespace chain { namespace wasm_injections {
          static standard_module_injectors _module_injectors;
    };
 
-}}} // namespace wasm_constraints, chain, eosio
+}}} // namespace wasm_constraints, chain, arisen

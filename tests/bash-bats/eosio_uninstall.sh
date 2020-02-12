@@ -52,13 +52,13 @@ mkdir -p $MONGODB_DATA_DIR
 @test "${TEST_LABEL} > -i" {
   run ./$SCRIPT_LOCATION -y -i eosiotest
   [[ $output =~ .*/eosiotest ]] || exit
-  ([[ ! $output =~ "Library/Application\ Support/eosio" ]] && [[ ! $output =~ ".local/share/eosio" ]]) || exit
+  ([[ ! $output =~ "Library/Application\ Support/arisen" ]] && [[ ! $output =~ ".local/share/arisen" ]]) || exit
   [[ ! $output =~ "ARISEN Removal Complete" ]] || exit
 }
 
 @test "${TEST_LABEL} > -f" {
   run bash -c "printf \"y\n%.0s\" {1..100} | ./$SCRIPT_LOCATION -f"
-  ([[ "${output[*]}" =~ "Library/Application\ Support/eosio" ]] && [[ "${output[*]}" =~ ".local/share/eosio" ]]) && exit
+  ([[ "${output[*]}" =~ "Library/Application\ Support/arisen" ]] && [[ "${output[*]}" =~ ".local/share/arisen" ]]) && exit
   [[ $output =~ "ARISEN Removal Complete" ]] || exit
 }
 

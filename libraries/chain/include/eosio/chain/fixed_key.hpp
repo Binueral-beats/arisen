@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
@@ -9,8 +9,8 @@
 #include <type_traits>
 
 #include <fc/exception/exception.hpp>
-#include <eosio/chain/exceptions.hpp>
-namespace eosio {
+#include <arisen/chain/exceptions.hpp>
+namespace arisen {
 
    using chain::uint128_t;
 

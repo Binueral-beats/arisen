@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
-#include <eosio/chain/name.hpp>
-#include <eosio/chain/chain_id_type.hpp>
+#include <arisen/chain/name.hpp>
+#include <arisen/chain/chain_id_type.hpp>
 
 #include <chainbase/chainbase.hpp>
 
@@ -46,7 +46,7 @@
 
 #define _V(n, v)  fc::mutable_variant_object(n, v)
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
    using                               std::map;
    using                               std::vector;
    using                               std::unordered_map;
@@ -372,6 +372,6 @@ namespace eosio { namespace chain {
          return ( flags & ~static_cast<F>(field) );
    }
 
-} }  // eosio::chain
+} }  // arisen::chain
 
-FC_REFLECT( eosio::chain::void_t, )
+FC_REFLECT( arisen::chain::void_t, )

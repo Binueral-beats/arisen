@@ -3,7 +3,7 @@ set -eo pipefail
 SCRIPT_VERSION=3.1 # Build script version (change this to re-build the CICD image)
 ##########################################################################
 # This is the ARISEN automated install script for Linux and Mac OS.
-# This file was downloaded from https://github.com/ARISEN/eos
+# This file was downloaded from https://github.com/ARISEN/rsn
 #
 # Copyright (c) 2017, Respective Authors all rights reserved.
 #
@@ -29,14 +29,14 @@ SCRIPT_VERSION=3.1 # Build script version (change this to re-build the CICD imag
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-# https://github.com/ARISEN/eos/blob/master/LICENSE
+# https://github.com/ARISEN/rsn/blob/master/LICENSE
 ##########################################################################
 
 function usage() {
    printf "Usage: $0 OPTION...
   -P          Build with pinned clang and libcxx
   -o TYPE     Build <Debug|Release|RelWithDebInfo|MinSizeRel> (default: Release)
-  -s NAME     Core Symbol Name <1-7 characters> (default: SYS)
+  -s NAME     Core Symbol Name <1-7 characters> (default: RSN)
   -b DIR      Use pre-built boost in DIR
   -i DIR      Directory to use for installing dependencies & ARISEN (default: $HOME)
   -y          Noninteractive mode (answers yes to every prompt)
@@ -116,8 +116,8 @@ export CURRENT_WORKING_DIR=$(pwd) # relative path support
 # Ensure we're in the repo root and not inside of scripts
 cd $( dirname "${BASH_SOURCE[0]}" )/..
 
-# Load eosio specific helper functions
-. ./scripts/helpers/eosio.sh
+# Load arisen specific helper functions
+. ./scripts/helpers/arisen.sh
 
 $VERBOSE && echo "Build Script Version: ${SCRIPT_VERSION}"
 echo "ARISEN Version: ${EOSIO_VERSION_FULL}"
@@ -161,7 +161,7 @@ if [[ ! -z $CMAKE_CURRENT_VERSION ]] && [[ $((10#$( echo $CMAKE_CURRENT_VERSION 
    fi
 fi
 
-# Use existing cmake on system (either global or specific to eosio)
+# Use existing cmake on system (either global or specific to arisen)
 # Setup based on architecture
 if [[ $ARCH == "Linux" ]]; then
    export CMAKE=${CMAKE:-${EOSIO_INSTALL_DIR}/bin/cmake}
@@ -183,7 +183,7 @@ if [[ $ARCH == "Linux" ]]; then
 fi
 
 if [ "$ARCH" == "Darwin" ]; then
-   # opt/gettext: cleos requires Intl, which requires gettext; it's keg only though and we don't want to force linking: https://github.com/ARISEN/eos/issues/2240#issuecomment-396309884
+   # opt/gettext: cleos requires Intl, which requires gettext; it's keg only though and we don't want to force linking: https://github.com/ARISEN/rsn/issues/2240#issuecomment-396309884
    # EOSIO_INSTALL_DIR/lib/cmake: mongo_db_plugin.cpp:25:10: fatal error: 'bsoncxx/builder/basic/kvp.hpp' file not found
    CMAKE_PREFIX_PATHS="/usr/local/opt/gettext;${EOSIO_INSTALL_DIR}"
    FILE="${SCRIPT_DIR}/eosio_build_darwin.sh"

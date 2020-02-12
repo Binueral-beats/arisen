@@ -1,9 +1,9 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/chain/block_log.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/block_log.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include <fstream>
 #include <fc/io/raw.hpp>
 
@@ -11,7 +11,7 @@
 #define LOG_WRITE (std::ios::out | std::ios::binary | std::ios::app)
 #define LOG_RW ( std::ios::in | std::ios::out | std::ios::binary )
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    const uint32_t block_log::min_supported_version = 1;
 
@@ -543,4 +543,4 @@ namespace eosio { namespace chain {
       return gs;
    }
 
-} } /// eosio::chain
+} } /// arisen::chain

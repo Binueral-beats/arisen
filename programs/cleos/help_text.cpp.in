@@ -1,15 +1,15 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include "help_text.hpp"
 #include "localize.hpp"
 #include <regex>
 #include <fc/io/json.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/exceptions.hpp>
 
-using namespace eosio::client::localize;
-using namespace eosio::chain;
+using namespace arisen::client::localize;
+using namespace arisen::chain;
 
 const char* transaction_help_text_header = _("An error occurred while submitting the transaction for this command!");
 
@@ -109,7 +109,7 @@ auto smatch_to_variant(const std::smatch& smatch) {
 };
 
 const char* error_advice_name_type_exception = R"=====(Name should be less than 13 characters and only contains the following symbol .12345abcdefghijklmnopqrstuvwxyz)=====";
-const char* error_advice_public_key_type_exception = R"=====(Public key should be encoded in base58 and starts with EOS prefix)=====";
+const char* error_advice_public_key_type_exception = R"=====(Public key should be encoded in base58 and starts with RSN prefix)=====";
 const char* error_advice_private_key_type_exception = R"=====(Private key should be encoded in base58 WIF)=====";
 const char* error_advice_authority_type_exception = R"=====(Ensure that your authority JSON is valid follows the following format!
 {
@@ -117,7 +117,7 @@ const char* error_advice_authority_type_exception = R"=====(Ensure that your aut
   "keys": [         <keys must be alpha-numerically sorted by their string representations and unique>
     ...
     {
-      "key":        <STRING: EOS.IO compatible Public Key>,
+      "key":        <STRING: RSN.IO compatible Public Key>,
       "weight":     <INTEGER [1-2^16): a signature from this key contributes this to satisfying the threshold>
     }
     ...
@@ -145,7 +145,7 @@ const char* error_advice_authority_type_exception = R"=====(Ensure that your aut
 )=====";
 const char* error_advice_action_type_exception = R"=====(Ensure that your action JSON follows the contract's abi!)=====";
 const char* error_advice_transaction_type_exception = R"=====(Ensure that your transaction JSON follows the right transaction format!
-You can refer to eosio.cdt/libraries/eosiolib/transaction.hpp for reference)=====";
+You can refer to arisen.cdt/libraries/eosiolib/transaction.hpp for reference)=====";
 const char* error_advice_abi_type_exception =  R"=====(Ensure that your abi JSON follows the following format!
 {
   "types" : [{ "new_type_name":"type_name", "type":"type_name" }],
@@ -198,7 +198,7 @@ const char* error_advice_transaction_exception =  "Ensure that your transaction 
 const char* error_advice_expired_tx_exception =  "Please increase the expiration time of your transaction!";
 const char* error_advice_tx_exp_too_far_exception =  "Please decrease the expiration time of your transaction!";
 const char* error_advice_invalid_ref_block_exception =  "Ensure that the reference block exist in the blockchain!";
-const char* error_advice_tx_duplicate =  "You can try embedding eosio nonce action inside your transaction to ensure uniqueness.";
+const char* error_advice_tx_duplicate =  "You can try embedding arisen nonce action inside your transaction to ensure uniqueness.";
 
 const char* error_advice_invalid_action_args_exception = R"=====(Ensure that your arguments follow the contract abi!
 You can check the contract's abi by using '@CLI_CLIENT_EXECUTABLE_NAME@ get code' command.)=====";
@@ -270,11 +270,11 @@ const std::map<int64_t, std::string> error_advice = {
    { wallet_not_available_exception::code_value, error_advice_wallet_not_available_exception }
 };
 
-namespace eosio { namespace client { namespace help {
+namespace arisen { namespace client { namespace help {
 
 bool print_recognized_errors(const fc::exception& e, const bool verbose_errors) {
-   // eos recognized error code is from 3000000
-   // refer to libraries/chain/include/eosio/chain/exceptions.hpp
+   // rsn recognized error code is from 3000000
+   // refer to libraries/chain/include/arisen/chain/exceptions.hpp
    if (e.code() >= chain_exception::code_value) {
       std::string advice, explanation, stack_trace;
 

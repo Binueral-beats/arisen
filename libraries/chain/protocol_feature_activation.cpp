@@ -1,14 +1,14 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 
-#include <eosio/chain/protocol_feature_activation.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/protocol_feature_activation.hpp>
+#include <arisen/chain/exceptions.hpp>
 
 #include <algorithm>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    void protocol_feature_activation::reflector_init() {
       static_assert( fc::raw::has_feature_reflector_init_on_unpacked_reflected_types,
@@ -52,4 +52,4 @@ namespace eosio { namespace chain {
       );
    }
 
-} }  // eosio::chain
+} }  // arisen::chain

@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/authority.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/parallel_markers.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/chain/authority.hpp>
+#include <arisen/chain/exceptions.hpp>
+#include <arisen/chain/parallel_markers.hpp>
 
 #include <fc/scoped_exit.hpp>
 
@@ -16,7 +16,7 @@
 
 #include <functional>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 namespace detail {
 
@@ -289,4 +289,4 @@ namespace detail {
                                                             checktime );
    }
 
-} } // namespace eosio::chain
+} } // namespace arisen::chain

@@ -51,7 +51,7 @@ class NamedAccounts:
 
 ###############################################################
 # nodeos_voting_test
-# --dump-error-details <Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
+# --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
 
@@ -87,7 +87,7 @@ try:
     extraNodeosArgs=" %s %d %s %d  --http-max-response-time-ms 990000 " % (minRAMFlag, minRAMValue, maxRAMFlag, maxRAMValue)
     if cluster.launch(onlyBios=False, pnodes=totalNodes, totalNodes=totalNodes, totalProducers=totalNodes, extraNodeosArgs=extraNodeosArgs, useBiosBootFile=False) is False:
         Utils.cmdError("launcher")
-        errorExit("Failed to stand up eos cluster.")
+        errorExit("Failed to stand up rsn cluster.")
 
     Print("Validating system accounts after bootstrap")
     cluster.validateAccounts(None)
@@ -116,7 +116,7 @@ try:
     for account in accounts:
         walletMgr.importKey(account, testWallet)
 
-    # create accounts via eosio as otherwise a bid is needed
+    # create accounts via arisen as otherwise a bid is needed
     for account in accounts:
         Print("Create new account %s via %s" % (account.name, cluster.eosioAccount.name))
         trans=nodes[0].createInitializeAccount(account, cluster.eosioAccount, stakedDeposit=500000, waitForTransBlock=False, stakeNet=50000, stakeCPU=50000, buyRAM=50000, exitOnError=True)
@@ -167,11 +167,11 @@ try:
                 if trans is None or not trans[0]:
                     timeOutCount+=1
                     if timeOutCount>=3:
-                        Print("Failed to push create action to eosio contract for %d consecutive times, looks like nodeos already exited." % (timeOutCount))
+                        Print("Failed to push create action to arisen contract for %d consecutive times, looks like nodeos already exited." % (timeOutCount))
                         keepProcessing=False
                         break
 
-                    Print("Failed to push create action to eosio contract. sleep for 5 seconds")
+                    Print("Failed to push create action to arisen contract. sleep for 5 seconds")
                     count-=1 # failed attempt shouldn't be counted
                     time.sleep(5)
                 else:
@@ -255,7 +255,7 @@ try:
             try:
                 trans=nodes[0].pushMessage(contract, action, data, opts)
                 if trans is None or not trans[0]:
-                    Print("Failed to push create action to eosio contract. sleep for 60 seconds")
+                    Print("Failed to push create action to arisen contract. sleep for 60 seconds")
                     time.sleep(60)
                 time.sleep(1)
             except TypeError as ex:
@@ -314,7 +314,7 @@ try:
         try:
             trans=nodes[0].pushMessage(contract, action, data, opts)
             if trans is None or not trans[0]:
-                Print("Failed to push create action to eosio contract. sleep for 60 seconds")
+                Print("Failed to push create action to arisen contract. sleep for 60 seconds")
                 time.sleep(60)
                 continue
             time.sleep(1)

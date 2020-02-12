@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/config.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/chain/config.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 /**
  * @brief Producer-voted blockchain configuration parameters
@@ -105,9 +105,9 @@ struct chain_config {
 
 };
 
-} } // namespace eosio::chain
+} } // namespace arisen::chain
 
-FC_REFLECT(eosio::chain::chain_config,
+FC_REFLECT(arisen::chain::chain_config,
            (max_block_net_usage)(target_block_net_usage_pct)
            (max_transaction_net_usage)(base_per_transaction_net_usage)(net_usage_leeway)
            (context_free_discount_net_usage_num)(context_free_discount_net_usage_den)

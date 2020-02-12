@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/exceptions.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 struct chain_snapshot_header {
    /**
@@ -34,4 +34,4 @@ struct chain_snapshot_header {
 
 } }
 
-FC_REFLECT(eosio::chain::chain_snapshot_header,(version))
+FC_REFLECT(arisen::chain::chain_snapshot_header,(version))

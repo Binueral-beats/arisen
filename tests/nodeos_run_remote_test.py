@@ -44,7 +44,7 @@ try:
     Print("Stand up cluster")
 
     if cluster.launch(pnodes=pnodes, totalNodes=total_nodes, prodCount=prodCount, topo=topo, delay=delay, onlyBios=onlyBios) is False:
-        errorExit("Failed to stand up eos cluster.")
+        errorExit("Failed to stand up rsn cluster.")
 
     Print ("Wait for Cluster stabilization")
     # wait for cluster to start producing blocks

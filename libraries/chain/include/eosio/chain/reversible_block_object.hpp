@@ -1,17 +1,17 @@
 
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/authority.hpp>
-#include <eosio/chain/block_timestamp.hpp>
-#include <eosio/chain/contract_types.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/chain/authority.hpp>
+#include <arisen/chain/block_timestamp.hpp>
+#include <arisen/chain/contract_types.hpp>
 
 #include "multi_index_includes.hpp"
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    class reversible_block_object : public chainbase::object<reversible_block_object_type, reversible_block_object> {
       OBJECT_CTOR(reversible_block_object,(packedblock) )
@@ -52,6 +52,6 @@ namespace eosio { namespace chain {
       >
    >;
 
-} } // eosio::chain
+} } // arisen::chain
 
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::reversible_block_object, eosio::chain::reversible_block_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::reversible_block_object, arisen::chain::reversible_block_index)

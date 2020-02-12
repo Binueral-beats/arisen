@@ -1,14 +1,14 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include <appbase/application.hpp>
-#include <eosio/wallet_plugin/wallet_manager.hpp>
-#include <eosio/wallet_plugin/wallet.hpp>
-#include <eosio/wallet_plugin/se_wallet.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/wallet_plugin/wallet_manager.hpp>
+#include <arisen/wallet_plugin/wallet.hpp>
+#include <arisen/wallet_plugin/se_wallet.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include <boost/algorithm/string.hpp>
-namespace eosio {
+namespace arisen {
 namespace wallet {
 
 constexpr auto file_ext = ".wallet";
@@ -82,7 +82,7 @@ std::string wallet_manager::create(const std::string& name) {
    wallet->save_wallet_file();
 
    // If we have name in our map then remove it since we want the emplace below to replace.
-   // This can happen if the wallet file is removed while eos-walletd is running.
+   // This can happen if the wallet file is removed while rsn-walletd is running.
    auto it = wallets.find(name);
    if (it != wallets.end()) {
       wallets.erase(it);
@@ -106,7 +106,7 @@ void wallet_manager::open(const std::string& name) {
    }
 
    // If we have name in our map then remove it since we want the emplace below to replace.
-   // This can happen if the wallet file is added while eos-walletd is running.
+   // This can happen if the wallet file is added while rsn-walletd is running.
    auto it = wallets.find(name);
    if (it != wallets.end()) {
       wallets.erase(it);
@@ -312,4 +312,4 @@ void wallet_manager::initialize_lock() {
 }
 
 } // namespace wallet
-} // namespace eosio
+} // namespace arisen

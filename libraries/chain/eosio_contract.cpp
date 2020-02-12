@@ -1,30 +1,30 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/chain/eosio_contract.hpp>
-#include <eosio/chain/contract_table_objects.hpp>
+#include <arisen/chain/eosio_contract.hpp>
+#include <arisen/chain/contract_table_objects.hpp>
 
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/transaction_context.hpp>
-#include <eosio/chain/apply_context.hpp>
-#include <eosio/chain/transaction.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/controller.hpp>
+#include <arisen/chain/transaction_context.hpp>
+#include <arisen/chain/apply_context.hpp>
+#include <arisen/chain/transaction.hpp>
+#include <arisen/chain/exceptions.hpp>
 
-#include <eosio/chain/account_object.hpp>
-#include <eosio/chain/code_object.hpp>
-#include <eosio/chain/permission_object.hpp>
-#include <eosio/chain/permission_link_object.hpp>
-#include <eosio/chain/global_property_object.hpp>
-#include <eosio/chain/contract_types.hpp>
+#include <arisen/chain/account_object.hpp>
+#include <arisen/chain/code_object.hpp>
+#include <arisen/chain/permission_object.hpp>
+#include <arisen/chain/permission_link_object.hpp>
+#include <arisen/chain/global_property_object.hpp>
+#include <arisen/chain/contract_types.hpp>
 
-#include <eosio/chain/wasm_interface.hpp>
-#include <eosio/chain/abi_serializer.hpp>
+#include <arisen/chain/wasm_interface.hpp>
+#include <arisen/chain/abi_serializer.hpp>
 
-#include <eosio/chain/authorization_manager.hpp>
-#include <eosio/chain/resource_limits.hpp>
+#include <arisen/chain/authorization_manager.hpp>
+#include <arisen/chain/resource_limits.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 
 
@@ -44,7 +44,7 @@ void validate_authority_precondition( const apply_context& context, const author
       if( a.permission.permission == config::owner_name || a.permission.permission == config::active_name )
          continue; // account was already checked to exist, so its owner and active permissions should exist
 
-      if( a.permission.permission == config::eosio_code_name ) // virtual eosio.code permission does not really exist but is allowed
+      if( a.permission.permission == config::eosio_code_name ) // virtual arisen.code permission does not really exist but is allowed
          continue;
 
       try {
@@ -87,8 +87,8 @@ void apply_eosio_newaccount(apply_context& context) {
    // Check if the creator is privileged
    const auto &creator = db.get<account_metadata_object, by_name>(create.creator);
    if( !creator.is_privileged() ) {
-      EOS_ASSERT( name_str.find( "eosio." ) != 0, action_validate_exception,
-                  "only privileged accounts can have names that start with 'eosio.'" );
+      EOS_ASSERT( name_str.find( "arisen." ) != 0, action_validate_exception,
+                  "only privileged accounts can have names that start with 'arisen.'" );
    }
 
    auto existing_account = db.find<account_object, by_name>(create.name);
@@ -239,8 +239,8 @@ void apply_eosio_updateauth(apply_context& context) {
    auto& db = context.db;
 
    EOS_ASSERT(!update.permission.empty(), action_validate_exception, "Cannot create authority with empty name");
-   EOS_ASSERT( update.permission.to_string().find( "eosio." ) != 0, action_validate_exception,
-               "Permission names that start with 'eosio.' are reserved" );
+   EOS_ASSERT( update.permission.to_string().find( "arisen." ) != 0, action_validate_exception,
+               "Permission names that start with 'arisen.' are reserved" );
    EOS_ASSERT(update.permission != update.parent, action_validate_exception, "Cannot set an authority as its own parent");
    db.get<account_object, by_name>(update.account);
    EOS_ASSERT(validate(update.auth), action_validate_exception,
@@ -409,4 +409,4 @@ void apply_eosio_canceldelay(apply_context& context) {
    context.cancel_deferred_transaction(transaction_id_to_sender_id(trx_id), account_name());
 }
 
-} } // namespace eosio::chain
+} } // namespace arisen::chain

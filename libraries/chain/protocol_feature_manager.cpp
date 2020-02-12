@@ -1,18 +1,18 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 
-#include <eosio/chain/protocol_feature_manager.hpp>
-#include <eosio/chain/protocol_state_object.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/protocol_feature_manager.hpp>
+#include <arisen/chain/protocol_state_object.hpp>
+#include <arisen/chain/exceptions.hpp>
 
 #include <fc/scoped_exit.hpp>
 
 #include <algorithm>
 #include <boost/assign/list_of.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    const std::unordered_map<builtin_protocol_feature_t, builtin_protocol_feature_spec, enum_hash<builtin_protocol_feature_t>>
    builtin_protocol_feature_codenames =
@@ -73,7 +73,7 @@ Also allows a contract to send a deferred transaction in a manner that enables t
 /*
 Builtin protocol feature: FIX_LINKAUTH_RESTRICTION
 
-Removes the restriction on eosio::linkauth for non-native actions named one of the five special action names:
+Removes the restriction on arisen::linkauth for non-native actions named one of the five special action names:
 updateauth, deleteauth, linkauth, unlinkauth, or canceldelay.
 */
             {}
@@ -120,7 +120,7 @@ Adds CPU and network bandwidth usage to only the first authorizer of a transacti
 /*
 Builtin protocol feature: FORWARD_SETCODE
 
-Forward eosio::setcode actions to the WebAssembly code deployed on the eosio account.
+Forward arisen::setcode actions to the WebAssembly code deployed on the arisen account.
 */
             {}
          } )
@@ -669,4 +669,4 @@ either the account authorized the action or the action's net effect on RAM usage
       }
    }
 
-} }  // eosio::chain
+} }  // arisen::chain

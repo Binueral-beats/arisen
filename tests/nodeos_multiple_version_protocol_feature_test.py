@@ -85,7 +85,7 @@ try:
     Utils.Print("Alternate Version Labels File is {}".format(alternateVersionLabelsFile))
     assert exists(alternateVersionLabelsFile), "Alternate version labels file does not exist"
     assert cluster.launch(pnodes=4, totalNodes=4, prodCount=1, totalProducers=4,
-                          extraNodeosArgs=" --plugin eosio::producer_api_plugin ",
+                          extraNodeosArgs=" --plugin arisen::producer_api_plugin ",
                           useBiosBootFile=False,
                           specificExtraNodeosArgs={
                              0:"--http-max-response-time-ms 990000",

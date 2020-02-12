@@ -1,9 +1,9 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in rsn/LICENSE.txt
  */
-#include <eosio/chain/abi_serializer.hpp>
-#include <eosio/testing/tester.hpp>
+#include <arisen/chain/abi_serializer.hpp>
+#include <arisen/testing/tester.hpp>
 
 #include <Runtime/Runtime.h>
 
@@ -20,9 +20,9 @@
 #endif
 
 
-using namespace eosio;
-using namespace eosio::chain;
-using namespace eosio::testing;
+using namespace arisen;
+using namespace arisen::chain;
+using namespace arisen::testing;
 using namespace fc;
 
 using mvo = fc::mutable_variant_object;
@@ -167,7 +167,7 @@ public:
     }
 
     asset get_balance( const account_name& act ) {
-         return get_currency_balance(N(eosio.token), symbol(CORE_SYMBOL), act);
+         return get_currency_balance(N(arisen.token), symbol(CORE_SYMBOL), act);
     }
 
     void set_code_abi(const account_name& account, const vector<uint8_t>& wasm, const char* abi, const private_key_type* signer = nullptr) {
@@ -192,39 +192,39 @@ BOOST_AUTO_TEST_SUITE(bootseq_tests)
 BOOST_FIXTURE_TEST_CASE( bootseq_test, bootseq_tester ) {
     try {
 
-        // Create eosio.msig and eosio.token
-        create_accounts({N(eosio.msig), N(eosio.token), N(eosio.ram), N(eosio.ramfee), N(eosio.stake), N(eosio.vpay), N(eosio.bpay), N(eosio.saving) });
+        // Create arisen.msig and arisen.token
+        create_accounts({N(arisen.msig), N(arisen.token), N(arisen.ram), N(arisen.ramfee), N(arisen.stake), N(arisen.vpay), N(arisen.bpay), N(arisen.saving) });
         // Set code for the following accounts:
-        //  - eosio (code: eosio.bios) (already set by tester constructor)
-        //  - eosio.msig (code: eosio.msig)
-        //  - eosio.token (code: eosio.token)
-        // set_code_abi(N(eosio.msig), contracts::eosio_msig_wasm(), contracts::eosio_msig_abi().data());//, &eosio_active_pk);
-        // set_code_abi(N(eosio.token), contracts::eosio_token_wasm(), contracts::eosio_token_abi().data()); //, &eosio_active_pk);
+        //  - arisen (code: arisen.bios) (already set by tester constructor)
+        //  - arisen.msig (code: arisen.msig)
+        //  - arisen.token (code: arisen.token)
+        // set_code_abi(N(arisen.msig), contracts::eosio_msig_wasm(), contracts::eosio_msig_abi().data());//, &eosio_active_pk);
+        // set_code_abi(N(arisen.token), contracts::eosio_token_wasm(), contracts::eosio_token_abi().data()); //, &eosio_active_pk);
 
-        set_code_abi(N(eosio.msig),
+        set_code_abi(N(arisen.msig),
                      contracts::eosio_msig_wasm(),
                      contracts::eosio_msig_abi().data());//, &eosio_active_pk);
-        set_code_abi(N(eosio.token),
+        set_code_abi(N(arisen.token),
                      contracts::eosio_token_wasm(),
                      contracts::eosio_token_abi().data()); //, &eosio_active_pk);
 
-        // Set privileged for eosio.msig and eosio.token
-        set_privileged(N(eosio.msig));
-        set_privileged(N(eosio.token));
+        // Set privileged for arisen.msig and arisen.token
+        set_privileged(N(arisen.msig));
+        set_privileged(N(arisen.token));
 
-        // Verify eosio.msig and eosio.token is privileged
-        const auto& eosio_msig_acc = get<account_metadata_object, by_name>(N(eosio.msig));
+        // Verify arisen.msig and arisen.token is privileged
+        const auto& eosio_msig_acc = get<account_metadata_object, by_name>(N(arisen.msig));
         BOOST_TEST(eosio_msig_acc.is_privileged() == true);
-        const auto& eosio_token_acc = get<account_metadata_object, by_name>(N(eosio.token));
+        const auto& eosio_token_acc = get<account_metadata_object, by_name>(N(arisen.token));
         BOOST_TEST(eosio_token_acc.is_privileged() == true);
 
 
-        // Create SYS tokens in eosio.token, set its manager as eosio
+        // Create RSN tokens in arisen.token, set its manager as arisen
         auto max_supply = core_from_string("10000000000.0000"); /// 1x larger than 1B initial tokens
         auto initial_supply = core_from_string("1000000000.0000"); /// 1x larger than 1B initial tokens
-        create_currency(N(eosio.token), config::system_account_name, max_supply);
-        // Issue the genesis supply of 1 billion SYS tokens to eosio.system
-        issue(N(eosio.token), config::system_account_name, config::system_account_name, initial_supply);
+        create_currency(N(arisen.token), config::system_account_name, max_supply);
+        // Issue the genesis supply of 1 billion RSN tokens to arisen.system
+        issue(N(arisen.token), config::system_account_name, config::system_account_name, initial_supply);
 
         auto actual = get_balance(config::system_account_name);
         BOOST_REQUIRE_EQUAL(initial_supply, actual);
@@ -246,7 +246,7 @@ BOOST_FIXTURE_TEST_CASE( bootseq_test, bootseq_tester ) {
            auto r = buyram(config::system_account_name, a.aname, asset(ram));
            BOOST_REQUIRE( !r->except_ptr );
 
-           r = delegate_bandwidth(N(eosio.stake), a.aname, asset(net), asset(cpu));
+           r = delegate_bandwidth(N(arisen.stake), a.aname, asset(net), asset(cpu));
            BOOST_REQUIRE( !r->except_ptr );
         }
 
@@ -286,7 +286,7 @@ BOOST_FIXTURE_TEST_CASE( bootseq_test, bootseq_tester ) {
         produce_blocks_for_n_rounds(2); // 2 rounds since new producer schedule is set when the first block of next round is irreversible
         auto active_schedule = control->head_block_state()->active_schedule;
         BOOST_TEST(active_schedule.producers.size() == 1u);
-        BOOST_TEST(active_schedule.producers.front().producer_name == "eosio");
+        BOOST_TEST(active_schedule.producers.front().producer_name == "arisen");
 
         // Spend some time so the producer pay pool is filled by the inflation rate
         produce_min_num_of_blocks_to_spend_time_wo_inactive_prod(fc::seconds(30 * 24 * 3600)); // 30 days

@@ -1,20 +1,20 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 #include <fc/uint128.hpp>
 #include <fc/array.hpp>
 
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/block_timestamp.hpp>
-#include <eosio/chain/chain_config.hpp>
-#include <eosio/chain/producer_schedule.hpp>
-#include <eosio/chain/incremental_merkle.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/chain/block_timestamp.hpp>
+#include <arisen/chain/chain_config.hpp>
+#include <arisen/chain/producer_schedule.hpp>
+#include <arisen/chain/incremental_merkle.hpp>
 #include <chainbase/chainbase.hpp>
 #include "multi_index_includes.hpp"
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    /**
     * @class global_property_object
@@ -68,14 +68,14 @@ namespace eosio { namespace chain {
 
 }}
 
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::global_property_object, eosio::chain::global_property_multi_index)
-CHAINBASE_SET_INDEX_TYPE(eosio::chain::dynamic_global_property_object,
-                         eosio::chain::dynamic_global_property_multi_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::global_property_object, arisen::chain::global_property_multi_index)
+CHAINBASE_SET_INDEX_TYPE(arisen::chain::dynamic_global_property_object,
+                         arisen::chain::dynamic_global_property_multi_index)
 
-FC_REFLECT(eosio::chain::global_property_object,
+FC_REFLECT(arisen::chain::global_property_object,
             (proposed_schedule_block_num)(proposed_schedule)(configuration)
           )
 
-FC_REFLECT(eosio::chain::dynamic_global_property_object,
+FC_REFLECT(arisen::chain::dynamic_global_property_object,
             (global_action_sequence)
           )

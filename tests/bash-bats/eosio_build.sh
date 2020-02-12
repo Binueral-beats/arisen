@@ -43,7 +43,7 @@ TEST_LABEL="[eosio_build]"
     [[ ! -z $(echo "${output}" | grep "ENABLE_MONGO: false") ]] || exit
     [[ ! -z $(echo "${output}" | grep "INSTALL_MONGO: false") ]] || exit
     # lack of -i
-    [[ ! -z $(echo "${output}" | grep "EOSIO_INSTALL_DIR: ${HOME}/eosio/${EOSIO_VERSION}") ]] || exit
+    [[ ! -z $(echo "${output}" | grep "EOSIO_INSTALL_DIR: ${HOME}/arisen/${EOSIO_VERSION}") ]] || exit
     ## -o
     run bash -c "printf \"y\ny\nn\nn\n\" | ./$SCRIPT_LOCATION -o Debug -P"
     [[ ! -z $(echo "${output}" | grep "CMAKE_BUILD_TYPE: Debug") ]] || exit

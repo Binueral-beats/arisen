@@ -14,7 +14,7 @@ import re
 
 ###############################################################
 # nodeos_producer_watermark_test
-# --dump-error-details <Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
+# --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
 def isValidBlockProducer(prodsActive, blockNum, node):
@@ -49,9 +49,9 @@ def setProds(sharedProdKey):
 
     setProdsStr += ' ] }'
     Utils.Print("setprods: %s" % (setProdsStr))
-    opts="--permission eosio@active"
+    opts="--permission arisen@active"
     # pylint: disable=redefined-variable-type
-    trans=cluster.biosNode.pushMessage("eosio", "setprods", setProdsStr, opts)
+    trans=cluster.biosNode.pushMessage("arisen", "setprods", setProdsStr, opts)
     if trans is None or not trans[0]:
         Utils.Print("ERROR: Failed to set producer with cmd %s" % (setProdsStr))
 
@@ -183,7 +183,7 @@ try:
     Print("Stand up cluster")
     if cluster.launch(prodCount=prodCount, onlyBios=False, pnodes=totalNodes, totalNodes=totalNodes, totalProducers=totalNodes, useBiosBootFile=False, onlySetProds=True, sharedProducers=1) is False:
         Utils.cmdError("launcher")
-        Utils.errorExit("Failed to stand up eos cluster.")
+        Utils.errorExit("Failed to stand up rsn cluster.")
 
     Print("Validating system accounts after bootstrap")
     cluster.validateAccounts(None)
@@ -208,7 +208,7 @@ try:
     while tries > 0:
         node.infoValid = False
         info = node.getInfo()
-        if node.infoValid and node.lastRetrievedHeadBlockProducer != "eosio":
+        if node.infoValid and node.lastRetrievedHeadBlockProducer != "arisen":
             break
         time.sleep(1)
         tries = tries-1

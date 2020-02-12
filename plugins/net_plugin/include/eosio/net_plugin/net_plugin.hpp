@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 #include <appbase/application.hpp>
-#include <eosio/chain_plugin/chain_plugin.hpp>
-#include <eosio/net_plugin/protocol.hpp>
+#include <arisen/chain_plugin/chain_plugin.hpp>
+#include <arisen/net_plugin/protocol.hpp>
 
-namespace eosio {
+namespace arisen {
    using namespace appbase;
 
    struct connection_status {
@@ -45,4 +45,4 @@ namespace eosio {
 
 }
 
-FC_REFLECT( eosio::connection_status, (peer)(connecting)(syncing)(last_handshake) )
+FC_REFLECT( arisen::connection_status, (peer)(connecting)(syncing)(last_handshake) )

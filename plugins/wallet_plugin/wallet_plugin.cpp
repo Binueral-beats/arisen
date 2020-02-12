@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/wallet_plugin/wallet_plugin.hpp>
-#include <eosio/wallet_plugin/wallet_manager.hpp>
-#include <eosio/wallet_plugin/yubihsm_wallet.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/wallet_plugin/wallet_plugin.hpp>
+#include <arisen/wallet_plugin/wallet_manager.hpp>
+#include <arisen/wallet_plugin/yubihsm_wallet.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include <boost/filesystem/path.hpp>
 #include <chrono>
 
@@ -13,7 +13,7 @@
 
 namespace fc { class variant; }
 
-namespace eosio {
+namespace arisen {
 
 static appbase::abstract_plugin& _wallet_plugin = app().register_plugin<wallet_plugin>();
 
@@ -68,4 +68,4 @@ void wallet_plugin::plugin_initialize(const variables_map& options) {
    } FC_LOG_AND_RETHROW()
 }
 
-} // namespace eosio
+} // namespace arisen

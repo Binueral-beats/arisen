@@ -18,18 +18,18 @@ The `bios-boot-tutorial.py` script simulates the ARISEN bios boot sequence.
 
 ``Steps``:
 
-1. Install eosio binaries by following the steps outlined in below tutorial
-[Install eosio binaries](https://github.com/ARISEN/eos#mac-os-x-brew-install)
+1. Install arisen binaries by following the steps outlined in below tutorial
+[Install arisen binaries](https://github.com/ARISEN/rsn#mac-os-x-brew-install)
 
-2. Install eosio.cdt binaries by following the steps outlined in below tutorial
-[Install eosio.cdt binaries](https://github.com/ARISEN/eosio.cdt#binary-releases)
+2. Install arisen.cdt binaries by following the steps outlined in below tutorial
+[Install arisen.cdt binaries](https://github.com/ARISEN/arisen.cdt#binary-releases)
 
-3. Compile eosio.contracts
+3. Compile arisen.contracts
 
 ```bash
 $ cd ~
-$ git clone https://github.com/ARISEN/eosio.contracts.git
-$ cd ./eosio.contracts/
+$ git clone https://github.com/ARISEN/arisen.contracts.git
+$ cd ./arisen.contracts/
 $ ./build.sh
 $ cd ./build/contracts/
 $ pwd
@@ -44,9 +44,9 @@ Minimal command line to launch the script below, make sure you replace `EOSIO_CO
 
 ```bash
 $ cd ~
-$ git clone https://github.com/ARISEN/eos.git
-$ cd ./eos/tutorials/bios-boot-tutorial/
+$ git clone https://github.com/ARISEN/rsn.git
+$ cd ./rsn/tutorials/bios-boot-tutorial/
 $ python3 bios-boot-tutorial.py --cleos="cleos --wallet-url http://127.0.0.1:6666 " --nodeos=nodeos --keosd=keosd --contracts-dir="EOSIO_CONTRACTS_DIRECTORY" -w -a
 ```
 
-See [ARISEN Documentation Wiki: Tutorial - Bios Boot](https://github.com/ARISEN/eos/wiki/Tutorial-Bios-Boot-Sequence) for additional information.
+See [ARISEN Documentation Wiki: Tutorial - Bios Boot](https://github.com/ARISEN/rsn/wiki/Tutorial-Bios-Boot-Sequence) for additional information.

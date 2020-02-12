@@ -1,16 +1,16 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
-#include <eosio/test_control_plugin/test_control_plugin.hpp>
-#include <eosio/http_plugin/http_plugin.hpp>
+#include <arisen/test_control_plugin/test_control_plugin.hpp>
+#include <arisen/http_plugin/http_plugin.hpp>
 
 #include <appbase/application.hpp>
-#include <eosio/chain/controller.hpp>
+#include <arisen/chain/controller.hpp>
 
-namespace eosio {
-   using eosio::chain::controller;
+namespace arisen {
+   using arisen::chain::controller;
    using std::unique_ptr;
    using namespace appbase;
 

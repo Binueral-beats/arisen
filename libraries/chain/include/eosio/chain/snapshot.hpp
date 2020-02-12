@@ -1,16 +1,16 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/database_utils.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/database_utils.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include <fc/variant_object.hpp>
 #include <boost/core/demangle.hpp>
 #include <ostream>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
    /**
     * History:
     * Version 1: initial version with string identified sections and rows

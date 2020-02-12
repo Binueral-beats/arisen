@@ -1,15 +1,15 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
-#include <eosio/chain/abi_def.hpp>
-#include <eosio/chain/trace.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/abi_def.hpp>
+#include <arisen/chain/trace.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include <fc/variant_object.hpp>
 #include <fc/scoped_exit.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 using std::map;
 using std::string;
@@ -685,7 +685,7 @@ namespace impl {
       const variant_object& vo = v.get_object();
       fc::reflector<M>::visit( abi_from_variant_visitor<M, decltype(resolver)>( vo, o, resolver, ctx ) );
    }
-} /// namespace eosio::chain::impl
+} /// namespace arisen::chain::impl
 
 template<typename T, typename Resolver>
 void abi_serializer::to_variant( const T& o, variant& vo, Resolver resolver, const fc::microseconds& max_serialization_time ) try {
@@ -702,4 +702,4 @@ void abi_serializer::from_variant( const variant& v, T& o, Resolver resolver, co
 } FC_RETHROW_EXCEPTIONS(error, "Failed to deserialize variant", ("variant",v))
 
 
-} } // eosio::chain
+} } // arisen::chain

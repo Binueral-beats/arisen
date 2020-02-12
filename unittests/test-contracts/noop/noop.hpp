@@ -1,17 +1,17 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <arisen/arisen.hpp>
 
-class [[eosio::contract]] noop : public eosio::contract {
+class [[arisen::contract]] noop : public arisen::contract {
 public:
-   using eosio::contract::contract;
+   using arisen::contract::contract;
 
-   [[eosio::action]]
-   void anyaction( eosio::name                       from,
-                   const eosio::ignore<std::string>& type,
-                   const eosio::ignore<std::string>& data );
+   [[arisen::action]]
+   void anyaction( arisen::name                       from,
+                   const arisen::ignore<std::string>& type,
+                   const arisen::ignore<std::string>& data );
 };

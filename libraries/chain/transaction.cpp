@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include <fc/io/raw.hpp>
 #include <fc/bitutil.hpp>
@@ -17,11 +17,11 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
 
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/transaction.hpp>
+#include <arisen/chain/config.hpp>
+#include <arisen/chain/exceptions.hpp>
+#include <arisen/chain/transaction.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 using namespace boost::multi_index;
 
@@ -149,7 +149,7 @@ vector<transaction_extensions> transaction::validate_and_extract_extensions()con
    using transaction_extensions_t = transaction_extension_types::transaction_extensions_t;
    using decompose_t = transaction_extension_types::decompose_t;
 
-   static_assert( std::is_same<transaction_extensions_t, eosio::chain::transaction_extensions>::value,
+   static_assert( std::is_same<transaction_extensions_t, arisen::chain::transaction_extensions>::value,
                   "transaction_extensions is not setup as expected" );
 
    vector<transaction_extensions_t> results;
@@ -450,4 +450,4 @@ void packed_transaction::local_pack_context_free_data()
 }
 
 
-} } // eosio::chain
+} } // arisen::chain

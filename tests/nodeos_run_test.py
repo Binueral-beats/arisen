@@ -12,7 +12,7 @@ import re
 
 ###############################################################
 # nodeos_run_test
-# --dump-error-details <Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
+# --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
 
@@ -69,7 +69,7 @@ try:
         Print("Stand up cluster")
         if cluster.launch(prodCount=prodCount, onlyBios=onlyBios, dontBootstrap=dontBootstrap) is False:
             cmdError("launcher")
-            errorExit("Failed to stand up eos cluster.")
+            errorExit("Failed to stand up rsn cluster.")
     else:
         Print("Collecting cluster info.")
         cluster.initializeNodes(defproduceraPrvtKey=defproduceraPrvtKey, defproducerbPrvtKey=defproducerbPrvtKey)
@@ -80,7 +80,7 @@ try:
         print("Stand up walletd")
         if walletMgr.launch() is False:
             cmdError("%s" % (WalletdName))
-            errorExit("Failed to stand up eos walletd.")
+            errorExit("Failed to stand up rsn walletd.")
 
     if sanityTest:
         testSuccessful=True
@@ -320,9 +320,9 @@ try:
     if hashNum != 0:
         errorExit("FAILURE - get code currency1111 failed", raw=True)
 
-    contractDir="unittests/contracts/eosio.token"
-    wasmFile="eosio.token.wasm"
-    abiFile="eosio.token.abi"
+    contractDir="unittests/contracts/arisen.token"
+    wasmFile="arisen.token.wasm"
+    abiFile="arisen.token.abi"
     Print("Publish contract")
     trans=node.publishContract(currencyAccount.name, contractDir, wasmFile, abiFile, waitForTransBlock=True)
     if trans is None:
@@ -345,7 +345,7 @@ try:
         abiActionName=account["abi"]["actions"][0]["name"]
         abiType=account["abi"]["actions"][0]["type"]
         if abiName != "account" or abiActionName != "close" or abiType != "close":
-            errorExit("FAILURE - get EOS account failed", raw=True)
+            errorExit("FAILURE - get RSN account failed", raw=True)
 
     Print("push create action to currency1111 contract")
     contract="currency1111"

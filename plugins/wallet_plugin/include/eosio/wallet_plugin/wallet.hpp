@@ -1,19 +1,19 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/types.hpp>
-#include <eosio/wallet_plugin/wallet_api.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/wallet_plugin/wallet_api.hpp>
 
 #include <fc/real128.hpp>
 #include <fc/crypto/base58.hpp>
 
 using namespace std;
-using namespace eosio::chain;
+using namespace arisen::chain;
 
-namespace eosio { namespace wallet {
+namespace arisen { namespace wallet {
 
 typedef uint16_t transaction_handle_type;
 
@@ -194,6 +194,6 @@ struct plain_keys {
 
 } }
 
-FC_REFLECT( eosio::wallet::wallet_data, (cipher_keys) )
+FC_REFLECT( arisen::wallet::wallet_data, (cipher_keys) )
 
-FC_REFLECT( eosio::wallet::plain_keys, (checksum)(keys) )
+FC_REFLECT( arisen::wallet::plain_keys, (checksum)(keys) )

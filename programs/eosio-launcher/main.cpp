@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  *  @brief launch testnet nodes
  **/
 #include <string>
@@ -34,7 +34,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <net/if.h>
-#include <eosio/chain/genesis_state.hpp>
+#include <arisen/chain/genesis_state.hpp>
 
 #include "config.hpp"
 
@@ -48,7 +48,7 @@ using bpo::options_description;
 using bpo::variables_map;
 using public_key_type = fc::crypto::public_key;
 using private_key_type = fc::crypto::private_key;
-using namespace eosio::launcher::config;
+using namespace arisen::launcher::config;
 
 const string block_dir = "blocks";
 const string shared_mem_dir = "state";
@@ -432,7 +432,7 @@ struct launcher_def {
    string start_script;
    fc::optional<uint32_t> max_block_cpu_usage;
    fc::optional<uint32_t> max_transaction_cpu_usage;
-   eosio::chain::genesis_state genesis_from_file;
+   arisen::chain::genesis_state genesis_from_file;
 
    void assign_name (eosd_def &node, bool is_bios);
 
@@ -614,7 +614,7 @@ launcher_def::initialize (const variables_map &vmap) {
     }
   }
 
-  config_dir_base = "etc/eosio";
+  config_dir_base = "etc/arisen";
   data_dir_base = "var/lib";
   next_node = 0;
   ++prod_nodes; // add one for the bios node
@@ -893,7 +893,7 @@ launcher_def::bind_nodes () {
          auto pubkey = kp.get_public_key();
          node.keys.emplace_back (move(kp));
          if (is_bios) {
-            string prodname = "eosio";
+            string prodname = "arisen";
             node.producers.push_back(prodname);
             producer_set.schedule.push_back({prodname,pubkey});
          }
@@ -1141,14 +1141,14 @@ launcher_def::write_config_file (tn_node_def &node) {
     for (auto &p : node.producers) {
       cfg << "producer-name = " << p << "\n";
     }
-    cfg << "plugin = eosio::producer_plugin\n";
+    cfg << "plugin = arisen::producer_plugin\n";
   }
   if( instance.has_db ) {
-    cfg << "plugin = eosio::mongo_db_plugin\n";
+    cfg << "plugin = arisen::mongo_db_plugin\n";
   }
-  cfg << "plugin = eosio::net_plugin\n";
-  cfg << "plugin = eosio::chain_api_plugin\n"
-      << "plugin = eosio::history_api_plugin\n";
+  cfg << "plugin = arisen::net_plugin\n";
+  cfg << "plugin = arisen::chain_api_plugin\n"
+      << "plugin = arisen::history_api_plugin\n";
   cfg.close();
 }
 
@@ -1209,12 +1209,12 @@ launcher_def::init_genesis () {
    const bfs::path genesis_path = genesis.is_complete() ? genesis : bfs::current_path() / genesis;
    if (!bfs::exists(genesis_path)) {
       cout << "generating default genesis file " << genesis_path << endl;
-      eosio::chain::genesis_state default_genesis;
+      arisen::chain::genesis_state default_genesis;
       fc::json::save_to_file( default_genesis, genesis_path, true );
    }
    string bioskey = string(network.nodes["bios"].keys[0].get_public_key());
 
-   fc::json::from_file(genesis_path).as<eosio::chain::genesis_state>(genesis_from_file);
+   fc::json::from_file(genesis_path).as<arisen::chain::genesis_state>(genesis_from_file);
    genesis_from_file.initial_key = public_key_type(bioskey);
    if (max_block_cpu_usage)
       genesis_from_file.initial_configuration.max_block_cpu_usage = *max_block_cpu_usage;
@@ -1246,7 +1246,7 @@ launcher_def::write_setprods_file() {
   }
    producer_set_def no_bios;
    for (auto &p : producer_set.schedule) {
-      if (p.producer_name != "eosio")
+      if (p.producer_name != "arisen")
          no_bios.schedule.push_back(p);
    }
   auto str = fc::json::to_pretty_string( no_bios, fc::time_point::maximum(), fc::json::stringify_large_ints_and_doubles );
@@ -1287,7 +1287,7 @@ launcher_def::write_bios_boot () {
          }
          else if (key == "cacmd") {
             for (auto &p : producer_set.schedule) {
-               if (p.producer_name == "eosio") {
+               if (p.producer_name == "arisen") {
                   continue;
                }
                brb << "cacmd " << p.producer_name
@@ -1554,7 +1554,7 @@ launcher_def::launch (eosd_def &instance, string &gts) {
     if (instance.name == "bios") {
        // Strip the mongo-related options out of the bios node so
        // the plugins don't conflict between 00 and bios.
-       regex r("--plugin +eosio::mongo_db_plugin");
+       regex r("--plugin +arisen::mongo_db_plugin");
        string args = std::regex_replace (eosd_extra_args,r,"");
        regex r2("--mongodb-uri +[^ ]+");
        args = std::regex_replace (args,r2,"");
@@ -1781,7 +1781,7 @@ launcher_def::bounce (const string& node_numbers) {
       const eosd_def& node = node_pair.second;
       const string node_num = node.get_node_num();
       cout << "Bouncing " << node.name << endl;
-      string cmd = "./scripts/eosio-tn_bounce.sh " + eosd_extra_args;
+      string cmd = "./scripts/arisen-tn_bounce.sh " + eosd_extra_args;
       if (node_num != "bios" && !specific_nodeos_args.empty()) {
          const auto node_num_i = boost::lexical_cast<uint16_t,string>(node_num);
          if (specific_nodeos_args.count(node_num_i)) {
@@ -1801,7 +1801,7 @@ launcher_def::down (const string& node_numbers) {
       const eosd_def& node = node_pair.second;
       const string node_num = node.get_node_num();
       cout << "Taking down " << node.name << endl;
-      string cmd = "./scripts/eosio-tn_down.sh ";
+      string cmd = "./scripts/arisen-tn_down.sh ";
       do_command(host, node.name,
                  { { "EOSIO_HOME", host.eosio_home }, { "EOSIO_NODE", node_num }, { "EOSIO_TN_RESTART_CONFIG_DIR", node.config_dir_name } },
                  cmd);
@@ -1815,7 +1815,7 @@ launcher_def::roll (const string& host_names) {
    for (string host_name: hosts) {
       cout << "Rolling " << host_name << endl;
       auto host = find_host_by_name_or_address(host_name);
-      string cmd = "./scripts/eosio-tn_roll.sh ";
+      string cmd = "./scripts/arisen-tn_roll.sh ";
       do_command(*host, host_name, { { "EOSIO_HOME", host->eosio_home } }, cmd);
    }
 }
@@ -1966,9 +1966,9 @@ int main (int argc, char *argv[]) {
     ("launch,l",bpo::value<string>(), "select a subset of nodes to launch. Currently may be \"all\", \"none\", or \"local\". If not set, the default is to launch all unless an output file is named, in which case it starts none.")
     ("output,o",bpo::value<bfs::path>(&top.output),"save a copy of the generated topology in this file")
     ("kill,k", bpo::value<string>(&kill_arg),"The launcher retrieves the previously started process ids and issues a kill to each.")
-    ("down", bpo::value<string>(&down_nodes),"comma-separated list of node numbers that will be taken down using the eosio-tn_down.sh script")
-    ("bounce", bpo::value<string>(&bounce_nodes),"comma-separated list of node numbers that will be restarted using the eosio-tn_bounce.sh script")
-    ("roll", bpo::value<string>(&roll_nodes),"comma-separated list of host names where the nodes should be rolled to a new version using the eosio-tn_roll.sh script")
+    ("down", bpo::value<string>(&down_nodes),"comma-separated list of node numbers that will be taken down using the arisen-tn_down.sh script")
+    ("bounce", bpo::value<string>(&bounce_nodes),"comma-separated list of node numbers that will be restarted using the arisen-tn_bounce.sh script")
+    ("roll", bpo::value<string>(&roll_nodes),"comma-separated list of host names where the nodes should be rolled to a new version using the arisen-tn_roll.sh script")
     ("version,v", "print version information")
     ("help,h","print this list")
     ("config-dir", bpo::value<bfs::path>(), "Directory containing configuration files such as config.ini")
@@ -1987,7 +1987,7 @@ int main (int argc, char *argv[]) {
       return 0;
     }
     if (vmap.count("version") > 0) {
-      cout << eosio::launcher::config::version_str << endl;
+      cout << arisen::launcher::config::version_str << endl;
       return 0;
     }
 

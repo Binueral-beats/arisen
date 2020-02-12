@@ -1,9 +1,9 @@
 #pragma once
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/trace.hpp>
+#include <arisen/chain/controller.hpp>
+#include <arisen/chain/trace.hpp>
 #include <signal.h>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    struct deadline_timer {
          deadline_timer();

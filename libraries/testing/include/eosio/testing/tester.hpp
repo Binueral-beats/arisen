@@ -1,9 +1,9 @@
 #pragma once
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/asset.hpp>
-#include <eosio/chain/contract_table_objects.hpp>
-#include <eosio/chain/account_object.hpp>
-#include <eosio/chain/abi_serializer.hpp>
+#include <arisen/chain/controller.hpp>
+#include <arisen/chain/asset.hpp>
+#include <arisen/chain/contract_table_objects.hpp>
+#include <arisen/chain/account_object.hpp>
+#include <arisen/chain/abi_serializer.hpp>
 #include <fc/io/json.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/tuple/tuple_io.hpp>
@@ -16,7 +16,7 @@
 
 #define REQUIRE_MATCHING_OBJECT(left, right) { auto a = fc::variant( left ); auto b = fc::variant( right ); BOOST_REQUIRE_EQUAL( true, a.is_object() ); \
    BOOST_REQUIRE_EQUAL( true, b.is_object() ); \
-   auto filtered = ::eosio::testing::filter_fields( a.get_object(), b.get_object() ); \
+   auto filtered = ::arisen::testing::filter_fields( a.get_object(), b.get_object() ); \
    BOOST_REQUIRE_EQUAL_COLLECTIONS( a.get_object().begin(), a.get_object().end(), filtered.begin(), filtered.end() ); }
 
 std::ostream& operator<<( std::ostream& osm, const fc::variant& v );
@@ -25,7 +25,7 @@ std::ostream& operator<<( std::ostream& osm, const fc::variant_object& v );
 
 std::ostream& operator<<( std::ostream& osm, const fc::variant_object::entry& e );
 
-eosio::chain::asset core_from_string(const std::string& s);
+arisen::chain::asset core_from_string(const std::string& s);
 
 namespace boost { namespace test_tools { namespace tt_detail {
 
@@ -55,7 +55,7 @@ namespace boost { namespace test_tools { namespace tt_detail {
 
 } } }
 
-namespace eosio { namespace testing {
+namespace arisen { namespace testing {
   enum class setup_policy {
       none,
       old_bios_only,
@@ -67,7 +67,7 @@ namespace eosio { namespace testing {
    std::vector<uint8_t> read_wasm( const char* fn );
    std::vector<char>    read_abi( const char* fn );
    std::string          read_wast( const char* fn );
-   using namespace eosio::chain;
+   using namespace arisen::chain;
 
    fc::variant_object filter_fields(const fc::variant_object& filter, const fc::variant_object& value);
 
@@ -563,4 +563,4 @@ namespace eosio { namespace testing {
      string expected;
   };
 
-} } /// eosio::testing
+} } /// arisen::testing

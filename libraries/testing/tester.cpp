@@ -1,19 +1,19 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <eosio/testing/tester.hpp>
-#include <eosio/chain/wast_to_wasm.hpp>
-#include <eosio/chain/eosio_contract.hpp>
-#include <eosio/chain/generated_transaction_object.hpp>
+#include <arisen/testing/tester.hpp>
+#include <arisen/chain/wast_to_wasm.hpp>
+#include <arisen/chain/eosio_contract.hpp>
+#include <arisen/chain/generated_transaction_object.hpp>
 
 #include <fstream>
 
 #include <contracts.hpp>
 
-eosio::chain::asset core_from_string(const std::string& s) {
-  return eosio::chain::asset::from_string(s + " " CORE_SYMBOL_NAME);
+arisen::chain::asset core_from_string(const std::string& s) {
+  return arisen::chain::asset::from_string(s + " " CORE_SYMBOL_NAME);
 }
 
-namespace eosio { namespace testing {
+namespace arisen { namespace testing {
    std::string read_wast( const char* fn ) {
       std::ifstream wast_file(fn);
       FC_ASSERT( wast_file.is_open(), "wast file cannot be found" );
@@ -931,7 +931,7 @@ namespace eosio { namespace testing {
             if( block ) { //&& !b.control->is_known_block(block->id()) ) {
                auto bs = b.control->create_block_state_future( block );
                b.control->abort_block();
-               b.control->push_block(bs); //, eosio::chain::validation_steps::created_block);
+               b.control->push_block(bs); //, arisen::chain::validation_steps::created_block);
             }
          }
       };
@@ -1098,7 +1098,7 @@ namespace eosio { namespace testing {
       return match;
    }
 
-} }  /// eosio::testing
+} }  /// arisen::testing
 
 std::ostream& operator<<( std::ostream& osm, const fc::variant& v ) {
    //fc::json::to_stream( osm, v );

@@ -94,7 +94,7 @@ function install-directory-prompt() {
             esac
         done
     else
-        # Support relative paths : https://github.com/ARISEN/eos/issues/7560
+        # Support relative paths : https://github.com/ARISEN/rsn/issues/7560
         [[ ! $INSTALL_LOCATION =~ ^\/ ]] && export INSTALL_LOCATION="${CURRENT_WORKING_DIR}/$INSTALL_LOCATION"
         export EOSIO_INSTALL_DIR="$INSTALL_LOCATION"
     fi
@@ -119,10 +119,10 @@ function previous-install-prompt() {
 }
 
 function resources() {
-    echo "${COLOR_CYAN}ARISEN website:${COLOR_NC} https://eos.io"
+    echo "${COLOR_CYAN}ARISEN website:${COLOR_NC} https://rsn.io"
     echo "${COLOR_CYAN}ARISEN Telegram channel:${COLOR_NC} https://t.me/EOSProject"
-    echo "${COLOR_CYAN}ARISEN resources:${COLOR_NC} https://eos.io/resources/"
-    echo "${COLOR_CYAN}ARISEN Stack Exchange:${COLOR_NC} https://eosio.stackexchange.com"
+    echo "${COLOR_CYAN}ARISEN resources:${COLOR_NC} https://rsn.io/resources/"
+    echo "${COLOR_CYAN}ARISEN Stack Exchange:${COLOR_NC} https://arisen.stackexchange.com"
 }
 
 function print_supported_linux_distros_and_exit() {
@@ -183,9 +183,9 @@ function ensure-compiler() {
         else
             ## Check for c++ version 7 or higher
             [[ $( $(which $CXX) -dumpversion | cut -d '.' -f 1 ) -lt 7 ]] && export NO_CPP17=true
-            if [[ $NO_CPP17 == false ]]; then # https://github.com/ARISEN/eos/issues/7402
+            if [[ $NO_CPP17 == false ]]; then # https://github.com/ARISEN/rsn/issues/7402
                 while true; do
-                    echo "${COLOR_YELLOW}WARNING: Your GCC compiler ($CXX) is less performant than clang (https://github.com/ARISEN/eos/issues/7402). We suggest running the build script with -P or install your own clang and try again.${COLOR_NC}"
+                    echo "${COLOR_YELLOW}WARNING: Your GCC compiler ($CXX) is less performant than clang (https://github.com/ARISEN/rsn/issues/7402). We suggest running the build script with -P or install your own clang and try again.${COLOR_NC}"
                     [[ $NONINTERACTIVE == false ]] && printf "${COLOR_YELLOW}Do you wish to proceed anyway? (y/n)?${COLOR_NC}" && read -p " " PROCEED
                     case $PROCEED in
                         "" ) echo "What would you like to do?";;

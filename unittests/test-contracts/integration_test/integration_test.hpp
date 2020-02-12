@@ -1,19 +1,19 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <arisen/arisen.hpp>
 
-class [[eosio::contract]] integration_test : public eosio::contract {
+class [[arisen::contract]] integration_test : public arisen::contract {
 public:
-   using eosio::contract::contract;
+   using arisen::contract::contract;
 
-   [[eosio::action]]
-   void store( eosio::name from, eosio::name to, uint64_t num );
+   [[arisen::action]]
+   void store( arisen::name from, arisen::name to, uint64_t num );
 
-   struct [[eosio::table("payloads")]] payload {
+   struct [[arisen::table("payloads")]] payload {
       uint64_t              key;
       std::vector<uint64_t> data;
 
@@ -22,6 +22,6 @@ public:
       EOSLIB_SERIALIZE( payload, (key)(data) )
    };
 
-   using payloads_table = eosio::multi_index< "payloads"_n,  payload >;
+   using payloads_table = arisen::multi_index< "payloads"_n,  payload >;
 
 };

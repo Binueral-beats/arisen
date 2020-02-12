@@ -19,7 +19,7 @@ import shutil
 
 ###############################################################
 # nodeos_irreversible_mode_test
-# --dump-error-details <Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
+# --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 # -v --leave-running --clean-run
 ###############################################################
@@ -169,7 +169,7 @@ try:
          0:"--enable-stale-production",
          4:"--read-mode irreversible",
          6:"--read-mode irreversible",
-         9:"--plugin eosio::producer_api_plugin"})
+         9:"--plugin arisen::producer_api_plugin"})
 
    producingNodeId = 0
    producingNode = cluster.getNode(producingNodeId)

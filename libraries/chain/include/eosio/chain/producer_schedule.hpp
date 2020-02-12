@@ -1,9 +1,9 @@
 #pragma once
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/types.hpp>
+#include <arisen/chain/config.hpp>
+#include <arisen/chain/types.hpp>
 #include <chainbase/chainbase.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    /**
     *  Used as part of the producer_schedule_type, mapps the producer name to their key.
@@ -80,8 +80,8 @@ namespace eosio { namespace chain {
    }
 
 
-} } /// eosio::chain
+} } /// arisen::chain
 
-FC_REFLECT( eosio::chain::producer_key, (producer_name)(block_signing_key) )
-FC_REFLECT( eosio::chain::producer_schedule_type, (version)(producers) )
-FC_REFLECT( eosio::chain::shared_producer_schedule_type, (version)(producers) )
+FC_REFLECT( arisen::chain::producer_key, (producer_name)(block_signing_key) )
+FC_REFLECT( arisen::chain::producer_schedule_type, (version)(producers) )
+FC_REFLECT( arisen::chain::shared_producer_schedule_type, (version)(producers) )

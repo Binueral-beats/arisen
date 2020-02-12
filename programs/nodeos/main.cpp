@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in eosio/LICENSE.txt
+ *  @copyright defined in arisen/LICENSE.txt
  */
 #include <appbase/application.hpp>
 
-#include <eosio/chain_plugin/chain_plugin.hpp>
-#include <eosio/http_plugin/http_plugin.hpp>
-#include <eosio/net_plugin/net_plugin.hpp>
-#include <eosio/producer_plugin/producer_plugin.hpp>
+#include <arisen/chain_plugin/chain_plugin.hpp>
+#include <arisen/http_plugin/http_plugin.hpp>
+#include <arisen/net_plugin/net_plugin.hpp>
+#include <arisen/producer_plugin/producer_plugin.hpp>
 
 #include <fc/log/logger_config.hpp>
 #include <fc/log/appender.hpp>
@@ -19,7 +19,7 @@
 #include "config.hpp"
 
 using namespace appbase;
-using namespace eosio;
+using namespace arisen;
 
 namespace detail {
 
@@ -78,11 +78,11 @@ enum return_codes {
 int main(int argc, char** argv)
 {
    try {
-      app().set_version(eosio::nodeos::config::version);
+      app().set_version(arisen::nodeos::config::version);
 
       auto root = fc::app_path();
-      app().set_default_data_dir(root / "eosio" / nodeos::config::node_executable_name / "data" );
-      app().set_default_config_dir(root / "eosio" / nodeos::config::node_executable_name / "config" );
+      app().set_default_data_dir(root / "arisen" / nodeos::config::node_executable_name / "data" );
+      app().set_default_config_dir(root / "arisen" / nodeos::config::node_executable_name / "config" );
       http_plugin::set_defaults({
          .default_unix_socket_path = "",
          .default_http_port = 8888

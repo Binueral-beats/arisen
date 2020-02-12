@@ -90,7 +90,7 @@ class TestHelper(object):
             parser.add_argument("--mongodb", help="Configure a MongoDb instance", action='store_true')
         if "--dump-error-details" in includeArgs:
             parser.add_argument("--dump-error-details",
-                                     help="Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout",
+                                     help="Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout",
                                      action='store_true')
         if "--dont-launch" in includeArgs:
             parser.add_argument("--dont-launch", help="Don't launch own node. Assume node is already running.",
@@ -124,7 +124,7 @@ class TestHelper(object):
             Utils.Print(str(prefix))
         clientVersion=Cluster.getClientVersion()
         Utils.Print("UTC time: %s" % str(datetime.utcnow()))
-        Utils.Print("EOS Client version: %s" % (clientVersion))
+        Utils.Print("RSN Client version: %s" % (clientVersion))
         Utils.Print("Processor: %s" % (platform.processor()))
         Utils.Print("OS name: %s" % (platform.platform()))
     

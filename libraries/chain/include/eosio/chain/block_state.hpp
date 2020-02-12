@@ -1,15 +1,15 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/block_header_state.hpp>
-#include <eosio/chain/block.hpp>
-#include <eosio/chain/transaction_metadata.hpp>
-#include <eosio/chain/action_receipt.hpp>
+#include <arisen/chain/block_header_state.hpp>
+#include <arisen/chain/block.hpp>
+#include <arisen/chain/transaction_metadata.hpp>
+#include <arisen/chain/action_receipt.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    struct block_state : public block_header_state {
       block_state( const block_header_state& prev,
@@ -53,6 +53,6 @@ namespace eosio { namespace chain {
 
    using block_state_ptr = std::shared_ptr<block_state>;
 
-} } /// namespace eosio::chain
+} } /// namespace arisen::chain
 
-FC_REFLECT_DERIVED( eosio::chain::block_state, (eosio::chain::block_header_state), (block)(validated) )
+FC_REFLECT_DERIVED( arisen::chain::block_state, (arisen::chain::block_header_state), (block)(validated) )

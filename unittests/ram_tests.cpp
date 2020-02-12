@@ -1,15 +1,15 @@
 /**
  *  @file api_tests.cpp
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #include <boost/test/unit_test.hpp>
 #pragma GCC diagnostic pop
 
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/resource_limits.hpp>
-#include <eosio/testing/tester.hpp>
+#include <arisen/chain/exceptions.hpp>
+#include <arisen/chain/resource_limits.hpp>
+#include <arisen/testing/tester.hpp>
 
 #include <fc/exception/exception.hpp>
 #include <fc/variant_object.hpp>
@@ -36,7 +36,7 @@ BOOST_FIXTURE_TEST_CASE(ram_tests, eosio_system::eosio_system_tester) { try {
    create_account_with_resources(N(testram11111),config::system_account_name, init_request_bytes + 40);
    create_account_with_resources(N(testram22222),config::system_account_name, init_request_bytes + 1190);
    produce_blocks(10);
-   BOOST_REQUIRE_EQUAL( success(), stake( "eosio.stake", "testram11111", core_from_string("10.0000"), core_from_string("5.0000") ) );
+   BOOST_REQUIRE_EQUAL( success(), stake( "arisen.stake", "testram11111", core_from_string("10.0000"), core_from_string("5.0000") ) );
    produce_blocks(10);
 
    for (auto i = 0; i < 10; ++i) {

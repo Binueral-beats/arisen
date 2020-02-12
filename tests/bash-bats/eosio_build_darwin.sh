@@ -32,7 +32,7 @@ export TEST_LABEL="[eosio_build_darwin]"
     [[ -z $(echo "${output}" | grep " -   NOT found") ]] || exit
     rm -f $CMAKE
     [[ ! -z $(echo "${output}" | grep "[Updating HomeBrew]") ]] || exit
-    [[ ! -z $(echo "${output}" | grep "brew tap eosio/eosio") ]] || exit
+    [[ ! -z $(echo "${output}" | grep "brew tap arisen/arisen") ]] || exit
     [[ ! -z $(echo "${output}" | grep "brew install.*llvm@4.*") ]] || exit
     [[ ! -z $(echo "${output}" | grep "LLVM successfully linked from /usr/local/opt/llvm@4") ]] || exit
     [[ ! -z $(echo "${output}" | grep /NEWPATH.*/src/boost) ]] || exit

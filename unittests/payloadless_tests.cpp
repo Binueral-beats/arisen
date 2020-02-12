@@ -1,14 +1,14 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in rsn/LICENSE.txt
  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #include <boost/test/unit_test.hpp>
 #pragma GCC diagnostic pop
 
-#include <eosio/testing/tester.hpp>
-#include <eosio/chain/abi_serializer.hpp>
+#include <arisen/testing/tester.hpp>
+#include <arisen/chain/abi_serializer.hpp>
 
 #include <Runtime/Runtime.h>
 
@@ -25,9 +25,9 @@
 #define TESTER validating_tester
 #endif
 
-using namespace eosio;
-using namespace eosio::chain;
-using namespace eosio::testing;
+using namespace arisen;
+using namespace arisen::chain;
+using namespace arisen::testing;
 using namespace fc;
 
 class payloadless_tester : public TESTER {

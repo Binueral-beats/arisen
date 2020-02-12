@@ -16,7 +16,7 @@ import signal
 
 ###############################################################
 # nodeos_short_fork_take_over_test
-# --dump-error-details <Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
+# --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
 Print=Utils.Print
@@ -145,7 +145,7 @@ try:
     Print("Stand up cluster")
     specificExtraNodeosArgs={}
     # producer nodes will be mapped to 0 through totalProducerNodes-1, so the number totalProducerNodes will be the non-producing node
-    specificExtraNodeosArgs[totalProducerNodes]="--plugin eosio::test_control_api_plugin"
+    specificExtraNodeosArgs[totalProducerNodes]="--plugin arisen::test_control_api_plugin"
 
 
     # ***   setup topogrophy   ***
@@ -156,7 +156,7 @@ try:
                       totalNodes=totalNodes, totalProducers=totalProducers,
                       useBiosBootFile=False, specificExtraNodeosArgs=specificExtraNodeosArgs, onlySetProds=True) is False:
         Utils.cmdError("launcher")
-        Utils.errorExit("Failed to stand up eos cluster.")
+        Utils.errorExit("Failed to stand up rsn cluster.")
     Print("Validating system accounts after bootstrap")
     cluster.validateAccounts(None)
 

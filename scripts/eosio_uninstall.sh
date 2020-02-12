@@ -7,7 +7,7 @@ FULL=false
 
 function usage() {
    printf "Usage: $0 OPTION...
-  -i DIR      Directory where eosio is installed)
+  -i DIR      Directory where arisen is installed)
   -y          Noninteractive mode (answers yes to every prompt)
   -f          Removal of data directory (be absolutely sure you want to delete it before using this!)
    \\n" "$0" 1>&2
@@ -53,9 +53,9 @@ export CURRENT_WORKING_DIR=$(pwd) # relative path support
 cd $( dirname "${BASH_SOURCE[0]}" )/..
 
 # Load bash script helper functions
-. ./scripts/helpers/eosio.sh
+. ./scripts/helpers/arisen.sh
 
-# Support relative paths : https://github.com/ARISEN/eos/issues/7560
+# Support relative paths : https://github.com/ARISEN/rsn/issues/7560
 ( [[ ! -z $INSTALL_LOCATION ]] && [[ ! $INSTALL_LOCATION =~ ^\/ ]] ) && export INSTALL_LOCATION="${CURRENT_WORKING_DIR}/$INSTALL_LOCATION"
 
 INSTALL_PATHS=()
@@ -65,7 +65,7 @@ INSTALL_PATHS=()
 # -f -y should proceed forward with removing the data directories without prompting the user.
 if [[ $NONINTERACTIVE == false ]] && $FULL; then
    while true; do
-      read -p "By specifying -f, removal of the eosio data directory will require a resync of data which can take days. Do you wish to proceed? (y/n) " PROCEED
+      read -p "By specifying -f, removal of the arisen data directory will require a resync of data which can take days. Do you wish to proceed? (y/n) " PROCEED
       case $PROCEED in
          "" ) echo "What would you like to do?";;
          0 | true | [Yy]* ) break;;
@@ -80,7 +80,7 @@ export EOSIO_INSTALL_DIR=${INSTALL_LOCATION:-$EOSIO_INSTALL_DIR}
 if [[ ! -d "${EOSIO_INSTALL_DIR}" ]]; then
    echo "[ARISEN installation ${COLOR_YELLOW}NOT${COLOR_NC} found in ${EOSIO_INSTALL_DIR}]"
 else
-   # As of 1.8.0, we're using a versioned directories under home: https://github.com/ARISEN/eos/issues/6940
+   # As of 1.8.0, we're using a versioned directories under home: https://github.com/ARISEN/rsn/issues/6940
    echo "[ARISEN installation found: ${EOSIO_INSTALL_DIR}]" && INSTALL_PATHS+=("${EOSIO_INSTALL_DIR}") # EOSIO_INSTALL_DIR set in .environment
    while true; do
       [[ $NONINTERACTIVE == false ]] && read -p "Do you wish to remove the installation in ${EOSIO_INSTALL_DIR}? (y/n) " PROCEED
@@ -90,10 +90,10 @@ else
             # Handle cleanup of data directory
             if $FULL; then
                ## Add both just to be safe
-               [[ $ARCH == "Darwin" ]] && INSTALL_PATHS+=("${HOME}/Library/Application\ Support/eosio")
-               [[ $ARCH != "Darwin" ]] && INSTALL_PATHS+=("${HOME}/.local/share/eosio")
+               [[ $ARCH == "Darwin" ]] && INSTALL_PATHS+=("${HOME}/Library/Application\ Support/arisen")
+               [[ $ARCH != "Darwin" ]] && INSTALL_PATHS+=("${HOME}/.local/share/arisen")
             fi
-            # Version < 1.8.0; Before we started using ~/eosio/1.8.x
+            # Version < 1.8.0; Before we started using ~/arisen/1.8.x
             # Arrays should return with newlines (IFS=\n;helpers.sh) as Application\ Support will split into two
             for INSTALL_PATH in ${INSTALL_PATHS[@]}; do
                execute rm -rf $INSTALL_PATH

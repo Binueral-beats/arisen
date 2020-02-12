@@ -1,16 +1,16 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/transaction.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/chain/transaction.hpp>
 
 using namespace std;
-using namespace eosio::chain;
+using namespace arisen::chain;
 
-namespace eosio { namespace wallet {
+namespace arisen { namespace wallet {
 
 class wallet_api
 {

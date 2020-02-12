@@ -1,19 +1,19 @@
 
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/chain_config.hpp>
-#include <eosio/chain/types.hpp>
+#include <arisen/chain/chain_config.hpp>
+#include <arisen/chain/types.hpp>
 
 #include <fc/crypto/sha256.hpp>
 
 #include <string>
 #include <vector>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 struct genesis_state {
    genesis_state();
@@ -61,8 +61,8 @@ struct genesis_state {
 
 };
 
-} } // namespace eosio::chain
+} } // namespace arisen::chain
 
 
-FC_REFLECT(eosio::chain::genesis_state,
+FC_REFLECT(arisen::chain::genesis_state,
            (initial_timestamp)(initial_key)(initial_configuration))

@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 
-#include <eosio/chain/genesis_intrinsics.hpp>
+#include <arisen/chain/genesis_intrinsics.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 const std::vector<const char*> genesis_intrinsics = {
    "__ashrti3",
@@ -178,4 +178,4 @@ const std::vector<const char*> genesis_intrinsics = {
    "memset"
 };
 
-} } // namespace eosio::chain
+} } // namespace arisen::chain

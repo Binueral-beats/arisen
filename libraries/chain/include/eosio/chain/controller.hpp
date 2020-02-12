@@ -1,14 +1,14 @@
 #pragma once
-#include <eosio/chain/block_state.hpp>
-#include <eosio/chain/trace.hpp>
-#include <eosio/chain/genesis_state.hpp>
+#include <arisen/chain/block_state.hpp>
+#include <arisen/chain/trace.hpp>
+#include <arisen/chain/genesis_state.hpp>
 #include <chainbase/pinnable_mapped_file.hpp>
 #include <boost/signals2/signal.hpp>
 
-#include <eosio/chain/abi_serializer.hpp>
-#include <eosio/chain/account_object.hpp>
-#include <eosio/chain/snapshot.hpp>
-#include <eosio/chain/protocol_feature_manager.hpp>
+#include <arisen/chain/abi_serializer.hpp>
+#include <arisen/chain/account_object.hpp>
+#include <arisen/chain/snapshot.hpp>
+#include <arisen/chain/protocol_feature_manager.hpp>
 
 namespace chainbase {
    class database;
@@ -17,7 +17,7 @@ namespace boost { namespace asio {
    class thread_pool;
 }}
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    class authorization_manager;
 
@@ -334,4 +334,4 @@ namespace eosio { namespace chain {
 
    };
 
-} }  /// eosio::chain
+} }  /// arisen::chain

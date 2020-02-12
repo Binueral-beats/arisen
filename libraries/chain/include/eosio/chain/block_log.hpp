@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 #include <fc/filesystem.hpp>
-#include <eosio/chain/block.hpp>
-#include <eosio/chain/genesis_state.hpp>
+#include <arisen/chain/block.hpp>
+#include <arisen/chain/genesis_state.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    namespace detail { class block_log_impl; }
 

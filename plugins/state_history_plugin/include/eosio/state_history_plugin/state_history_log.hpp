@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
@@ -8,12 +8,12 @@
 #include <fstream>
 #include <stdint.h>
 
-#include <eosio/chain/block_header.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/types.hpp>
+#include <arisen/chain/block_header.hpp>
+#include <arisen/chain/exceptions.hpp>
+#include <arisen/chain/types.hpp>
 #include <fc/log/logger.hpp>
 
-namespace eosio {
+namespace arisen {
 
 /*
  *   *.log:
@@ -293,6 +293,6 @@ class state_history_log {
    }
 }; // state_history_log
 
-} // namespace eosio
+} // namespace arisen
 
-FC_REFLECT(eosio::state_history_log_header, (magic)(block_id)(payload_size))
+FC_REFLECT(arisen::state_history_log_header, (magic)(block_id)(payload_size))

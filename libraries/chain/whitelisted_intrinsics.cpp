@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/chain/whitelisted_intrinsics.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/whitelisted_intrinsics.hpp>
+#include <arisen/chain/exceptions.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    template<typename Iterator>
    bool find_intrinsic_helper( uint64_t h, const std::string& name, Iterator& itr, const Iterator& end ) {

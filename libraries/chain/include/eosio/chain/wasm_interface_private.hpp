@@ -1,13 +1,13 @@
 #pragma once
 
-#include <eosio/chain/wasm_interface.hpp>
-#include <eosio/chain/webassembly/wavm.hpp>
-#include <eosio/chain/webassembly/wabt.hpp>
-#include <eosio/chain/webassembly/runtime_interface.hpp>
-#include <eosio/chain/wasm_eosio_injection.hpp>
-#include <eosio/chain/transaction_context.hpp>
-#include <eosio/chain/code_object.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/wasm_interface.hpp>
+#include <arisen/chain/webassembly/wavm.hpp>
+#include <arisen/chain/webassembly/wabt.hpp>
+#include <arisen/chain/webassembly/runtime_interface.hpp>
+#include <arisen/chain/wasm_eosio_injection.hpp>
+#include <arisen/chain/transaction_context.hpp>
+#include <arisen/chain/code_object.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include <fc/scoped_exit.hpp>
 
 #include "IR/Module.h"
@@ -17,12 +17,12 @@
 #include "IR/Validate.h"
 
 using namespace fc;
-using namespace eosio::chain::webassembly;
+using namespace arisen::chain::webassembly;
 using namespace IR;
 using namespace Runtime;
 using boost::multi_index_container;
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    struct wasm_interface_impl {
       struct wasm_cache_entry {
@@ -202,4 +202,4 @@ namespace eosio { namespace chain {
 #define REGISTER_INJECTED_INTRINSICS(CLS, MEMBERS)\
    BOOST_PP_SEQ_FOR_EACH(_REGISTER_INJECTED_INTRINSIC, CLS, _WRAPPED_SEQ(MEMBERS))
 
-} } // eosio::chain
+} } // arisen::chain

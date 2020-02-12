@@ -1,17 +1,17 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/permission_object.hpp>
-#include <eosio/chain/snapshot.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/chain/permission_object.hpp>
+#include <arisen/chain/snapshot.hpp>
 
 #include <utility>
 #include <functional>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    class controller;
    struct updateauth;
@@ -134,4 +134,4 @@ namespace eosio { namespace chain {
                                                            )const;
    };
 
-} } /// namespace eosio::chain
+} } /// namespace arisen::chain

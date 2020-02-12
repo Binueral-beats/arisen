@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/wallet_plugin/se_wallet.hpp>
-#include <eosio/wallet_plugin/macos_user_auth.h>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/wallet_plugin/se_wallet.hpp>
+#include <arisen/wallet_plugin/macos_user_auth.h>
+#include <arisen/chain/exceptions.hpp>
 
 #include <fc/crypto/openssl.hpp>
 
@@ -15,7 +15,7 @@
 
 #include <future>
 
-namespace eosio { namespace wallet {
+namespace arisen { namespace wallet {
 
 using namespace fc::crypto::r1;
 

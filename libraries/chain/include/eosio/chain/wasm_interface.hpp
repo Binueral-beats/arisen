@@ -1,12 +1,12 @@
 #pragma once
-#include <eosio/chain/code_object.hpp>
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/whitelisted_intrinsics.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/code_object.hpp>
+#include <arisen/chain/types.hpp>
+#include <arisen/chain/whitelisted_intrinsics.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include "Runtime/Linker.h"
 #include "Runtime/Runtime.h"
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    class apply_context;
    class wasm_runtime_interface;
@@ -99,13 +99,13 @@ namespace eosio { namespace chain {
 
       private:
          unique_ptr<struct wasm_interface_impl> my;
-         friend class eosio::chain::webassembly::common::intrinsics_accessor;
+         friend class arisen::chain::webassembly::common::intrinsics_accessor;
    };
 
-} } // eosio::chain
+} } // arisen::chain
 
-namespace eosio{ namespace chain {
+namespace arisen{ namespace chain {
    std::istream& operator>>(std::istream& in, wasm_interface::vm_type& runtime);
 }}
 
-FC_REFLECT_ENUM( eosio::chain::wasm_interface::vm_type, (wavm)(wabt) )
+FC_REFLECT_ENUM( arisen::chain::wasm_interface::vm_type, (wavm)(wabt) )

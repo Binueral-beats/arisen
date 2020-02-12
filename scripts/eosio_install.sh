@@ -3,7 +3,7 @@ set -eo pipefail
 VERSION=2.1
 ##########################################################################
 # This is the ARISEN automated install script for Linux and Mac OS.
-# This file was downloaded from https://github.com/ARISEN/eos
+# This file was downloaded from https://github.com/ARISEN/rsn
 #
 # Copyright (c) 2017, Respective Authors all rights reserved.
 #
@@ -29,14 +29,14 @@ VERSION=2.1
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-# https://github.com/ARISEN/eos/blob/master/LICENSE.txt
+# https://github.com/ARISEN/rsn/blob/master/LICENSE.txt
 ##########################################################################
 
 # Ensure we're in the repo root and not inside of scripts
 cd $( dirname "${BASH_SOURCE[0]}" )/..
 
-# Load eosio specific helper functions
-. ./scripts/helpers/eosio.sh
+# Load arisen specific helper functions
+. ./scripts/helpers/arisen.sh
 
 [[ ! $NAME == "Ubuntu" ]] && set -i # Ubuntu doesn't support interactive mode since it uses dash
 

@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include "snapshot_test.hpp"
 
-using namespace eosio;
+using namespace arisen;
 
 void snapshot_test::increment( uint32_t value ) {
    require_auth( get_self() );

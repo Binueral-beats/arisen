@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
 #include "config.hpp"
 
-namespace eosio { namespace client { namespace http {
+namespace arisen { namespace client { namespace http {
 
    namespace detail {
       class http_context_impl;

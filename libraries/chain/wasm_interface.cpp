@@ -1,18 +1,18 @@
-#include <eosio/chain/wasm_interface.hpp>
-#include <eosio/chain/apply_context.hpp>
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/transaction_context.hpp>
-#include <eosio/chain/producer_schedule.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/wasm_interface.hpp>
+#include <arisen/chain/apply_context.hpp>
+#include <arisen/chain/controller.hpp>
+#include <arisen/chain/transaction_context.hpp>
+#include <arisen/chain/producer_schedule.hpp>
+#include <arisen/chain/exceptions.hpp>
 #include <boost/core/ignore_unused.hpp>
-#include <eosio/chain/authorization_manager.hpp>
-#include <eosio/chain/resource_limits.hpp>
-#include <eosio/chain/wasm_interface_private.hpp>
-#include <eosio/chain/wasm_eosio_validation.hpp>
-#include <eosio/chain/wasm_eosio_injection.hpp>
-#include <eosio/chain/global_property_object.hpp>
-#include <eosio/chain/protocol_state_object.hpp>
-#include <eosio/chain/account_object.hpp>
+#include <arisen/chain/authorization_manager.hpp>
+#include <arisen/chain/resource_limits.hpp>
+#include <arisen/chain/wasm_interface_private.hpp>
+#include <arisen/chain/wasm_eosio_validation.hpp>
+#include <arisen/chain/wasm_eosio_injection.hpp>
+#include <arisen/chain/global_property_object.hpp>
+#include <arisen/chain/protocol_state_object.hpp>
+#include <arisen/chain/account_object.hpp>
 #include <fc/exception/exception.hpp>
 #include <fc/crypto/sha256.hpp>
 #include <fc/crypto/sha1.hpp>
@@ -25,7 +25,7 @@
 #include <fstream>
 #include <string.h>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
    using namespace webassembly;
    using namespace webassembly::common;
 
@@ -595,67 +595,67 @@ class softfloat_api : public context_aware_api {
       int32_t _eosio_f32_trunc_i32s( float af ) {
          float32_t a = to_softfloat32(af);
          if (_eosio_f32_ge(af, 2147483648.0f) || _eosio_f32_lt(af, -2147483648.0f))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f32.convert_s/i32 overflow" );
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f32.convert_s/i32 overflow" );
 
          if (is_nan(a))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f32.convert_s/i32 unrepresentable");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f32.convert_s/i32 unrepresentable");
          return f32_to_i32( to_softfloat32(_eosio_f32_trunc( af )), 0, false );
       }
       int32_t _eosio_f64_trunc_i32s( double af ) {
          float64_t a = to_softfloat64(af);
          if (_eosio_f64_ge(af, 2147483648.0) || _eosio_f64_lt(af, -2147483648.0))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f64.convert_s/i32 overflow");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f64.convert_s/i32 overflow");
          if (is_nan(a))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f64.convert_s/i32 unrepresentable");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f64.convert_s/i32 unrepresentable");
          return f64_to_i32( to_softfloat64(_eosio_f64_trunc( af )), 0, false );
       }
       uint32_t _eosio_f32_trunc_i32u( float af ) {
          float32_t a = to_softfloat32(af);
          if (_eosio_f32_ge(af, 4294967296.0f) || _eosio_f32_le(af, -1.0f))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f32.convert_u/i32 overflow");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f32.convert_u/i32 overflow");
          if (is_nan(a))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f32.convert_u/i32 unrepresentable");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f32.convert_u/i32 unrepresentable");
          return f32_to_ui32( to_softfloat32(_eosio_f32_trunc( af )), 0, false );
       }
       uint32_t _eosio_f64_trunc_i32u( double af ) {
          float64_t a = to_softfloat64(af);
          if (_eosio_f64_ge(af, 4294967296.0) || _eosio_f64_le(af, -1.0))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f64.convert_u/i32 overflow");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f64.convert_u/i32 overflow");
          if (is_nan(a))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f64.convert_u/i32 unrepresentable");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f64.convert_u/i32 unrepresentable");
          return f64_to_ui32( to_softfloat64(_eosio_f64_trunc( af )), 0, false );
       }
       int64_t _eosio_f32_trunc_i64s( float af ) {
          float32_t a = to_softfloat32(af);
          if (_eosio_f32_ge(af, 9223372036854775808.0f) || _eosio_f32_lt(af, -9223372036854775808.0f))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f32.convert_s/i64 overflow");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f32.convert_s/i64 overflow");
          if (is_nan(a))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f32.convert_s/i64 unrepresentable");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f32.convert_s/i64 unrepresentable");
          return f32_to_i64( to_softfloat32(_eosio_f32_trunc( af )), 0, false );
       }
       int64_t _eosio_f64_trunc_i64s( double af ) {
          float64_t a = to_softfloat64(af);
          if (_eosio_f64_ge(af, 9223372036854775808.0) || _eosio_f64_lt(af, -9223372036854775808.0))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f64.convert_s/i64 overflow");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f64.convert_s/i64 overflow");
          if (is_nan(a))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f64.convert_s/i64 unrepresentable");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f64.convert_s/i64 unrepresentable");
 
          return f64_to_i64( to_softfloat64(_eosio_f64_trunc( af )), 0, false );
       }
       uint64_t _eosio_f32_trunc_i64u( float af ) {
          float32_t a = to_softfloat32(af);
          if (_eosio_f32_ge(af, 18446744073709551616.0f) || _eosio_f32_le(af, -1.0f))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f32.convert_u/i64 overflow");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f32.convert_u/i64 overflow");
          if (is_nan(a))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f32.convert_u/i64 unrepresentable");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f32.convert_u/i64 unrepresentable");
          return f32_to_ui64( to_softfloat32(_eosio_f32_trunc( af )), 0, false );
       }
       uint64_t _eosio_f64_trunc_i64u( double af ) {
          float64_t a = to_softfloat64(af);
          if (_eosio_f64_ge(af, 18446744073709551616.0) || _eosio_f64_le(af, -1.0))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f64.convert_u/i64 overflow");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f64.convert_u/i64 overflow");
          if (is_nan(a))
-            FC_THROW_EXCEPTION( eosio::chain::wasm_execution_error, "Error, f64.convert_u/i64 unrepresentable");
+            FC_THROW_EXCEPTION( arisen::chain::wasm_execution_error, "Error, f64.convert_u/i64 unrepresentable");
          return f64_to_ui64( to_softfloat64(_eosio_f64_trunc( af )), 0, false );
       }
       float _eosio_i32_to_f32( int32_t a )  {
@@ -752,7 +752,7 @@ class crypto_api : public context_aware_api {
 
       template<class Encoder> auto encode(char* data, size_t datalen) {
          Encoder e;
-         const size_t bs = eosio::chain::config::hashing_checktime_block_size;
+         const size_t bs = arisen::chain::config::hashing_checktime_block_size;
          while ( datalen > bs ) {
             e.write( data, bs );
             data += bs;
@@ -1686,7 +1686,7 @@ class compiler_builtins : public context_aware_api {
 
 
 /*
- * This api will be removed with fix for `eos #2561`
+ * This api will be removed with fix for `rsn #2561`
  */
 class call_depth_api : public context_aware_api {
    public:
@@ -1968,12 +1968,12 @@ std::istream& operator>>(std::istream& in, wasm_interface::vm_type& runtime) {
    std::string s;
    in >> s;
    if (s == "wavm")
-      runtime = eosio::chain::wasm_interface::vm_type::wavm;
+      runtime = arisen::chain::wasm_interface::vm_type::wavm;
    else if (s == "wabt")
-      runtime = eosio::chain::wasm_interface::vm_type::wabt;
+      runtime = arisen::chain::wasm_interface::vm_type::wabt;
    else
       in.setstate(std::ios_base::failbit);
    return in;
 }
 
-} } /// eosio::chain
+} } /// arisen::chain

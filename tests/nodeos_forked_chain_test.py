@@ -16,7 +16,7 @@ import signal
 
 ###############################################################
 # nodeos_forked_chain_test
-# --dump-error-details <Upon error print etc/eosio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
+# --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
 Print=Utils.Print
@@ -146,7 +146,7 @@ try:
     Print("Stand up cluster")
     specificExtraNodeosArgs={}
     # producer nodes will be mapped to 0 through totalProducerNodes-1, so the number totalProducerNodes will be the non-producing node
-    specificExtraNodeosArgs[totalProducerNodes]="--plugin eosio::test_control_api_plugin"
+    specificExtraNodeosArgs[totalProducerNodes]="--plugin arisen::test_control_api_plugin"
 
 
     # ***   setup topogrophy   ***
@@ -158,7 +158,7 @@ try:
                       totalNodes=totalNodes, totalProducers=totalProducers,
                       useBiosBootFile=False, specificExtraNodeosArgs=specificExtraNodeosArgs) is False:
         Utils.cmdError("launcher")
-        Utils.errorExit("Failed to stand up eos cluster.")
+        Utils.errorExit("Failed to stand up rsn cluster.")
     Print("Validating system accounts after bootstrap")
     cluster.validateAccounts(None)
 
@@ -212,7 +212,7 @@ try:
     # ***   delegate bandwidth to accounts   ***
 
     node=prodNodes[0]
-    # create accounts via eosio as otherwise a bid is needed
+    # create accounts via arisen as otherwise a bid is needed
     for account in accounts:
         Print("Create new account %s via %s" % (account.name, cluster.eosioAccount.name))
         trans=node.createInitializeAccount(account, cluster.eosioAccount, stakedDeposit=0, waitForTransBlock=True, stakeNet=1000, stakeCPU=1000, buyRAM=1000, exitOnError=True)

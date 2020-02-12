@@ -1,14 +1,14 @@
 
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
 #include <vector>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 extern const std::vector<const char*> genesis_intrinsics;
 
-} } // namespace eosio::chain
+} } // namespace arisen::chain

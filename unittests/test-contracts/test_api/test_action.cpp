@@ -1,20 +1,20 @@
 /**
  * @file action_test.cpp
- * @copyright defined in eos/LICENSE
+ * @copyright defined in rsn/LICENSE
  */
 #include <eosiolib/action.hpp>
 #include <eosiolib/chain.h>
 #include <eosiolib/crypto.h>
 #include <eosiolib/datastream.hpp>
 #include <eosiolib/db.h>
-#include <eosiolib/eosio.hpp>
+#include <eosiolib/arisen.hpp>
 #include <eosiolib/print.hpp>
 #include <eosiolib/privileged.h>
 #include <eosiolib/transaction.hpp>
 
 #include "test_api.hpp"
 
-using namespace eosio;
+using namespace arisen;
 
 void test_action::read_action_normal() {
 
@@ -50,10 +50,10 @@ void test_action::test_dummy_action() {
    total = get_action( 1, 0, buffer, 0 );
    total = get_action( 1, 0, buffer, static_cast<size_t>(total) );
    eosio_assert( total > 0, "get_action failed" );
-   eosio::action act = eosio::get_action( 1, 0 );
+   arisen::action act = arisen::get_action( 1, 0 );
    eosio_assert( act.authorization.back().actor == "testapi"_n, "incorrect permission actor" );
    eosio_assert( act.authorization.back().permission == "active"_n, "incorrect permission name" );
-   eosio_assert( eosio::pack_size(act) == static_cast<size_t>(total), "pack_size does not match get_action size" );
+   eosio_assert( arisen::pack_size(act) == static_cast<size_t>(total), "pack_size does not match get_action size" );
    eosio_assert( act.account == "testapi"_n, "expected testapi account" );
 
    dummy_action dum13 = act.data_as<dummy_action>();
@@ -79,7 +79,7 @@ void test_action::read_action_to_64k() {
 
 void test_action::test_cf_action() {
 
-   eosio::action act = eosio::get_action( 0, 0 );
+   arisen::action act = arisen::get_action( 0, 0 );
    cf_action cfa = act.data_as<cf_action>();
    if ( cfa.payload == 100 ) {
       // verify read of get_context_free_data, also verifies system api access
@@ -88,7 +88,7 @@ void test_action::test_cf_action() {
       std::vector<char> cfd( static_cast<size_t>(size) );
       size = get_context_free_data( cfa.cfd_idx, &cfd[0], static_cast<size_t>(size) );
       eosio_assert(static_cast<size_t>(size) == cfd.size(), "get_context_free_data failed" );
-      uint32_t v = eosio::unpack<uint32_t>( &cfd[0], cfd.size() );
+      uint32_t v = arisen::unpack<uint32_t>( &cfd[0], cfd.size() );
       eosio_assert( v == cfa.payload, "invalid value" );
 
       // verify crypto api access
@@ -99,7 +99,7 @@ void test_action::test_cf_action() {
       // verify action api access
       action_data_size();
       // verify console api access
-      eosio::print("test\n");
+      arisen::print("test\n");
       // verify memory api access
       uint32_t i = 42;
       memccpy( &v, &i, sizeof(i), sizeof(i) );
@@ -135,11 +135,11 @@ void test_action::test_cf_action() {
       eosio_assert( false, "db_api should not be allowed" );
    } else if ( cfa.payload == 205 ) {
       // attempt to access non context free api, send action
-      eosio::action dum_act;
+      arisen::action dum_act;
       dum_act.send();
       eosio_assert( false, "action send should not be allowed" );
    } else if ( cfa.payload == 206 ) {
-      eosio::require_auth("test"_n);
+      arisen::require_auth("test"_n);
       eosio_assert( false, "authorization_api should not be allowed" );
    } else if ( cfa.payload == 207 ) {
       now();
@@ -163,9 +163,9 @@ void test_action::test_cf_action() {
 void test_action::require_notice( uint64_t receiver, uint64_t code, uint64_t action ) {
    (void)code;(void)action;
    if( receiver == "testapi"_n.value ) {
-      eosio::require_recipient( "acc1"_n );
-      eosio::require_recipient( "acc2"_n );
-      eosio::require_recipient( "acc1"_n, "acc2"_n );
+      arisen::require_recipient( "acc1"_n );
+      arisen::require_recipient( "acc2"_n );
+      arisen::require_recipient( "acc1"_n, "acc2"_n );
       eosio_assert( false, "Should've failed" );
    } else if ( receiver == "acc1"_n.value || receiver == "acc2"_n.value ) {
       return;
@@ -174,20 +174,20 @@ void test_action::require_notice( uint64_t receiver, uint64_t code, uint64_t act
 }
 
 void test_action::require_notice_tests( uint64_t receiver, uint64_t code, uint64_t action ) {
-   eosio::print( "require_notice_tests" );
+   arisen::print( "require_notice_tests" );
    if( receiver == "testapi"_n.value ) {
-      eosio::print("require_recipient( \"acc5\"_n )");
-      eosio::require_recipient("acc5"_n);
+      arisen::print("require_recipient( \"acc5\"_n )");
+      arisen::require_recipient("acc5"_n);
    } else if( receiver == "acc5"_n.value ) {
-      eosio::print("require_recipient( \"testapi\"_n )");
-      eosio::require_recipient("testapi"_n);
+      arisen::print("require_recipient( \"testapi\"_n )");
+      arisen::require_recipient("testapi"_n);
    }
 }
 
 void test_action::require_auth() {
    prints("require_auth");
-   eosio::require_auth("acc3"_n);
-   eosio::require_auth("acc4"_n);
+   arisen::require_auth("acc3"_n);
+   arisen::require_auth("acc4"_n);
 }
 
 void test_action::assert_false() {
@@ -245,7 +245,7 @@ void test_action::test_ram_billing_in_notify( uint64_t receiver, uint64_t code, 
    uint64_t payer = tmp & 0xFFFFFFFFFFFFFFFFULL;
 
    if( code == receiver ) {
-      eosio::require_recipient( name{to_notify} );
+      arisen::require_recipient( name{to_notify} );
    } else {
       eosio_assert( to_notify == receiver, "notified recipient other than the one specified in to_notify" );
 
@@ -264,9 +264,9 @@ void test_action::test_action_ordinal1(uint64_t receiver, uint64_t code, uint64_
    uint64_t _self = receiver;
    if (receiver == "testapi"_n.value) {
       print("exec 1");
-      eosio::require_recipient( "bob"_n ); //-> exec 2 which would then cause execution of 4, 10
+      arisen::require_recipient( "bob"_n ); //-> exec 2 which would then cause execution of 4, 10
 
-      eosio::action act1({name(_self), "active"_n}, name(_self),
+      arisen::action act1({name(_self), "active"_n}, name(_self),
                          name(WASM_TEST_ACTION("test_action", "test_action_ordinal2")),
                          std::tuple<>());
       act1.send(); // -> exec 5 which would then cause execution of 6, 7, 8
@@ -275,24 +275,24 @@ void test_action::test_action_ordinal1(uint64_t receiver, uint64_t code, uint64_
          eosio_assert(false, "fail at point 1");
       }
 
-      eosio::action act2({name(_self), "active"_n}, name(_self),
+      arisen::action act2({name(_self), "active"_n}, name(_self),
                          name(WASM_TEST_ACTION("test_action", "test_action_ordinal3")),
                          std::tuple<>());
       act2.send(); // -> exec 9
 
-      eosio::require_recipient( "charlie"_n ); // -> exec 3 which would then cause execution of 11
+      arisen::require_recipient( "charlie"_n ); // -> exec 3 which would then cause execution of 11
 
    } else if (receiver == "bob"_n.value) {
       print("exec 2");
-      eosio::action act1({name(_self), "active"_n}, name(_self),
+      arisen::action act1({name(_self), "active"_n}, name(_self),
                          name(WASM_TEST_ACTION("test_action", "test_action_ordinal_foo")),
                          std::tuple<>());
       act1.send(); // -> exec 10
 
-      eosio::require_recipient( "david"_n );  // -> exec 4
+      arisen::require_recipient( "david"_n );  // -> exec 4
    } else if (receiver == "charlie"_n.value) {
       print("exec 3");
-      eosio::action act1({name(_self), "active"_n}, name(_self),
+      arisen::action act1({name(_self), "active"_n}, name(_self),
                          name(WASM_TEST_ACTION("test_action", "test_action_ordinal_bar")),
                          std::tuple<>()); // exec 11
       act1.send();
@@ -311,10 +311,10 @@ void test_action::test_action_ordinal2(uint64_t receiver, uint64_t code, uint64_
    uint64_t _self = receiver;
    if (receiver == "testapi"_n.value) {
       print("exec 5");
-      eosio::require_recipient( "david"_n ); // -> exec 6
-      eosio::require_recipient( "erin"_n ); // -> exec 7
+      arisen::require_recipient( "david"_n ); // -> exec 6
+      arisen::require_recipient( "erin"_n ); // -> exec 7
 
-      eosio::action act1({name(_self), "active"_n}, name(_self),
+      arisen::action act1({name(_self), "active"_n}, name(_self),
                          name(WASM_TEST_ACTION("test_action", "test_action_ordinal4")),
                          std::tuple<>());
       act1.send(); // -> exec 8
