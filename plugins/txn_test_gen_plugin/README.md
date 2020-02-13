@@ -1,6 +1,6 @@
 # txn\_test\_gen\_plugin
 
-This plugin provides a way to generate a given amount of transactions per second against the currency contract. It runs internally to eosd to reduce overhead.
+This plugin provides a way to generate a given amount of transactions per second against the currency contract. It runs internally to rsnd to reduce overhead.
 
 This general procedure was used when doing Dawn 3.0 performance testing as mentioned in https://github.com/ARISEN/rsn/issues/2078.
 
@@ -51,29 +51,29 @@ EOF
 
 ### Launch producer
 ```bash
-$ ./nodeos -d ~/rsn.data/producer_node --config-dir ~/rsn.data/producer_node -l ~/rsn.data/logging.json --http-server-address "" -p arisen -e
+$ ./aos -d ~/rsn.data/producer_node --config-dir ~/rsn.data/producer_node -l ~/rsn.data/logging.json --http-server-address "" -p arisen -e
 ```
 
 ### Launch non-producer that will generate transactions
 ```bash
-$ ./nodeos -d ~/rsn.data/generator_node --config-dir ~/rsn.data/generator_node -l ~/rsn.data/logging.json --plugin arisen::txn_test_gen_plugin --plugin arisen::chain_api_plugin --p2p-peer-address localhost:9876 --p2p-listen-endpoint localhost:5555
+$ ./aos -d ~/rsn.data/generator_node --config-dir ~/rsn.data/generator_node -l ~/rsn.data/logging.json --plugin arisen::txn_test_gen_plugin --plugin arisen::chain_api_plugin --p2p-peer-address localhost:6620 --p2p-listen-endpoint localhost:5555
 ```
 
 ### Create a wallet on the non-producer and set bios contract
 ```bash
-$ ./cleos wallet create --to-console
-$ ./cleos wallet import --private-key 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
-$ ./cleos set contract arisen ~/rsn/build.release/contracts/arisen.bios/ 
+$ ./arisecli wallet create --to-console
+$ ./arisecli wallet import --private-key 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
+$ ./arisecli set contract arisen ~/rsn/build.release/contracts/arisen.bios/ 
 ```
 
 ### Initialize the accounts txn_test_gen_plugin uses
 ```bash
-$ curl --data-binary '["arisen", "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"]' http://127.0.0.1:8888/v1/txn_test_gen/create_test_accounts
+$ curl --data-binary '["arisen", "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"]' http://127.0.0.1:12618/v1/txn_test_gen/create_test_accounts
 ```
 
 ### Start transaction generation, this will submit 20 transactions evey 20ms (total of 1000TPS)
 ```bash
-$ curl --data-binary '["", 20, 20]' http://127.0.0.1:8888/v1/txn_test_gen/start_generation
+$ curl --data-binary '["", 20, 20]' http://127.0.0.1:12618/v1/txn_test_gen/start_generation
 ```
 
 ### Note the producer console prints

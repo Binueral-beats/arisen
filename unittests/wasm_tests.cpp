@@ -8,7 +8,7 @@
 #include <arisen/chain/abi_serializer.hpp>
 #include <arisen/chain/exceptions.hpp>
 #include <arisen/chain/resource_limits.hpp>
-#include <arisen/chain/wasm_eosio_constraints.hpp>
+#include <arisen/chain/wasm_arisen_constraints.hpp>
 #include <arisen/chain/wast_to_wasm.hpp>
 #include <arisen/testing/tester.hpp>
 
@@ -117,7 +117,7 @@ BOOST_FIXTURE_TEST_CASE( basic_test, TESTER ) try {
       trx.sign( get_private_key( N(asserter), "active" ), control->get_chain_id() );
       yes_assert_id = trx.id();
 
-      BOOST_CHECK_THROW(push_transaction( trx ), eosio_assert_message_exception);
+      BOOST_CHECK_THROW(push_transaction( trx ), arisen_assert_message_exception);
    }
 
    produce_blocks(1);
@@ -966,10 +966,10 @@ BOOST_FIXTURE_TEST_CASE(noop, TESTER) try {
 
  } FC_LOG_AND_RETHROW()
 
-// abi_serializer::to_variant failed because eosio_system_abi modified via set_abi.
-// This test also verifies that chain_initializer::eos_contract_abi() does not conflict
-// with eosio_system_abi as they are not allowed to contain duplicates.
-BOOST_FIXTURE_TEST_CASE(eosio_abi, TESTER) try {
+// abi_serializer::to_variant failed because arisen_system_abi modified via set_abi.
+// This test also verifies that chain_initializer::rsn_contract_abi() does not conflict
+// with arisen_system_abi as they are not allowed to contain duplicates.
+BOOST_FIXTURE_TEST_CASE(arisen_abi, TESTER) try {
    produce_blocks(2);
 
    const auto& accnt  = control->db().get<account_object,by_name>(config::system_account_name);
@@ -1137,7 +1137,7 @@ BOOST_FIXTURE_TEST_CASE( check_table_maximum, TESTER ) try {
    trx.sign(get_private_key( N(tbl), "active" ), control->get_chain_id());
 
    //should fail, a check to make sure assert() in wasm is being evaluated correctly
-   BOOST_CHECK_THROW(push_transaction(trx), eosio_assert_message_exception);
+   BOOST_CHECK_THROW(push_transaction(trx), arisen_assert_message_exception);
    }
 
    produce_blocks(1);
@@ -1753,7 +1753,7 @@ BOOST_FIXTURE_TEST_CASE(net_usage_tests, tester ) try {
       std::string code = R"=====(
    (module
    (import "env" "require_auth" (func $require_auth (param i64)))
-   (import "env" "eosio_assert" (func $eosio_assert (param i32 i32)))
+   (import "env" "arisen_assert" (func $arisen_assert (param i32 i32)))
       (table 0 anyfunc)
       (memory $0 1)
       (export "apply" (func $apply))
@@ -1804,7 +1804,7 @@ BOOST_FIXTURE_TEST_CASE(weighted_net_usage_tests, tester ) try {
       std::string code = R"=====(
    (module
    (import "env" "require_auth" (func $require_auth (param i64)))
-   (import "env" "eosio_assert" (func $eosio_assert (param i32 i32)))
+   (import "env" "arisen_assert" (func $arisen_assert (param i32 i32)))
       (table 0 anyfunc)
       (memory $0 1)
       (export "apply" (func $apply))

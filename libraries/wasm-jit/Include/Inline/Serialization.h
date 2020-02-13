@@ -2,7 +2,7 @@
 
 #include "Platform/Platform.h"
 
-#include "../../../chain/include/arisen/chain/wasm_eosio_constraints.hpp"
+#include "../../../chain/include/arisen/chain/wasm_arisen_constraints.hpp"
 #include <string>
 #include <vector>
 #include <string.h>

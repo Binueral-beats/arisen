@@ -70,8 +70,8 @@ std::vector<genesis_account> test_genesis( {
 class bootseq_tester : public TESTER {
 public:
    void deploy_contract( bool call_init = true ) {
-      set_code( config::system_account_name, contracts::eosio_system_wasm() );
-      set_abi( config::system_account_name, contracts::eosio_system_abi().data() );
+      set_code( config::system_account_name, contracts::arisen_system_wasm() );
+      set_abi( config::system_account_name, contracts::arisen_system_abi().data() );
       if( call_init ) {
          base_tester::push_action(config::system_account_name, N(init),
                                   config::system_account_name,  mutable_variant_object()
@@ -88,7 +88,7 @@ public:
    fc::variant get_global_state() {
       vector<char> data = get_row_by_account( config::system_account_name, config::system_account_name, N(global), N(global) );
       if (data.empty()) std::cout << "\nData is empty\n" << std::endl;
-      return data.empty() ? fc::variant() : abi_ser.binary_to_variant( "eosio_global_state", data, abi_serializer_max_time );
+      return data.empty() ? fc::variant() : abi_ser.binary_to_variant( "arisen_global_state", data, abi_serializer_max_time );
    }
 
     auto buyram( name payer, name receiver, asset ram ) {
@@ -193,30 +193,30 @@ BOOST_FIXTURE_TEST_CASE( bootseq_test, bootseq_tester ) {
     try {
 
         // Create arisen.msig and arisen.token
-        create_accounts({N(arisen.msig), N(arisen.token), N(arisen.ram), N(arisen.ramfee), N(arisen.stake), N(arisen.vpay), N(arisen.bpay), N(arisen.saving) });
+        create_accounts({N(arisen.msig), N(arisen.token), N(arisen.ram), N(arisen.rfee), N(arisen.stake), N(arisen.vpay), N(arisen.bpay), N(arisen.saving) });
         // Set code for the following accounts:
         //  - arisen (code: arisen.bios) (already set by tester constructor)
         //  - arisen.msig (code: arisen.msig)
         //  - arisen.token (code: arisen.token)
-        // set_code_abi(N(arisen.msig), contracts::eosio_msig_wasm(), contracts::eosio_msig_abi().data());//, &eosio_active_pk);
-        // set_code_abi(N(arisen.token), contracts::eosio_token_wasm(), contracts::eosio_token_abi().data()); //, &eosio_active_pk);
+        // set_code_abi(N(arisen.msig), contracts::arisen_msig_wasm(), contracts::arisen_msig_abi().data());//, &arisen_active_pk);
+        // set_code_abi(N(arisen.token), contracts::arisen_token_wasm(), contracts::arisen_token_abi().data()); //, &arisen_active_pk);
 
         set_code_abi(N(arisen.msig),
-                     contracts::eosio_msig_wasm(),
-                     contracts::eosio_msig_abi().data());//, &eosio_active_pk);
+                     contracts::arisen_msig_wasm(),
+                     contracts::arisen_msig_abi().data());//, &arisen_active_pk);
         set_code_abi(N(arisen.token),
-                     contracts::eosio_token_wasm(),
-                     contracts::eosio_token_abi().data()); //, &eosio_active_pk);
+                     contracts::arisen_token_wasm(),
+                     contracts::arisen_token_abi().data()); //, &arisen_active_pk);
 
         // Set privileged for arisen.msig and arisen.token
         set_privileged(N(arisen.msig));
         set_privileged(N(arisen.token));
 
         // Verify arisen.msig and arisen.token is privileged
-        const auto& eosio_msig_acc = get<account_metadata_object, by_name>(N(arisen.msig));
-        BOOST_TEST(eosio_msig_acc.is_privileged() == true);
-        const auto& eosio_token_acc = get<account_metadata_object, by_name>(N(arisen.token));
-        BOOST_TEST(eosio_token_acc.is_privileged() == true);
+        const auto& arisen_msig_acc = get<account_metadata_object, by_name>(N(arisen.msig));
+        BOOST_TEST(arisen_msig_acc.is_privileged() == true);
+        const auto& arisen_token_acc = get<account_metadata_object, by_name>(N(arisen.token));
+        BOOST_TEST(arisen_token_acc.is_privileged() == true);
 
 
         // Create RSN tokens in arisen.token, set its manager as arisen
@@ -291,7 +291,7 @@ BOOST_FIXTURE_TEST_CASE( bootseq_test, bootseq_tester ) {
         // Spend some time so the producer pay pool is filled by the inflation rate
         produce_min_num_of_blocks_to_spend_time_wo_inactive_prod(fc::seconds(30 * 24 * 3600)); // 30 days
         // Since the total activated stake is less than 150,000,000, it shouldn't be possible to claim rewards
-        BOOST_REQUIRE_THROW(claim_rewards(N(runnerup1)), eosio_assert_message_exception);
+        BOOST_REQUIRE_THROW(claim_rewards(N(runnerup1)), arisen_assert_message_exception);
 
         // This will increase the total vote stake by (40,000,000 - 1,000)
         votepro( N(whale4), {N(prodq), N(prodr), N(prods), N(prodt), N(produ)} );
@@ -336,7 +336,7 @@ BOOST_FIXTURE_TEST_CASE( bootseq_test, bootseq_tester ) {
 
         // This should thrown an error, since block one can only unstake all his stake after 10 years
 
-        BOOST_REQUIRE_THROW(undelegate_bandwidth(N(b1), N(b1), core_from_string("49999500.0000"), core_from_string("49999500.0000")), eosio_assert_message_exception);
+        BOOST_REQUIRE_THROW(undelegate_bandwidth(N(b1), N(b1), core_from_string("49999500.0000"), core_from_string("49999500.0000")), arisen_assert_message_exception);
 
         // Skip 10 years
         produce_block(first_june_2028 - control->head_block_time().time_since_epoch());

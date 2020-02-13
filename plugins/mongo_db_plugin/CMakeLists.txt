@@ -52,7 +52,7 @@ if(BUILD_MONGO_DB_PLUGIN)
   endforeach()
 
   target_link_libraries(mongo_db_plugin
-          PUBLIC chain_plugin eosio_chain appbase
+          PUBLIC chain_plugin arisen_chain appbase
           ${LIBMONGOCXX_STATIC_LIBRARY_PATH} ${LIBBSONCXX_STATIC_LIBRARY_PATH}
           ${MONGOC_STATIC_LIBRARY} ${BSON_STATIC_LIBRARY}
           resolv ${LINK_SASL} ${LINK_ICU} ${LINK_SNAPPY}

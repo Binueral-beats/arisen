@@ -2,8 +2,8 @@
  *  @file
  *  @copyright defined in rsn/LICENSE
  */
-#include <eosiolib/arisen.hpp>
-#include <eosiolib/transaction.hpp>
+#include <arisenlib/arisen.hpp>
+#include <arisenlib/transaction.hpp>
 
 #include "test_api.hpp"
 
@@ -163,7 +163,7 @@ extern "C" {
       WASM_TEST_HANDLER_EX( test_permission, test_account_creation_time );
 
       //unhandled test call
-      eosio_assert( false, "Unknown Test" );
+      arisen_assert( false, "Unknown Test" );
 
    }
 }

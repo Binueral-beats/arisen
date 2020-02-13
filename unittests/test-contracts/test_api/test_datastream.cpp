@@ -4,8 +4,8 @@
  */
 #include <cmath>
 
-#include <eosiolib/arisen.hpp>
-#include <eosiolib/datastream.hpp>
+#include <arisenlib/arisen.hpp>
+#include <arisenlib/datastream.hpp>
 
 #include "test_api.hpp"
 
@@ -18,7 +18,7 @@ struct testtype {
         T v2;
         ds.seekp(0);
         ds >> v2;
-        eosio_assert ( v == v2, errmsg );   
+        arisen_assert ( v == v2, errmsg );   
     }
 };
 
@@ -31,7 +31,7 @@ struct testtype<double> {
       double v2;
       ds.seekp(0);
       ds >> v2;
-      eosio_assert( std::abs(v - v2) < 1e-20, errmsg );
+      arisen_assert( std::abs(v - v2) < 1e-20, errmsg );
    }
 };
 
@@ -44,7 +44,7 @@ struct testtype<float> {
       float v2;
       ds.seekp(0);
       ds >> v2;
-      eosio_assert( std::abs(v - v2) < float(1e-10), errmsg );
+      arisen_assert( std::abs(v - v2) < float(1e-10), errmsg );
    }
 };
 

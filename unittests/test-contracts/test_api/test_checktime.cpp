@@ -4,9 +4,9 @@
  */
 #include <vector>
 
-#include <eosiolib/crypto.h>
-#include <eosiolib/arisen.hpp>
-#include <eosiolib/print.h>
+#include <arisenlib/crypto.h>
+#include <arisenlib/arisen.hpp>
+#include <arisenlib/print.h>
 
 #include "test_api.hpp"
 

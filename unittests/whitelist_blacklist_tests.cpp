@@ -71,8 +71,8 @@ class whitelist_blacklist_tester {
          if( !bootstrap ) return;
 
          chain->create_accounts({N(arisen.token), N(alice), N(bob), N(charlie)});
-         chain->set_code(N(arisen.token), contracts::eosio_token_wasm() );
-         chain->set_abi(N(arisen.token), contracts::eosio_token_abi().data() );
+         chain->set_code(N(arisen.token), contracts::arisen_token_wasm() );
+         chain->set_abi(N(arisen.token), contracts::arisen_token_abi().data() );
          chain->push_action( N(arisen.token), N(create), N(arisen.token), mvo()
               ( "issuer", "arisen.token" )
               ( "maximum_supply", "1000000.00 TOK" )
@@ -207,13 +207,13 @@ BOOST_AUTO_TEST_CASE( contract_whitelist ) { try {
 
    test.chain->produce_blocks();
 
-   test.chain->set_code(N(bob), contracts::eosio_token_wasm() );
-   test.chain->set_abi(N(bob), contracts::eosio_token_abi().data() );
+   test.chain->set_code(N(bob), contracts::arisen_token_wasm() );
+   test.chain->set_abi(N(bob), contracts::arisen_token_abi().data() );
 
    test.chain->produce_blocks();
 
-   test.chain->set_code(N(charlie), contracts::eosio_token_wasm() );
-   test.chain->set_abi(N(charlie), contracts::eosio_token_abi().data() );
+   test.chain->set_code(N(charlie), contracts::arisen_token_wasm() );
+   test.chain->set_abi(N(charlie), contracts::arisen_token_abi().data() );
 
    test.chain->produce_blocks();
 
@@ -256,13 +256,13 @@ BOOST_AUTO_TEST_CASE( contract_blacklist ) { try {
 
    test.chain->produce_blocks();
 
-   test.chain->set_code(N(bob), contracts::eosio_token_wasm() );
-   test.chain->set_abi(N(bob), contracts::eosio_token_abi().data() );
+   test.chain->set_code(N(bob), contracts::arisen_token_wasm() );
+   test.chain->set_abi(N(bob), contracts::arisen_token_abi().data() );
 
    test.chain->produce_blocks();
 
-   test.chain->set_code(N(charlie), contracts::eosio_token_wasm() );
-   test.chain->set_abi(N(charlie), contracts::eosio_token_abi().data() );
+   test.chain->set_code(N(charlie), contracts::arisen_token_wasm() );
+   test.chain->set_abi(N(charlie), contracts::arisen_token_abi().data() );
 
    test.chain->produce_blocks();
 
@@ -299,13 +299,13 @@ BOOST_AUTO_TEST_CASE( action_blacklist ) { try {
 
    test.chain->produce_blocks();
 
-   test.chain->set_code(N(bob), contracts::eosio_token_wasm() );
-   test.chain->set_abi(N(bob), contracts::eosio_token_abi().data() );
+   test.chain->set_code(N(bob), contracts::arisen_token_wasm() );
+   test.chain->set_abi(N(bob), contracts::arisen_token_abi().data() );
 
    test.chain->produce_blocks();
 
-   test.chain->set_code(N(charlie), contracts::eosio_token_wasm() );
-   test.chain->set_abi(N(charlie), contracts::eosio_token_abi().data() );
+   test.chain->set_code(N(charlie), contracts::arisen_token_wasm() );
+   test.chain->set_abi(N(charlie), contracts::arisen_token_abi().data() );
 
    test.chain->produce_blocks();
 
@@ -328,11 +328,11 @@ BOOST_AUTO_TEST_CASE( action_blacklist ) { try {
    test.chain->produce_blocks();
 } FC_LOG_AND_RETHROW() }
 
-BOOST_AUTO_TEST_CASE( blacklist_eosio ) { try {
+BOOST_AUTO_TEST_CASE( blacklist_arisen ) { try {
    whitelist_blacklist_tester<tester> tester1;
    tester1.init();
    tester1.chain->produce_blocks();
-   tester1.chain->set_code(config::system_account_name, contracts::eosio_token_wasm() );
+   tester1.chain->set_code(config::system_account_name, contracts::arisen_token_wasm() );
    tester1.chain->produce_blocks();
    tester1.shutdown();
    tester1.contract_blacklist = {config::system_account_name};
@@ -454,7 +454,7 @@ BOOST_AUTO_TEST_CASE( actor_blacklist_inline_deferred ) { try {
    tester1.chain->produce_blocks();
 
    auto auth = authority(arisen::testing::base_tester::get_public_key("alice", "active"));
-   auth.accounts.push_back( permission_level_weight{{N(alice), config::eosio_code_name}, 1} );
+   auth.accounts.push_back( permission_level_weight{{N(alice), config::arisen_code_name}, 1} );
 
    tester1.chain->push_action( N(arisen), N(updateauth), N(alice), mvo()
       ( "account", "alice" )
@@ -464,8 +464,8 @@ BOOST_AUTO_TEST_CASE( actor_blacklist_inline_deferred ) { try {
    );
 
    auth = authority(arisen::testing::base_tester::get_public_key("bob", "active"));
-   auth.accounts.push_back( permission_level_weight{{N(alice), config::eosio_code_name}, 1} );
-   auth.accounts.push_back( permission_level_weight{{N(bob), config::eosio_code_name}, 1} );
+   auth.accounts.push_back( permission_level_weight{{N(alice), config::arisen_code_name}, 1} );
+   auth.accounts.push_back( permission_level_weight{{N(bob), config::arisen_code_name}, 1} );
 
    tester1.chain->push_action( N(arisen), N(updateauth), N(bob), mvo()
       ( "account", "bob" )
@@ -475,7 +475,7 @@ BOOST_AUTO_TEST_CASE( actor_blacklist_inline_deferred ) { try {
    );
 
    auth = authority(arisen::testing::base_tester::get_public_key("charlie", "active"));
-   auth.accounts.push_back( permission_level_weight{{N(charlie), config::eosio_code_name}, 1} );
+   auth.accounts.push_back( permission_level_weight{{N(charlie), config::arisen_code_name}, 1} );
 
    tester1.chain->push_action( N(arisen), N(updateauth), N(charlie), mvo()
       ( "account", "charlie" )
@@ -598,7 +598,7 @@ BOOST_AUTO_TEST_CASE( blacklist_sender_bypass ) { try {
    tester1.chain->produce_blocks();
 
    auto auth = authority(arisen::testing::base_tester::get_public_key("alice", "active"));
-   auth.accounts.push_back( permission_level_weight{{N(alice), config::eosio_code_name}, 1} );
+   auth.accounts.push_back( permission_level_weight{{N(alice), config::arisen_code_name}, 1} );
 
    tester1.chain->push_action( N(arisen), N(updateauth), N(alice), mvo()
       ( "account", "alice" )
@@ -608,7 +608,7 @@ BOOST_AUTO_TEST_CASE( blacklist_sender_bypass ) { try {
    );
 
    auth = authority(arisen::testing::base_tester::get_public_key("bob", "active"));
-   auth.accounts.push_back( permission_level_weight{{N(bob), config::eosio_code_name}, 1} );
+   auth.accounts.push_back( permission_level_weight{{N(bob), config::arisen_code_name}, 1} );
 
    tester1.chain->push_action( N(arisen), N(updateauth), N(bob), mvo()
       ( "account", "bob" )
@@ -618,7 +618,7 @@ BOOST_AUTO_TEST_CASE( blacklist_sender_bypass ) { try {
    );
 
    auth = authority(arisen::testing::base_tester::get_public_key("charlie", "active"));
-   auth.accounts.push_back( permission_level_weight{{N(charlie), config::eosio_code_name}, 1} );
+   auth.accounts.push_back( permission_level_weight{{N(charlie), config::arisen_code_name}, 1} );
 
    tester1.chain->push_action( N(arisen), N(updateauth), N(charlie), mvo()
       ( "account", "charlie" )

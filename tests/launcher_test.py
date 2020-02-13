@@ -10,7 +10,7 @@ import decimal
 import re
 
 ###############################################################
-# nodeos_run_test
+# nodrsn_run_test
 # --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
@@ -34,11 +34,11 @@ Utils.Debug=debug
 cluster=Cluster(walletd=True, defproduceraPrvtKey=defproduceraPrvtKey)
 walletMgr=WalletMgr(True)
 testSuccessful=False
-killEosInstances=not dontKill
+killRsnInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
-ClientName="cleos"
+WalletdName=Utils.RsnWalletName
+ClientName="arisecli"
 timeout = .5 * 12 * 2 + 60 # time for finalization with 1 producer + 60 seconds padding
 Utils.setIrreversibleTimeout(timeout)
 
@@ -59,7 +59,7 @@ try:
         walletMgr.killall(allInstances=killAll)
         walletMgr.cleanup()
         cluster.initializeNodes(defproduceraPrvtKey=defproduceraPrvtKey)
-        killEosInstances=False
+        killRsnInstances=False
 
         print("Stand up walletd")
         if walletMgr.launch() is False:
@@ -94,7 +94,7 @@ try:
 
     testWalletName="test"
     Print("Creating wallet \"%s\"." % (testWalletName))
-    testWallet=walletMgr.create(testWalletName, [cluster.eosioAccount,cluster.defproduceraAccount])
+    testWallet=walletMgr.create(testWalletName, [cluster.arisenAccount,cluster.defproduceraAccount])
 
     Print("Wallet \"%s\" password=%s." % (testWalletName, testWallet.password.encode("utf-8")))
 
@@ -123,14 +123,14 @@ try:
     cluster.validateAccounts(None)
 
     # create accounts via arisen as otherwise a bid is needed 
-    Print("Create new account %s via %s" % (testeraAccount.name, cluster.eosioAccount.name))
-    transId=node.createInitializeAccount(testeraAccount, cluster.eosioAccount, stakedDeposit=0, waitForTransBlock=False, exitOnError=True)
+    Print("Create new account %s via %s" % (testeraAccount.name, cluster.arisenAccount.name))
+    transId=node.createInitializeAccount(testeraAccount, cluster.arisenAccount, stakedDeposit=0, waitForTransBlock=False, exitOnError=True)
 
-    Print("Create new account %s via %s" % (currencyAccount.name, cluster.eosioAccount.name))
-    transId=node.createInitializeAccount(currencyAccount, cluster.eosioAccount, buyRAM=1000000, stakedDeposit=5000, exitOnError=True)
+    Print("Create new account %s via %s" % (currencyAccount.name, cluster.arisenAccount.name))
+    transId=node.createInitializeAccount(currencyAccount, cluster.arisenAccount, buyRAM=1000000, stakedDeposit=5000, exitOnError=True)
 
-    Print("Create new account %s via %s" % (exchangeAccount.name, cluster.eosioAccount.name))
-    transId=node.createInitializeAccount(exchangeAccount, cluster.eosioAccount, buyRAM=1000000, waitForTransBlock=True, exitOnError=True)
+    Print("Create new account %s via %s" % (exchangeAccount.name, cluster.arisenAccount.name))
+    transId=node.createInitializeAccount(exchangeAccount, cluster.arisenAccount, buyRAM=1000000, waitForTransBlock=True, exitOnError=True)
 
     Print("Validating accounts after user accounts creation")
     accounts=[testeraAccount, currencyAccount, exchangeAccount]
@@ -146,7 +146,7 @@ try:
 
     expectedAmount=transferAmount
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(testeraAccount.name)
+    actualAmount=node.getAccountRsnBalanceStr(testeraAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -158,7 +158,7 @@ try:
 
     expectedAmount="97.5421 {0}".format(CORE_SYMBOL)
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(testeraAccount.name)
+    actualAmount=node.getAccountRsnBalanceStr(testeraAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -175,7 +175,7 @@ try:
 
     expectedAmount="98.0311 {0}".format(CORE_SYMBOL) # 5000 initial deposit
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(currencyAccount.name)
+    actualAmount=node.getAccountRsnBalanceStr(currencyAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -243,6 +243,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killRsnInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exit(0)

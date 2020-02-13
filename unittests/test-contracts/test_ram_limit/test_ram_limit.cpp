@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-#include <eosiolib/arisen.hpp>
+#include <arisenlib/arisen.hpp>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wsign-conversion"
@@ -46,7 +46,7 @@ CONTRACT test_ram_limit : public contract {
          test_table table( self, self.value );
          for ( int key = from; key <=to; ++key ) {
             auto itr = table.find(key);
-            eosio_assert ( itr != table.end(), "could not find test_table entry" );
+            arisen_assert ( itr != table.end(), "could not find test_table entry" );
             table.erase(itr);
          }
       }
@@ -58,7 +58,7 @@ CONTRACT test_ram_limit : public contract {
          for ( int key = from; key <= to; ++key ) {
             auto itr = table.find(key);
             arisen::print("\nkey=", key);
-            eosio_assert ( itr != table.end(), "could not find test_table entry" );
+            arisen_assert ( itr != table.end(), "could not find test_table entry" );
             arisen::print(" size=", itr->data.size());
          }
       }
@@ -70,11 +70,11 @@ CONTRACT test_ram_limit : public contract {
 
          uint64_t primary_key()const { return key; }
 
-         EOSLIB_SERIALIZE( test, (key)(data) )
+         RSNLIB_SERIALIZE( test, (key)(data) )
       };
       typedef arisen::multi_index< "test.table"_n, test> test_table;
 };
 
 #pragma clang diagnostic pop
 
-EOSIO_DISPATCH( test_ram_limit, (setentry)(rmentry)(printentry) )
+ARISEN_DISPATCH( test_ram_limit, (setentry)(rmentry)(printentry) )

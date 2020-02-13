@@ -30,13 +30,13 @@ namespace arisen {
    namespace testing {
       struct contracts {
          // Contracts in `rsn/unittests/contracts' directory
-         MAKE_READ_WASM_ABI(eosio_bios,   arisen.bios, contracts)
-         MAKE_READ_WASM_ABI(eosio_msig,   arisen.msig, contracts)
-         MAKE_READ_WASM_ABI(eosio_system, arisen.system, contracts)
-         MAKE_READ_WASM_ABI(eosio_token,  arisen.token,  contracts)
-         MAKE_READ_WASM_ABI(eosio_wrap,   arisen.wrap,   contracts)
+         MAKE_READ_WASM_ABI(arisen_bios,   arisen.bios, contracts)
+         MAKE_READ_WASM_ABI(arisen_msig,   arisen.msig, contracts)
+         MAKE_READ_WASM_ABI(arisen_system, arisen.system, contracts)
+         MAKE_READ_WASM_ABI(arisen_token,  arisen.token,  contracts)
+         MAKE_READ_WASM_ABI(arisen_wrap,   arisen.wrap,   contracts)
 
-         MAKE_READ_WASM_ABI(before_preactivate_eosio_bios,   arisen.bios, contracts/old_versions/v1.6.0-rc3)
+         MAKE_READ_WASM_ABI(before_preactivate_arisen_bios,   arisen.bios, contracts/old_versions/v1.6.0-rc3)
 
          // Contracts in `rsn/unittests/unittests/test-contracts' directory
          MAKE_READ_WASM_ABI(asserter,              asserter,              test-contracts)

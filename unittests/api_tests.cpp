@@ -391,10 +391,10 @@ BOOST_FIXTURE_TEST_CASE(action_receipt_tests, TESTER) { try {
       BOOST_CHECK_EQUAL( m.begin()->second, base_test_auth_seq_num + 4 );
    } );
 
-   set_code( config::system_account_name, contracts::eosio_bios_wasm() );
+   set_code( config::system_account_name, contracts::arisen_bios_wasm() );
 
-   set_code( N(test), contracts::eosio_bios_wasm() );
-   set_abi( N(test), contracts::eosio_bios_abi().data() );
+   set_code( N(test), contracts::arisen_bios_wasm() );
+   set_abi( N(test), contracts::arisen_bios_abi().data() );
 	set_code( N(test), contracts::payloadless_wasm() );
 
    call_doit_and_check( N(test), N(test), [&]( const transaction_trace_ptr& res ) {
@@ -430,7 +430,7 @@ BOOST_FIXTURE_TEST_CASE(action_tests, TESTER) { try {
 
    //test assert_false
    BOOST_CHECK_EXCEPTION( CALL_TEST_FUNCTION( *this, "test_action", "assert_false", {} ),
-                          eosio_assert_message_exception, eosio_assert_message_is("test_action::assert_false") );
+                          arisen_assert_message_exception, arisen_assert_message_is("test_action::assert_false") );
 
    // test read_action_normal
    dummy_action dummy13{DUMMY_ACTION_DEFAULT_A, DUMMY_ACTION_DEFAULT_B, DUMMY_ACTION_DEFAULT_C};
@@ -539,7 +539,7 @@ BOOST_FIXTURE_TEST_CASE(action_tests, TESTER) { try {
    // test current_time
    produce_block();
    BOOST_CHECK_EXCEPTION( CALL_TEST_FUNCTION( *this, "test_action", "test_current_time", fc::raw::pack(now) ),
-                          eosio_assert_message_exception, eosio_assert_message_is("tmp == current_time()")     );
+                          arisen_assert_message_exception, arisen_assert_message_is("tmp == current_time()")     );
 
    // test test_current_receiver
    CALL_TEST_FUNCTION( *this, "test_action", "test_current_receiver", fc::raw::pack(N(testapi)));
@@ -719,8 +719,8 @@ BOOST_FIXTURE_TEST_CASE(cf_action_tests, TESTER) { try {
       BOOST_CHECK_EQUAL(ttrace->action_traces[1].act.authorization.size(), 0);
 
       BOOST_CHECK_EXCEPTION( CALL_TEST_FUNCTION( *this, "test_transaction", "send_cf_action_fail", {} ),
-                             eosio_assert_message_exception,
-                             eosio_assert_message_is("context free actions cannot have authorizations") );
+                             arisen_assert_message_exception,
+                             arisen_assert_message_is("context free actions cannot have authorizations") );
 
       BOOST_REQUIRE_EQUAL( validate(), true );
 } FC_LOG_AND_RETHROW() }
@@ -1073,8 +1073,8 @@ BOOST_FIXTURE_TEST_CASE(transaction_tests, TESTER) { try {
 
    // test send_action_inline_fail
    BOOST_CHECK_EXCEPTION( CALL_TEST_FUNCTION(*this, "test_transaction", "send_action_inline_fail", {}),
-                          eosio_assert_message_exception,
-                          eosio_assert_message_is("test_action::assert_false")                          );
+                          arisen_assert_message_exception,
+                          arisen_assert_message_is("test_action::assert_false")                          );
 
    //   test send_transaction
       CALL_TEST_FUNCTION(*this, "test_transaction", "send_transaction", {});
@@ -1269,7 +1269,7 @@ BOOST_FIXTURE_TEST_CASE(deferred_transaction_tests, TESTER) { try {
       dtt_act2.delay_sec = 5;
 
       auto auth = authority(get_public_key("testapi", name(dtt_act2.permission_name).to_string()), 10);
-      auth.accounts.push_back( permission_level_weight{{N(testapi), config::eosio_code_name}, 1} );
+      auth.accounts.push_back( permission_level_weight{{N(testapi), config::arisen_code_name}, 1} );
 
       push_action(config::system_account_name, updateauth::get_name(), "testapi", fc::mutable_variant_object()
               ("account", "testapi")
@@ -1396,8 +1396,8 @@ BOOST_AUTO_TEST_CASE(more_deferred_transaction_tests) { try {
    trx.sign( chain.get_private_key( test_account, "active" ), chain.control->get_chain_id() );
    BOOST_REQUIRE_EXCEPTION(
       chain.push_transaction( trx ),
-      eosio_assert_message_exception,
-      eosio_assert_message_is("fail")
+      arisen_assert_message_exception,
+      arisen_assert_message_is("fail")
    );
 
    BOOST_REQUIRE_EQUAL(1, index.size());
@@ -1488,8 +1488,8 @@ BOOST_AUTO_TEST_CASE(more_deferred_transaction_tests) { try {
    trx2.sign( chain.get_private_key( test_account, "active" ), chain.control->get_chain_id() );
    BOOST_REQUIRE_EXCEPTION(
       chain.push_transaction( trx2 ),
-      eosio_assert_message_exception,
-      eosio_assert_message_is("fail")
+      arisen_assert_message_exception,
+      arisen_assert_message_is("fail")
    );
 
    BOOST_REQUIRE_EQUAL(3, index.size());
@@ -1678,8 +1678,8 @@ BOOST_FIXTURE_TEST_CASE(multi_index_tests, TESTER) { try {
 
    auto check_failure = [this]( action_name a, const char* expected_error_msg ) {
       BOOST_CHECK_EXCEPTION(  push_action( N(testapi), a, N(testapi), {} ),
-                              eosio_assert_message_exception,
-                              eosio_assert_message_is( expected_error_msg )
+                              arisen_assert_message_exception,
+                              arisen_assert_message_is( expected_error_msg )
       );
    };
 
@@ -1976,7 +1976,7 @@ BOOST_FIXTURE_TEST_CASE(permission_tests, TESTER) { try {
          .account    = N(testapi),
          .permission = N(active),
          .pubkeys    = {
-            public_key_type(string("EOS7GfRtyDWWgxV88a5TRaYY59XmHptyfjsFmHHfioGNJtPjpSmGX"))
+            public_key_type(string("RSN7GfRtyDWWgxV88a5TRaYY59XmHptyfjsFmHHfioGNJtPjpSmGX"))
          }
       })
    );
@@ -1988,7 +1988,7 @@ BOOST_FIXTURE_TEST_CASE(permission_tests, TESTER) { try {
          .permission = N(active),
          .pubkeys    = {
             get_public_key(N(testapi), "active"),
-            public_key_type(string("EOS7GfRtyDWWgxV88a5TRaYY59XmHptyfjsFmHHfioGNJtPjpSmGX"))
+            public_key_type(string("RSN7GfRtyDWWgxV88a5TRaYY59XmHptyfjsFmHHfioGNJtPjpSmGX"))
          }
       })
    );
@@ -2131,7 +2131,7 @@ BOOST_FIXTURE_TEST_CASE(permission_usage_tests, TESTER) { try {
                                        N(testapi), config::active_name,
                                        control->head_block_time() + fc::milliseconds(config::block_interval_ms)
                                      })
-   ), eosio_assert_message_exception );
+   ), arisen_assert_message_exception );
 
    produce_blocks(5);
 
@@ -2173,7 +2173,7 @@ BOOST_FIXTURE_TEST_CASE(permission_usage_tests, TESTER) { try {
                                                             N(bob), N(perm1),
                                                             permission_creation_time
                                           })
-   ), eosio_assert_message_exception );
+   ), arisen_assert_message_exception );
 
    CALL_TEST_FUNCTION( *this, "test_permission", "test_permission_last_used",
                        fc::raw::pack(test_permission_last_used_action{
@@ -2215,9 +2215,9 @@ BOOST_FIXTURE_TEST_CASE(account_creation_time_tests, TESTER) { try {
 } FC_LOG_AND_RETHROW() }
 
 /*************************************************************************************
- * eosio_assert_code_tests test cases
+ * arisen_assert_code_tests test cases
  *************************************************************************************/
-BOOST_FIXTURE_TEST_CASE(eosio_assert_code_tests, TESTER) { try {
+BOOST_FIXTURE_TEST_CASE(arisen_assert_code_tests, TESTER) { try {
    produce_block();
    create_account( N(testapi) );
    produce_block();
@@ -2247,7 +2247,7 @@ BOOST_FIXTURE_TEST_CASE(eosio_assert_code_tests, TESTER) { try {
    produce_blocks(10);
 
    BOOST_CHECK_EXCEPTION( CALL_TEST_FUNCTION( *this, "test_action", "test_assert_code", fc::raw::pack((uint64_t)42) ),
-                          eosio_assert_code_exception, eosio_assert_code_is(42)                                        );
+                          arisen_assert_code_exception, arisen_assert_code_is(42)                                        );
 
 
    auto trace = CALL_TEST_FUNCTION_NO_THROW( *this, "test_action", "test_assert_code", fc::raw::pack((uint64_t)42) );

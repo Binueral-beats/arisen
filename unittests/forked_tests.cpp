@@ -152,8 +152,8 @@ BOOST_AUTO_TEST_CASE( forking ) try {
 
    auto r2 = c.create_accounts( {N(arisen.token)} );
    wdump((fc::json::to_pretty_string(r2)));
-   c.set_code( N(arisen.token), contracts::eosio_token_wasm() );
-   c.set_abi( N(arisen.token), contracts::eosio_token_abi().data() );
+   c.set_code( N(arisen.token), contracts::arisen_token_wasm() );
+   c.set_abi( N(arisen.token), contracts::arisen_token_abi().data() );
    c.produce_blocks(10);
 
 

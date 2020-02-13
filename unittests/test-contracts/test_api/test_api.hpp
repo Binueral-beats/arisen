@@ -10,7 +10,7 @@
 
 namespace arisen { class transaction; }
 
-// NOTE: including eosiolib/transaction.hpp here causes !"unresolvable": env._ZNKSt3__120__vector_base_commonILb1EE20__throw_length_errorEv
+// NOTE: including arisenlib/transaction.hpp here causes !"unresolvable": env._ZNKSt3__120__vector_base_commonILb1EE20__throw_length_errorEv
 //       errors in api_tests/memory_tests
 
 #define WASM_TEST_HANDLER(CLASS, METHOD) \

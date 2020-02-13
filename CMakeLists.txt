@@ -37,9 +37,9 @@ else()
     set(VERSION_FULL "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 endif()
 
-set( CLI_CLIENT_EXECUTABLE_NAME cleos )
-set( NODE_EXECUTABLE_NAME nodeos )
-set( KEY_STORE_EXECUTABLE_NAME keosd )
+set( CLI_CLIENT_EXECUTABLE_NAME arisecli )
+set( NODE_EXECUTABLE_NAME aos )
+set( KEY_STORE_EXECUTABLE_NAME awalletd )
 set( GUI_CLIENT_EXECUTABLE_NAME arisen )
 set( CUSTOM_URL_SCHEME "gcs" )
 set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
@@ -64,7 +64,7 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 set(BUILD_DOXYGEN FALSE CACHE BOOL "Build doxygen documentation on every make")
 set(BUILD_MONGO_DB_PLUGIN FALSE CACHE BOOL "Build mongo database plugin")
-set(ENABLE_MULTIVERSION_PROTOCOL_TEST FALSE CACHE BOOL "Enable nodeos multiversion protocol test")
+set(ENABLE_MULTIVERSION_PROTOCOL_TEST FALSE CACHE BOOL "Enable aos multiversion protocol test")
 
 # add defaults for openssl
 if ("${OPENSSL_ROOT_DIR}" STREQUAL "")
@@ -208,11 +208,11 @@ endif()
 
 message( STATUS "Using '${CORE_SYMBOL_NAME}' as CORE symbol name" )
 
-if ("${EOSIO_ROOT_KEY}" STREQUAL "")
-   set(EOSIO_ROOT_KEY "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
+if ("${ARISEN_ROOT_KEY}" STREQUAL "")
+   set(ARISEN_ROOT_KEY "RSN6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
 endif()
 
-message( STATUS "Using '${EOSIO_ROOT_KEY}' as public key for 'arisen' account" )
+message( STATUS "Using '${ARISEN_ROOT_KEY}' as public key for 'arisen' account" )
 
 add_subdirectory( libraries )
 add_subdirectory( plugins )
@@ -233,15 +233,15 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/testnet.template ${CMAKE_CURRENT_BINA
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/arisen.version.in ${CMAKE_CURRENT_BINARY_DIR}/arisen.version.hpp)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/arisen.version.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
 
-set(EOS_ROOT_DIR ${CMAKE_BINARY_DIR})
+set(RSN_ROOT_DIR ${CMAKE_BINARY_DIR})
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisen-config.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/arisen-config.cmake @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/EosioTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/EosioTester.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/ArisenTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/ArisenTester.cmake @ONLY)
 
-set(EOS_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
+set(RSN_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisen-config.cmake.in ${CMAKE_BINARY_DIR}/modules/arisen-config.cmake @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/modules/arisen-config.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisen)
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/EosioTester.cmake.in ${CMAKE_BINARY_DIR}/modules/EosioTester.cmake @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/modules/EosioTester.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisen)
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/ArisenTester.cmake.in ${CMAKE_BINARY_DIR}/modules/ArisenTester.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/modules/ArisenTester.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisen)
 
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE
                ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE COPYONLY)

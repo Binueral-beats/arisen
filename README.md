@@ -44,13 +44,13 @@ $ brew remove arisen
 
 #### Ubuntu 18.04 Package Install
 ```sh
-$ wget https://github.com/arisen/rsn/releases/download/v1.8.10/eosio_1.8.10-1-ubuntu-18.04_amd64.deb
-$ sudo apt install ./eosio_1.8.10-1-ubuntu-18.04_amd64.deb
+$ wget https://github.com/arisen/rsn/releases/download/v1.8.10/arisen_1.8.10-1-ubuntu-18.04_amd64.deb
+$ sudo apt install ./arisen_1.8.10-1-ubuntu-18.04_amd64.deb
 ```
 #### Ubuntu 16.04 Package Install
 ```sh
-$ wget https://github.com/arisen/rsn/releases/download/v1.8.10/eosio_1.8.10-1-ubuntu-16.04_amd64.deb
-$ sudo apt install ./eosio_1.8.10-1-ubuntu-16.04_amd64.deb
+$ wget https://github.com/arisen/rsn/releases/download/v1.8.10/arisen_1.8.10-1-ubuntu-16.04_amd64.deb
+$ sudo apt install ./arisen_1.8.10-1-ubuntu-16.04_amd64.deb
 ```
 #### Ubuntu Package Uninstall
 ```sh
@@ -68,7 +68,7 @@ $ sudo yum remove arisen
 
 #### Build Script Uninstall
 
-If you have previously installed ARISEN using build scripts, you can execute `eosio_uninstall.sh` to uninstall.
+If you have previously installed ARISEN using build scripts, you can execute `arisen_uninstall.sh` to uninstall.
 - Passing `-y` will answer yes to all prompts (does not remove data directories)
 - Passing `-f` will remove data directories (be very careful with this)
 - Passing in `-i` allows you to specify where your arisen installation is located
@@ -86,7 +86,7 @@ ARISEN currently supports the following operating systems:
 1. [Blog](https://medium.com/arisen)
 1. [Developer Portal](https://developers.rsn.io)
 1. [StackExchange for Q&A](https://arisen.stackexchange.com/)
-1. [Community Telegram Group](https://t.me/EOSProject)
+1. [Community Telegram Group](https://t.me/RSNProject)
 1. [Developer Telegram Group](https://t.me/joinchat/EaEnSUPktgfoI-XPfMYtcQ)
 1. [White Paper](https://github.com/ARISEN/Documentation/blob/master/TechnicalWhitePaper.md)
 1. [Roadmap](https://github.com/ARISEN/Documentation/blob/master/Roadmap.md)

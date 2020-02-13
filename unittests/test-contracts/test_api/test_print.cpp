@@ -2,7 +2,7 @@
  *  @file
  *  @copyright defined in rsn/LICENSE
  */
-#include <eosiolib/arisen.hpp>
+#include <arisenlib/arisen.hpp>
 
 #include "test_api.hpp"
 

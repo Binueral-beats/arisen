@@ -1,6 +1,6 @@
 test_ram_limit contract was compiled with arisen.cdt v1.4.1
 
-That contract was ported to compile with arisen.cdt v1.5.0, but the test that uses it is very sensitive to stdlib/eosiolib changes, compilation flags and linker flags.
+That contract was ported to compile with arisen.cdt v1.5.0, but the test that uses it is very sensitive to stdlib/arisenlib changes, compilation flags and linker flags.
 
 deferred_test, get_sender_test, proxy, reject_all, and test_api contracts were compiled with arisen.cdt v1.6.1
 

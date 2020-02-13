@@ -29,13 +29,13 @@ BOOST_AUTO_TEST_CASE( activate_preactivate_feature ) try {
    c.produce_block();
 
    // Cannot set latest bios contract since it requires intrinsics that have not yet been whitelisted.
-   BOOST_CHECK_EXCEPTION( c.set_code( config::system_account_name, contracts::eosio_bios_wasm() ),
+   BOOST_CHECK_EXCEPTION( c.set_code( config::system_account_name, contracts::arisen_bios_wasm() ),
                           wasm_exception, fc_exception_message_is("env.is_feature_activated unresolveable")
    );
 
    // But the old bios contract can still be set.
-   c.set_code( config::system_account_name, contracts::before_preactivate_eosio_bios_wasm() );
-   c.set_abi( config::system_account_name, contracts::before_preactivate_eosio_bios_abi().data() );
+   c.set_code( config::system_account_name, contracts::before_preactivate_arisen_bios_wasm() );
+   c.set_abi( config::system_account_name, contracts::before_preactivate_arisen_bios_abi().data() );
 
    auto t = c.control->pending_block_time();
    c.control->abort_block();
@@ -52,15 +52,15 @@ BOOST_AUTO_TEST_CASE( activate_preactivate_feature ) try {
    c.produce_block();
 
    // Now the latest bios contract can be set.
-   c.set_code( config::system_account_name, contracts::eosio_bios_wasm() );
-   c.set_abi( config::system_account_name, contracts::eosio_bios_abi().data() );
+   c.set_code( config::system_account_name, contracts::arisen_bios_wasm() );
+   c.set_abi( config::system_account_name, contracts::arisen_bios_abi().data() );
 
    c.produce_block();
 
    BOOST_CHECK_EXCEPTION( c.push_action( config::system_account_name, N(reqactivated), config::system_account_name,
                                           mutable_variant_object()("feature_digest",  digest_type()) ),
-                           eosio_assert_message_exception,
-                           eosio_assert_message_is( "protocol feature is not activated" )
+                           arisen_assert_message_exception,
+                           arisen_assert_message_is( "protocol feature is not activated" )
    );
 
    c.push_action( config::system_account_name, N(reqactivated), config::system_account_name, mutable_variant_object()
@@ -978,8 +978,8 @@ BOOST_AUTO_TEST_CASE( forward_setcode_test ) { try {
    // After activation, deploying a contract causes setcode to be dispatched to the WASM on arisen,
    // and in this case the contract is configured to reject the setcode action.
    BOOST_REQUIRE_EXCEPTION( c.set_code( tester2_account, contracts::noop_wasm() ),
-                            eosio_assert_message_exception,
-                            eosio_assert_message_is( "rejecting all actions" ) );
+                            arisen_assert_message_exception,
+                            arisen_assert_message_is( "rejecting all actions" ) );
 
 
    tester c2(setup_policy::none);
@@ -993,8 +993,8 @@ BOOST_AUTO_TEST_CASE( forward_setcode_test ) { try {
    // It will now not be possible to deploy the reject_all contract to the arisen account,
    // because after it is set by the native function, it is called immediately after which will reject the transaction.
    BOOST_REQUIRE_EXCEPTION( c.set_code( config::system_account_name, contracts::reject_all_wasm() ),
-                            eosio_assert_message_exception,
-                            eosio_assert_message_is( "rejecting all actions" ) );
+                            arisen_assert_message_exception,
+                            arisen_assert_message_is( "rejecting all actions" ) );
 
 
    // Going back to the backup chain, we can create the rejectall account while the reject_all contract is
@@ -1037,8 +1037,8 @@ BOOST_AUTO_TEST_CASE( get_sender_test ) { try {
    BOOST_CHECK_EXCEPTION(  c.push_action( tester1_account, N(sendinline), tester1_account, mutable_variant_object()
                                              ("to", tester2_account.to_string())
                                              ("expected_sender", account_name{}) ),
-                           eosio_assert_message_exception,
-                           eosio_assert_message_is( "sender did not match" ) );
+                           arisen_assert_message_exception,
+                           arisen_assert_message_is( "sender did not match" ) );
 
    c.push_action( tester1_account, N(sendinline), tester1_account, mutable_variant_object()
       ("to", tester2_account.to_string())

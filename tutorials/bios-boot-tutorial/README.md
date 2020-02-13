@@ -37,16 +37,16 @@ $ pwd
 ```
 
 4. Make note of the directory where the contracts were compiled
-The last command in the previous step printed on the bash console the contracts' directory, make note of it, we'll reference it from now on as `EOSIO_CONTRACTS_DIRECTORY`
+The last command in the previous step printed on the bash console the contracts' directory, make note of it, we'll reference it from now on as `ARISEN_CONTRACTS_DIRECTORY`
 
 5. Launch the `bios-boot-tutorial.py` script
-Minimal command line to launch the script below, make sure you replace `EOSIO_CONTRACTS_DIRECTORY` with actual directory
+Minimal command line to launch the script below, make sure you replace `ARISEN_CONTRACTS_DIRECTORY` with actual directory
 
 ```bash
 $ cd ~
 $ git clone https://github.com/ARISEN/rsn.git
 $ cd ./rsn/tutorials/bios-boot-tutorial/
-$ python3 bios-boot-tutorial.py --cleos="cleos --wallet-url http://127.0.0.1:6666 " --nodeos=nodeos --keosd=keosd --contracts-dir="EOSIO_CONTRACTS_DIRECTORY" -w -a
+$ python3 bios-boot-tutorial.py --arisecli="arisecli --wallet-url http://127.0.0.1:6666 " --aos=aos --awalletd=awalletd --contracts-dir="ARISEN_CONTRACTS_DIRECTORY" -w -a
 ```
 
 See [ARISEN Documentation Wiki: Tutorial - Bios Boot](https://github.com/ARISEN/rsn/wiki/Tutorial-Bios-Boot-Sequence) for additional information.

@@ -9,7 +9,7 @@
 namespace arisen {
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((eosio_wasm_import))
+         __attribute__((arisen_wasm_import))
          uint64_t get_sender();
       }
    }

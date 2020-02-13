@@ -432,7 +432,7 @@ namespace arisen {
             fill_out_buffer( bufs, _sync_write_queue );
          } else { // postpone real_time write_queue if sync queue is not empty
             fill_out_buffer( bufs, _write_queue );
-            EOS_ASSERT( _write_queue_size == 0, plugin_exception, "write queue size expected to be zero" );
+            RSN_ASSERT( _write_queue_size == 0, plugin_exception, "write queue size expected to be zero" );
          }
       }
 
@@ -626,16 +626,16 @@ namespace arisen {
       msg_handler( net_plugin_impl &imp, const connection_ptr& conn) : impl(imp), c(conn) {}
 
       void operator()( const signed_block& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
+         RSN_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
       }
       void operator()( signed_block& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
+         RSN_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
       }
       void operator()( const packed_transaction& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
+         RSN_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
       }
       void operator()( packed_transaction& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
+         RSN_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
       }
 
       void operator()( signed_block&& msg ) const {
@@ -1238,7 +1238,7 @@ namespace arisen {
       ,state(in_sync)
    {
       chain_plug = app().find_plugin<chain_plugin>();
-      EOS_ASSERT( chain_plug, chain::missing_chain_plugin_exception, ""  );
+      RSN_ASSERT( chain_plug, chain::missing_chain_plugin_exception, ""  );
    }
 
    constexpr auto sync_manager::stage_str(stages s) {
@@ -2095,7 +2095,7 @@ namespace arisen {
                         fc_elog( logger,"async_read_some callback: bytes_transfered = ${bt}, buffer.bytes_to_write = ${btw}",
                                  ("bt",bytes_transferred)("btw",conn->pending_message_buffer.bytes_to_write()) );
                      }
-                     EOS_ASSERT(bytes_transferred <= conn->pending_message_buffer.bytes_to_write(), plugin_exception, "");
+                     RSN_ASSERT(bytes_transferred <= conn->pending_message_buffer.bytes_to_write(), plugin_exception, "");
                      conn->pending_message_buffer.advance_write_ptr(bytes_transferred);
                      while (conn->pending_message_buffer.bytes_to_read() > 0) {
                         uint32_t bytes_in_buffer = conn->pending_message_buffer.bytes_to_read();
@@ -2955,7 +2955,7 @@ namespace arisen {
    void net_plugin::set_program_options( options_description& /*cli*/, options_description& cfg )
    {
       cfg.add_options()
-         ( "p2p-listen-endpoint", bpo::value<string>()->default_value( "0.0.0.0:9876" ), "The actual host:port used to listen for incoming p2p connections.")
+         ( "p2p-listen-endpoint", bpo::value<string>()->default_value( "0.0.0.0:6620" ), "The actual host:port used to listen for incoming p2p connections.")
          ( "p2p-server-address", bpo::value<string>(), "An externally accessible host:port for identifying this node. Defaults to p2p-listen-endpoint.")
          ( "p2p-peer-address", bpo::value< vector<string> >()->composing(), "The public endpoint of a peer node to connect to. Use multiple p2p-peer-address options as needed to compose a network.")
          ( "p2p-max-nodes-per-host", bpo::value<int>()->default_value(def_max_nodes_per_host), "Maximum number of client nodes from any single IP address")
@@ -3016,17 +3016,17 @@ namespace arisen {
 
          if( options.count( "p2p-listen-endpoint" ) && options.at("p2p-listen-endpoint").as<string>().length()) {
             my->p2p_address = options.at( "p2p-listen-endpoint" ).as<string>();
-            EOS_ASSERT( my->p2p_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
+            RSN_ASSERT( my->p2p_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
                         "p2p-listen-endpoint to long, must be less than ${m}", ("m", max_p2p_address_length) );
          }
          if( options.count( "p2p-server-address" ) ) {
             my->p2p_server_address = options.at( "p2p-server-address" ).as<string>();
-            EOS_ASSERT( my->p2p_server_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
+            RSN_ASSERT( my->p2p_server_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
                         "p2p_server_address to long, must be less than ${m}", ("m", max_p2p_address_length) );
          }
 
          my->thread_pool_size = options.at( "net-threads" ).as<uint16_t>();
-         EOS_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
+         RSN_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
                      "net-threads ${num} must be greater than 0", ("num", my->thread_pool_size) );
 
          if( options.count( "p2p-peer-address" )) {
@@ -3034,7 +3034,7 @@ namespace arisen {
          }
          if( options.count( "agent-name" )) {
             my->user_agent_name = options.at( "agent-name" ).as<string>();
-            EOS_ASSERT( my->user_agent_name.length() <= max_handshake_str_length, chain::plugin_config_exception,
+            RSN_ASSERT( my->user_agent_name.length() <= max_handshake_str_length, chain::plugin_config_exception,
                         "agent-name to long, must be less than ${m}", ("m", max_handshake_str_length) );
          }
 
@@ -3053,7 +3053,7 @@ namespace arisen {
          }
 
          if( my->allowed_connections & net_plugin_impl::Specified )
-            EOS_ASSERT( options.count( "peer-key" ),
+            RSN_ASSERT( options.count( "peer-key" ),
                         plugin_config_exception,
                        "At least one peer-key must accompany 'allowed-connection=specified'" );
 
@@ -3074,7 +3074,7 @@ namespace arisen {
          }
 
          my->chain_plug = app().find_plugin<chain_plugin>();
-         EOS_ASSERT( my->chain_plug, chain::missing_chain_plugin_exception, ""  );
+         RSN_ASSERT( my->chain_plug, chain::missing_chain_plugin_exception, ""  );
          my->chain_id = my->chain_plug->get_chain_id();
          fc::rand_pseudo_bytes( my->node_id.data(), my->node_id.data_size());
          fc_ilog( logger, "my node_id is ${id}", ("id", my->node_id ));
