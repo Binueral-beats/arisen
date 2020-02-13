@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE.txt
+ *  @copyright defined in eos/LICENSE.txt
  */
-#include <arisen/chain/abi_serializer.hpp>
-#include <arisen/chain/resource_limits.hpp>
-#include <arisen/chain/generated_transaction_object.hpp>
-#include <arisen/testing/tester.hpp>
+#include <eosio/chain/abi_serializer.hpp>
+#include <eosio/chain/resource_limits.hpp>
+#include <eosio/chain/generated_transaction_object.hpp>
+#include <eosio/testing/tester.hpp>
 
 #include <Runtime/Runtime.h>
 
@@ -17,8 +17,8 @@
 
 #include "fork_test_utilities.hpp"
 
-using namespace arisen::chain;
-using namespace arisen::testing;
+using namespace eosio::chain;
+using namespace eosio::testing;
 
 BOOST_AUTO_TEST_SUITE(protocol_feature_tests)
 
@@ -29,13 +29,13 @@ BOOST_AUTO_TEST_CASE( activate_preactivate_feature ) try {
    c.produce_block();
 
    // Cannot set latest bios contract since it requires intrinsics that have not yet been whitelisted.
-   BOOST_CHECK_EXCEPTION( c.set_code( config::system_account_name, contracts::arisen_bios_wasm() ),
+   BOOST_CHECK_EXCEPTION( c.set_code( config::system_account_name, contracts::eosio_bios_wasm() ),
                           wasm_exception, fc_exception_message_is("env.is_feature_activated unresolveable")
    );
 
    // But the old bios contract can still be set.
-   c.set_code( config::system_account_name, contracts::before_preactivate_arisen_bios_wasm() );
-   c.set_abi( config::system_account_name, contracts::before_preactivate_arisen_bios_abi().data() );
+   c.set_code( config::system_account_name, contracts::before_preactivate_eosio_bios_wasm() );
+   c.set_abi( config::system_account_name, contracts::before_preactivate_eosio_bios_abi().data() );
 
    auto t = c.control->pending_block_time();
    c.control->abort_block();
@@ -52,15 +52,15 @@ BOOST_AUTO_TEST_CASE( activate_preactivate_feature ) try {
    c.produce_block();
 
    // Now the latest bios contract can be set.
-   c.set_code( config::system_account_name, contracts::arisen_bios_wasm() );
-   c.set_abi( config::system_account_name, contracts::arisen_bios_abi().data() );
+   c.set_code( config::system_account_name, contracts::eosio_bios_wasm() );
+   c.set_abi( config::system_account_name, contracts::eosio_bios_abi().data() );
 
    c.produce_block();
 
    BOOST_CHECK_EXCEPTION( c.push_action( config::system_account_name, N(reqactivated), config::system_account_name,
                                           mutable_variant_object()("feature_digest",  digest_type()) ),
-                           arisen_assert_message_exception,
-                           arisen_assert_message_is( "protocol feature is not activated" )
+                           eosio_assert_message_exception,
+                           eosio_assert_message_is( "protocol feature is not activated" )
    );
 
    c.push_action( config::system_account_name, N(reqactivated), config::system_account_name, mutable_variant_object()
@@ -602,7 +602,7 @@ BOOST_AUTO_TEST_CASE( no_duplicate_deferred_id_test ) try {
 
    trace1 = nullptr;
 
-   // Retire the delayed arisen::reqauth transaction.
+   // Retire the delayed eosio::reqauth transaction.
    c.produce_blocks(5);
    BOOST_REQUIRE( trace1 );
    BOOST_REQUIRE_EQUAL(0, index.size());
@@ -710,15 +710,15 @@ BOOST_AUTO_TEST_CASE( fix_linkauth_restriction ) { try {
                ("type", type)
                ("requirement", "first")),
          action_validate_exception,
-         fc_exception_message_is(std::string("Cannot link arisen::") + std::string(type) + std::string(" to a minimum permission"))
+         fc_exception_message_is(std::string("Cannot link eosio::") + std::string(type) + std::string(" to a minimum permission"))
       );
    };
 
-   validate_disallow("arisen", "linkauth");
-   validate_disallow("arisen", "unlinkauth");
-   validate_disallow("arisen", "deleteauth");
-   validate_disallow("arisen", "updateauth");
-   validate_disallow("arisen", "canceldelay");
+   validate_disallow("eosio", "linkauth");
+   validate_disallow("eosio", "unlinkauth");
+   validate_disallow("eosio", "deleteauth");
+   validate_disallow("eosio", "updateauth");
+   validate_disallow("eosio", "canceldelay");
 
    validate_disallow("currency", "linkauth");
    validate_disallow("currency", "unlinkauth");
@@ -741,11 +741,11 @@ BOOST_AUTO_TEST_CASE( fix_linkauth_restriction ) { try {
             ("requirement", "first"));
    };
 
-   validate_disallow("arisen", "linkauth");
-   validate_disallow("arisen", "unlinkauth");
-   validate_disallow("arisen", "deleteauth");
-   validate_disallow("arisen", "updateauth");
-   validate_disallow("arisen", "canceldelay");
+   validate_disallow("eosio", "linkauth");
+   validate_disallow("eosio", "unlinkauth");
+   validate_disallow("eosio", "deleteauth");
+   validate_disallow("eosio", "updateauth");
+   validate_disallow("eosio", "canceldelay");
 
    validate_allowed("currency", "linkauth");
    validate_allowed("currency", "unlinkauth");
@@ -957,15 +957,15 @@ BOOST_AUTO_TEST_CASE( forward_setcode_test ) { try {
    c.create_accounts( {tester1_account, tester2_account} );
 
    // Deploy contract that rejects all actions dispatched to it with the following exceptions:
-   //   * arisen::setcode to set code on the arisen is allowed (unless the rejectall account exists)
-   //   * arisen::newaccount is allowed only if it creates the rejectall account.
+   //   * eosio::setcode to set code on the eosio is allowed (unless the rejectall account exists)
+   //   * eosio::newaccount is allowed only if it creates the rejectall account.
    c.set_code( config::system_account_name, contracts::reject_all_wasm() );
    c.produce_block();
 
-   // Before activation, deploying a contract should work since setcode won't be forwarded to the WASM on arisen.
+   // Before activation, deploying a contract should work since setcode won't be forwarded to the WASM on eosio.
    c.set_code( tester1_account, contracts::noop_wasm() );
 
-   // Activate FORWARD_SETCODE protocol feature and then return contract on arisen back to what it was.
+   // Activate FORWARD_SETCODE protocol feature and then return contract on eosio back to what it was.
    const auto& pfm = c.control->get_protocol_feature_manager();
    const auto& d = pfm.get_builtin_digest( builtin_protocol_feature_t::forward_setcode );
    BOOST_REQUIRE( d );
@@ -975,11 +975,11 @@ BOOST_AUTO_TEST_CASE( forward_setcode_test ) { try {
    c.set_code( config::system_account_name, contracts::reject_all_wasm() );
    c.produce_block();
 
-   // After activation, deploying a contract causes setcode to be dispatched to the WASM on arisen,
+   // After activation, deploying a contract causes setcode to be dispatched to the WASM on eosio,
    // and in this case the contract is configured to reject the setcode action.
    BOOST_REQUIRE_EXCEPTION( c.set_code( tester2_account, contracts::noop_wasm() ),
-                            arisen_assert_message_exception,
-                            arisen_assert_message_is( "rejecting all actions" ) );
+                            eosio_assert_message_exception,
+                            eosio_assert_message_is( "rejecting all actions" ) );
 
 
    tester c2(setup_policy::none);
@@ -990,20 +990,20 @@ BOOST_AUTO_TEST_CASE( forward_setcode_test ) { try {
    c.produce_block();
    // The existence of the rejectall account will make the reject_all contract reject all actions with no exception.
 
-   // It will now not be possible to deploy the reject_all contract to the arisen account,
+   // It will now not be possible to deploy the reject_all contract to the eosio account,
    // because after it is set by the native function, it is called immediately after which will reject the transaction.
    BOOST_REQUIRE_EXCEPTION( c.set_code( config::system_account_name, contracts::reject_all_wasm() ),
-                            arisen_assert_message_exception,
-                            arisen_assert_message_is( "rejecting all actions" ) );
+                            eosio_assert_message_exception,
+                            eosio_assert_message_is( "rejecting all actions" ) );
 
 
    // Going back to the backup chain, we can create the rejectall account while the reject_all contract is
-   // already deployed on arisen.
+   // already deployed on eosio.
    c2.create_account( N(rejectall) );
    c2.produce_block();
-   // Now all actions dispatched to the arisen account should be rejected.
+   // Now all actions dispatched to the eosio account should be rejected.
 
-   // However, it should still be possible to set the bios contract because the WASM on arisen is called after the
+   // However, it should still be possible to set the bios contract because the WASM on eosio is called after the
    // native setcode function completes.
    c2.set_bios_contract();
    c2.produce_block();
@@ -1037,8 +1037,8 @@ BOOST_AUTO_TEST_CASE( get_sender_test ) { try {
    BOOST_CHECK_EXCEPTION(  c.push_action( tester1_account, N(sendinline), tester1_account, mutable_variant_object()
                                              ("to", tester2_account.to_string())
                                              ("expected_sender", account_name{}) ),
-                           arisen_assert_message_exception,
-                           arisen_assert_message_is( "sender did not match" ) );
+                           eosio_assert_message_exception,
+                           eosio_assert_message_is( "sender did not match" ) );
 
    c.push_action( tester1_account, N(sendinline), tester1_account, mutable_variant_object()
       ("to", tester2_account.to_string())

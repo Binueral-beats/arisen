@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE.txt
+ *  @copyright defined in eos/LICENSE.txt
  */
-#include <arisen/chain/abi_serializer.hpp>
-#include <arisen/chain/abi_serializer.hpp>
-#include <arisen/testing/tester.hpp>
+#include <eosio/chain/abi_serializer.hpp>
+#include <eosio/chain/abi_serializer.hpp>
+#include <eosio/testing/tester.hpp>
 
-#include <arisen/chain/fork_database.hpp>
+#include <eosio/chain/fork_database.hpp>
 
 #include <Runtime/Runtime.h>
 
@@ -18,8 +18,8 @@
 
 #include "fork_test_utilities.hpp"
 
-using namespace arisen::chain;
-using namespace arisen::testing;
+using namespace eosio::chain;
+using namespace eosio::testing;
 
 BOOST_AUTO_TEST_SUITE(forked_tests)
 
@@ -150,26 +150,26 @@ BOOST_AUTO_TEST_CASE( forking ) try {
    wlog("set producer schedule to [dan,sam,pam]");
    c.produce_blocks(30);
 
-   auto r2 = c.create_accounts( {N(arisen.token)} );
+   auto r2 = c.create_accounts( {N(eosio.token)} );
    wdump((fc::json::to_pretty_string(r2)));
-   c.set_code( N(arisen.token), contracts::arisen_token_wasm() );
-   c.set_abi( N(arisen.token), contracts::arisen_token_abi().data() );
+   c.set_code( N(eosio.token), contracts::eosio_token_wasm() );
+   c.set_abi( N(eosio.token), contracts::eosio_token_abi().data() );
    c.produce_blocks(10);
 
 
-   auto cr = c.push_action( N(arisen.token), N(create), N(arisen.token), mutable_variant_object()
-              ("issuer",       "arisen" )
+   auto cr = c.push_action( N(eosio.token), N(create), N(eosio.token), mutable_variant_object()
+              ("issuer",       "eosio" )
               ("maximum_supply", core_from_string("10000000.0000"))
       );
 
-   cr = c.push_action( N(arisen.token), N(issue), config::system_account_name, mutable_variant_object()
-              ("to",       "arisen" )
+   cr = c.push_action( N(eosio.token), N(issue), config::system_account_name, mutable_variant_object()
+              ("to",       "eosio" )
               ("quantity", core_from_string("100.0000"))
               ("memo", "")
       );
 
-   cr = c.push_action( N(arisen.token), N(transfer), config::system_account_name, mutable_variant_object()
-              ("from",     "arisen")
+   cr = c.push_action( N(eosio.token), N(transfer), config::system_account_name, mutable_variant_object()
+              ("from",     "eosio")
               ("to",       "dan" )
               ("quantity", core_from_string("100.0000"))
               ("memo", "")
@@ -405,7 +405,7 @@ BOOST_AUTO_TEST_CASE( read_modes ) try {
    BOOST_CHECK_EQUAL(head_block_num, read_only.control->fork_db_head_block_num());
    BOOST_CHECK_EQUAL(head_block_num, read_only.control->head_block_num());
 
-   tester irreversible(setup_policy::old_bios_only, db_read_mode::IRREVERSIBLE);
+   tester irreversible(setup_policy::none, db_read_mode::IRREVERSIBLE);
    push_blocks(c, irreversible);
    BOOST_CHECK_EQUAL(head_block_num, irreversible.control->fork_db_pending_head_block_num());
    BOOST_CHECK_EQUAL(last_irreversible_block_num, irreversible.control->fork_db_head_block_num());

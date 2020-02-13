@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
-#include <arisen/chain/protocol_state_object.hpp>
+#include <eosio/chain/protocol_state_object.hpp>
 
-namespace arisen { namespace chain {
+namespace eosio { namespace chain {
 
    namespace detail {
 

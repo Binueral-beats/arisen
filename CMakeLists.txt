@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.8 )
 
-project( ARISEN )
+project( EOSIO )
 include(CTest) # suppresses DartConfiguration.tcl error
 enable_testing()
 
@@ -21,14 +21,14 @@ include( SetupTargetMacros )
 include( InstallDirectoryPermissions )
 include( MASSigning )
 
-set( BLOCKCHAIN_NAME "ARISEN" )
+set( BLOCKCHAIN_NAME "EOSIO" )
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_EXTENSIONS ON )
 set( CXX_STANDARD_REQUIRED ON)
 
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 10)
-set(VERSION_PATCH 10)
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 8)
+set(VERSION_PATCH 11)
 #set(VERSION_SUFFIX develop)
 
 if(VERSION_SUFFIX)
@@ -37,10 +37,10 @@ else()
     set(VERSION_FULL "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 endif()
 
-set( CLI_CLIENT_EXECUTABLE_NAME arisecli )
-set( NODE_EXECUTABLE_NAME aos )
-set( KEY_STORE_EXECUTABLE_NAME awalletd )
-set( GUI_CLIENT_EXECUTABLE_NAME arisen )
+set( CLI_CLIENT_EXECUTABLE_NAME cleos )
+set( NODE_EXECUTABLE_NAME nodeos )
+set( KEY_STORE_EXECUTABLE_NAME keosd )
+set( GUI_CLIENT_EXECUTABLE_NAME eosio )
 set( CUSTOM_URL_SCHEME "gcs" )
 set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
 
@@ -64,7 +64,7 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 set(BUILD_DOXYGEN FALSE CACHE BOOL "Build doxygen documentation on every make")
 set(BUILD_MONGO_DB_PLUGIN FALSE CACHE BOOL "Build mongo database plugin")
-set(ENABLE_MULTIVERSION_PROTOCOL_TEST FALSE CACHE BOOL "Enable aos multiversion protocol test")
+set(ENABLE_MULTIVERSION_PROTOCOL_TEST FALSE CACHE BOOL "Enable nodeos multiversion protocol test")
 
 # add defaults for openssl
 if ("${OPENSSL_ROOT_DIR}" STREQUAL "")
@@ -121,7 +121,7 @@ link_libraries(Threads::Threads)
 
 if( WIN32 )
 
-    message( STATUS "Configuring ARISEN on WIN32")
+    message( STATUS "Configuring EOSIO on WIN32")
     set( DB_VERSION 60 )
     set( BDB_STATIC_LIBS 1 )
 
@@ -156,11 +156,11 @@ else( WIN32 ) # Apple AND Linux
 
     if( APPLE )
         # Apple Specific Options Here
-        message( STATUS "Configuring ARISEN on OS X" )
+        message( STATUS "Configuring EOSIO on OS X" )
         set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS} -Wall -Wno-deprecated-declarations" )
     else( APPLE )
         # Linux Specific Options Here
-        message( STATUS "Configuring ARISEN on Linux" )
+        message( STATUS "Configuring EOSIO on Linux" )
         set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS} -Wall" )
         if ( FULL_STATIC_BUILD )
           set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
@@ -185,7 +185,7 @@ else( WIN32 ) # Apple AND Linux
 
 endif( WIN32 )
 
-set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build ARISEN for code coverage analysis")
+set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build EOSIO for code coverage analysis")
 
 if(ENABLE_COVERAGE_TESTING)
   SET(CMAKE_CXX_FLAGS "--coverage ${CMAKE_CXX_FLAGS}")
@@ -197,7 +197,7 @@ endif()
 include(utils)
 
 if ("${CORE_SYMBOL_NAME}" STREQUAL "")
-  set( CORE_SYMBOL_NAME "RSN" )
+  set( CORE_SYMBOL_NAME "SYS" )
 endif()
 string(TOUPPER ${CORE_SYMBOL_NAME} CORE_SYMBOL_NAME)
 
@@ -208,11 +208,11 @@ endif()
 
 message( STATUS "Using '${CORE_SYMBOL_NAME}' as CORE symbol name" )
 
-if ("${ARISEN_ROOT_KEY}" STREQUAL "")
-   set(ARISEN_ROOT_KEY "RSN6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
+if ("${EOSIO_ROOT_KEY}" STREQUAL "")
+   set(EOSIO_ROOT_KEY "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
 endif()
 
-message( STATUS "Using '${ARISEN_ROOT_KEY}' as public key for 'arisen' account" )
+message( STATUS "Using '${EOSIO_ROOT_KEY}' as public key for 'eosio' account" )
 
 add_subdirectory( libraries )
 add_subdirectory( plugins )
@@ -223,48 +223,48 @@ add_subdirectory( tests )
 add_subdirectory( tools )
 add_subdirectory( debian )
 
-install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisen)
+install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/eosio)
 
-install(FILES testnet.template DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisen/launcher)
-install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisen)
-install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisen/launcher)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/testnet.template ${CMAKE_CURRENT_BINARY_DIR}/etc/arisen/launcher/testnet.template COPYONLY)
+install(FILES testnet.template DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/eosio/launcher)
+install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/eosio)
+install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/eosio/launcher)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/testnet.template ${CMAKE_CURRENT_BINARY_DIR}/etc/eosio/launcher/testnet.template COPYONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/arisen.version.in ${CMAKE_CURRENT_BINARY_DIR}/arisen.version.hpp)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/arisen.version.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/eosio.version.in ${CMAKE_CURRENT_BINARY_DIR}/eosio.version.hpp)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eosio.version.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
 
-set(RSN_ROOT_DIR ${CMAKE_BINARY_DIR})
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisen-config.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/arisen-config.cmake @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/ArisenTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/ArisenTester.cmake @ONLY)
+set(EOS_ROOT_DIR ${CMAKE_BINARY_DIR})
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/eosio-config.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/eosio/eosio-config.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/EosioTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/eosio/EosioTester.cmake @ONLY)
 
-set(RSN_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisen-config.cmake.in ${CMAKE_BINARY_DIR}/modules/arisen-config.cmake @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/modules/arisen-config.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisen)
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/ArisenTester.cmake.in ${CMAKE_BINARY_DIR}/modules/ArisenTester.cmake @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/modules/ArisenTester.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisen)
+set(EOS_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/eosio-config.cmake.in ${CMAKE_BINARY_DIR}/modules/eosio-config.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/modules/eosio-config.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/eosio)
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/EosioTester.cmake.in ${CMAKE_BINARY_DIR}/modules/EosioTester.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/modules/EosioTester.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/eosio)
 
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/eosio/LICENSE COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/wabt/LICENSE
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.wabt COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/eosio/LICENSE.wabt COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/softfloat/COPYING.txt
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.softfloat COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/eosio/LICENSE.softfloat COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/wasm-jit/LICENSE
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.wavm COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/eosio/LICENSE.wavm COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/fc/secp256k1/upstream/COPYING
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.secp256k1 COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/eosio/LICENSE.secp256k1 COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/fc/src/network/LICENSE.go
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.go COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/eosio/LICENSE.go COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/yubihsm/LICENSE
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.yubihsm COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/eosio/LICENSE.yubihsm COPYONLY)
 
-install(FILES LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ COMPONENT base)
-install(FILES libraries/wabt/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.wabt COMPONENT base)
-install(FILES libraries/softfloat/COPYING.txt DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.softfloat COMPONENT base)
-install(FILES libraries/wasm-jit/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.wavm COMPONENT base)
-install(FILES libraries/fc/secp256k1/upstream/COPYING DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.secp256k1 COMPONENT base)
-install(FILES libraries/fc/src/network/LICENSE.go DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ COMPONENT base)
-install(FILES libraries/yubihsm/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.yubihsm COMPONENT base)
+install(FILES LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/eosio/ COMPONENT base)
+install(FILES libraries/wabt/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/eosio/ RENAME LICENSE.wabt COMPONENT base)
+install(FILES libraries/softfloat/COPYING.txt DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/eosio/ RENAME LICENSE.softfloat COMPONENT base)
+install(FILES libraries/wasm-jit/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/eosio/ RENAME LICENSE.wavm COMPONENT base)
+install(FILES libraries/fc/secp256k1/upstream/COPYING DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/eosio/ RENAME LICENSE.secp256k1 COMPONENT base)
+install(FILES libraries/fc/src/network/LICENSE.go DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/eosio/ COMPONENT base)
+install(FILES libraries/yubihsm/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/eosio/ RENAME LICENSE.yubihsm COMPONENT base)
 
 add_custom_target(base-install
   COMMAND "${CMAKE_COMMAND}" --build "${CMAKE_BINARY_DIR}"

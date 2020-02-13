@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
 #include "integration_test.hpp"
 
-using namespace arisen;
+using namespace eosio;
 
 void integration_test::store( name from, name to, uint64_t num ) {
    require_auth( from );

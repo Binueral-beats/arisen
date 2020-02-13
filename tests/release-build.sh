@@ -3,11 +3,11 @@
 echo ''
 echo '                         ##### Release Build Test #####'
 echo ''
-echo '    The purpose of this test is to ensure that aos was built with compiler'
+echo '    The purpose of this test is to ensure that nodeos was built with compiler'
 echo 'optimizations enabled. While there is no way to programmatically determine that'
-echo 'given one binary, we do set a debug flag in aos when it is built with'
+echo 'given one binary, we do set a debug flag in nodeos when it is built with'
 echo 'asserts. This test checks that debug flag. Anyone intending to build and install'
-echo 'aos from source should perform a "release build" which excludes asserts and'
+echo 'nodeos from source should perform a "release build" which excludes asserts and'
 echo 'debugging symbols, and performs compiler optimizations.'
 echo ''
 # check for xxd
@@ -17,14 +17,14 @@ if ! $(xxd --version 2>/dev/null); then
     echo 'The xxd hex dump tool can be installed as part of the vim-common package on most operating systems.'
     exit 1
 fi
-# find aos
+# find nodeos
 [[ $(git --version) ]] && cd "$(git rev-parse --show-toplevel)/build" || cd "$(dirname "${BASH_SOURCE[0]}")/.."
-if [[ ! -f programs/aos/aos ]]; then
-    echo 'ERROR: aos binary not found!'
+if [[ ! -f programs/nodeos/nodeos ]]; then
+    echo 'ERROR: nodeos binary not found!'
     echo ''
     echo 'I looked here...'
-    echo "$ ls -la \"$(pwd)/programs/aos\""
-    ls -la "$(pwd)/programs/aos"
+    echo "$ ls -la \"$(pwd)/programs/nodeos\""
+    ls -la "$(pwd)/programs/nodeos"
     echo '...which I derived from one of these paths:'
     echo '$ echo "$(git rev-parse --show-toplevel)/build"'
     echo "$(git rev-parse --show-toplevel)/build"
@@ -33,13 +33,13 @@ if [[ ! -f programs/aos/aos ]]; then
     echo 'Release build test not run.'
     exit 2
 fi
-# run aos to generate state files
+# run nodeos to generate state files
 mkdir release-build-test
-programs/aos/aos --config-dir "$(pwd)/release-build-test/config" --data-dir "$(pwd)/release-build-test/data" 1>/dev/null 2>/dev/null &
+programs/nodeos/nodeos --config-dir "$(pwd)/release-build-test/config" --data-dir "$(pwd)/release-build-test/data" 1>/dev/null 2>/dev/null &
 sleep 10
-kill $! # kill aos gracefully, by PID
+kill $! # kill nodeos gracefully, by PID
 if [[ ! -f release-build-test/data/state/shared_memory.bin ]]; then
-    echo 'ERROR: aos state not found!'
+    echo 'ERROR: nodeos state not found!'
     echo ''
     echo 'Looked for shared_memory.bin in the following places:'
     echo "$ ls -la \"$(pwd)/release-build-test/data/state\""

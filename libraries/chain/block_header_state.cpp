@@ -1,8 +1,8 @@
-#include <arisen/chain/block_header_state.hpp>
-#include <arisen/chain/exceptions.hpp>
+#include <eosio/chain/block_header_state.hpp>
+#include <eosio/chain/exceptions.hpp>
 #include <limits>
 
-namespace arisen { namespace chain {
+namespace eosio { namespace chain {
 
 
    bool block_header_state::is_active_producer( account_name n )const {
@@ -35,7 +35,7 @@ namespace arisen { namespace chain {
       pending_block_header_state result;
 
       if( when != block_timestamp_type() ) {
-        RSN_ASSERT( when > header.timestamp, block_validate_exception, "next block must be in the future" );
+        EOS_ASSERT( when > header.timestamp, block_validate_exception, "next block must be in the future" );
       } else {
         (when = header.timestamp).slot++;
       }
@@ -44,7 +44,7 @@ namespace arisen { namespace chain {
 
       auto itr = producer_to_last_produced.find( prokey.producer_name );
       if( itr != producer_to_last_produced.end() ) {
-        RSN_ASSERT( itr->second < (block_num+1) - num_prev_blocks_to_confirm, producer_double_confirm,
+        EOS_ASSERT( itr->second < (block_num+1) - num_prev_blocks_to_confirm, producer_double_confirm,
                     "producer ${prod} double-confirming known range",
                     ("prod", prokey.producer_name)("num", block_num+1)
                     ("confirmed", num_prev_blocks_to_confirm)("last_produced", itr->second) );
@@ -199,16 +199,16 @@ namespace arisen { namespace chain {
                                                            const vector<digest_type>& )>& validator
    )&&
    {
-      RSN_ASSERT( h.timestamp == timestamp, block_validate_exception, "timestamp mismatch" );
-      RSN_ASSERT( h.previous == previous, unlinkable_block_exception, "previous mismatch" );
-      RSN_ASSERT( h.confirmed == confirmed, block_validate_exception, "confirmed mismatch" );
-      RSN_ASSERT( h.producer == producer, wrong_producer, "wrong producer specified" );
-      RSN_ASSERT( h.schedule_version == active_schedule_version, producer_schedule_exception, "schedule_version in signed block is corrupted" );
+      EOS_ASSERT( h.timestamp == timestamp, block_validate_exception, "timestamp mismatch" );
+      EOS_ASSERT( h.previous == previous, unlinkable_block_exception, "previous mismatch" );
+      EOS_ASSERT( h.confirmed == confirmed, block_validate_exception, "confirmed mismatch" );
+      EOS_ASSERT( h.producer == producer, wrong_producer, "wrong producer specified" );
+      EOS_ASSERT( h.schedule_version == active_schedule_version, producer_schedule_exception, "schedule_version in signed block is corrupted" );
 
       if( h.new_producers ) {
-         RSN_ASSERT( !was_pending_promoted, producer_schedule_exception, "cannot set pending producer schedule in the same block in which pending was promoted to active" );
-         RSN_ASSERT( h.new_producers->version == active_schedule.version + 1, producer_schedule_exception, "wrong producer schedule version specified" );
-         RSN_ASSERT( prev_pending_schedule.schedule.producers.size() == 0, producer_schedule_exception,
+         EOS_ASSERT( !was_pending_promoted, producer_schedule_exception, "cannot set pending producer schedule in the same block in which pending was promoted to active" );
+         EOS_ASSERT( h.new_producers->version == active_schedule.version + 1, producer_schedule_exception, "wrong producer schedule version specified" );
+         EOS_ASSERT( prev_pending_schedule.schedule.producers.size() == 0, producer_schedule_exception,
                     "cannot set new pending producers until last pending is confirmed" );
       }
 
@@ -315,7 +315,7 @@ namespace arisen { namespace chain {
    void block_header_state::sign( const std::function<signature_type(const digest_type&)>& signer ) {
       auto d = sig_digest();
       header.producer_signature = signer( d );
-      RSN_ASSERT( block_signing_key == fc::crypto::public_key( header.producer_signature, d ),
+      EOS_ASSERT( block_signing_key == fc::crypto::public_key( header.producer_signature, d ),
                   wrong_signing_key, "block is signed with unexpected key" );
    }
 
@@ -324,7 +324,7 @@ namespace arisen { namespace chain {
    }
 
    void block_header_state::verify_signee( const public_key_type& signee )const {
-      RSN_ASSERT( block_signing_key == signee, wrong_signing_key,
+      EOS_ASSERT( block_signing_key == signee, wrong_signing_key,
                   "block not signed by expected key",
                   ("block_signing_key", block_signing_key)( "signee", signee ) );
    }
@@ -341,4 +341,4 @@ namespace arisen { namespace chain {
       return header_exts.front().get<protocol_feature_activation>().protocol_features;
    }
 
-} } /// namespace arisen::chain
+} } /// namespace eosio::chain

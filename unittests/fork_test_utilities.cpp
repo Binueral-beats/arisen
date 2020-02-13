@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
 #include "fork_test_utilities.hpp"
 

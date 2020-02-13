@@ -1,11 +1,11 @@
-#include <arisen/chain/transaction_metadata.hpp>
-#include <arisen/chain/thread_utils.hpp>
+#include <eosio/chain/transaction_metadata.hpp>
+#include <eosio/chain/thread_utils.hpp>
 #include <boost/asio/thread_pool.hpp>
 
-namespace arisen { namespace chain {
+namespace eosio { namespace chain {
 
 recovery_keys_type transaction_metadata::recover_keys( const chain_id_type& chain_id ) {
-   // Unlikely for more than one chain_id to be used in one aos instance
+   // Unlikely for more than one chain_id to be used in one nodeos instance
    if( signing_keys_future.valid() ) {
       const std::tuple<chain_id_type, fc::microseconds, flat_set<public_key_type>>& sig_keys = signing_keys_future.get();
       if( std::get<0>( sig_keys ) == chain_id ) {
@@ -51,4 +51,4 @@ signing_keys_future_type transaction_metadata::start_recover_keys( const transac
 }
 
 
-} } // arisen::chain
+} } // eosio::chain

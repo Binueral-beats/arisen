@@ -1,17 +1,17 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
-#include <arisen/chain_api_plugin/chain_api_plugin.hpp>
-#include <arisen/chain/exceptions.hpp>
+#include <eosio/chain_api_plugin/chain_api_plugin.hpp>
+#include <eosio/chain/exceptions.hpp>
 
 #include <fc/io/json.hpp>
 
-namespace arisen {
+namespace eosio {
 
 static appbase::abstract_plugin& _chain_api_plugin = app().register_plugin<chain_api_plugin>();
 
-using namespace arisen;
+using namespace eosio;
 
 class chain_api_plugin_impl {
 public:

@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
 #pragma once
 
-#include <arisen/testing/tester.hpp>
+#include <eosio/testing/tester.hpp>
 
-using namespace arisen::chain;
-using namespace arisen::testing;
+using namespace eosio::chain;
+using namespace eosio::testing;
 
 private_key_type get_private_key( name keyname, string role );
 

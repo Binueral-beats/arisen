@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
-#include <arisen/http_plugin/http_plugin.hpp>
-#include <arisen/http_plugin/local_endpoint.hpp>
-#include <arisen/chain/exceptions.hpp>
-#include <arisen/chain/thread_utils.hpp>
+#include <eosio/http_plugin/http_plugin.hpp>
+#include <eosio/http_plugin/local_endpoint.hpp>
+#include <eosio/chain/exceptions.hpp>
+#include <eosio/chain/thread_utils.hpp>
 
 #include <fc/network/ip.hpp>
 #include <fc/log/logger_config.hpp>
@@ -28,7 +28,7 @@
 #include <memory>
 #include <regex>
 
-namespace arisen {
+namespace eosio {
 
    static appbase::abstract_plugin& _http_plugin = app().register_plugin<http_plugin>();
 
@@ -146,7 +146,7 @@ namespace arisen {
          websocket_server_type    server;
 
          uint16_t                                    thread_pool_size = 2;
-         optional<arisen::chain::named_thread_pool>   thread_pool;
+         optional<eosio::chain::named_thread_pool>   thread_pool;
          std::atomic<size_t>                         bytes_in_flight{0};
          size_t                                      max_bytes_in_flight = 0;
          fc::microseconds                            max_response_time{30*1000};
@@ -201,14 +201,14 @@ namespace arisen {
 
                fc::ec_key ecdh = EC_KEY_new_by_curve_name(https_ecdh_curve == SECP384R1 ? NID_secp384r1 : NID_X9_62_prime256v1);
                if (!ecdh)
-                  RSN_THROW(chain::http_exception, "Failed to set NID_secp384r1");
+                  EOS_THROW(chain::http_exception, "Failed to set NID_secp384r1");
                if(SSL_CTX_set_tmp_ecdh(ctx->native_handle(), (EC_KEY*)ecdh) != 1)
-                  RSN_THROW(chain::http_exception, "Failed to set ECDH PFS");
+                  EOS_THROW(chain::http_exception, "Failed to set ECDH PFS");
 
                if(SSL_CTX_set_cipher_list(ctx->native_handle(), \
                   "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:AES256:" \
                   "!DHE:!RSA:!AES128:!RC4:!DES:!3DES:!DSS:!SRP:!PSK:!EXP:!MD5:!LOW:!aNULL:!eNULL") != 1)
-                  RSN_THROW(chain::http_exception, "Failed to set HTTPS cipher list");
+                  EOS_THROW(chain::http_exception, "Failed to set HTTPS cipher list");
             } catch (const fc::exception& e) {
                elog("https server initialization error: ${w}", ("w", e.to_detail_string()));
             } catch(std::exception& e) {
@@ -559,7 +559,7 @@ namespace arisen {
          verbose_http_errors = options.at( "verbose-http-errors" ).as<bool>();
 
          my->thread_pool_size = options.at( "http-threads" ).as<uint16_t>();
-         RSN_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
+         EOS_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
                      "http-threads ${num} must be greater than 0", ("num", my->thread_pool_size));
 
          my->max_bytes_in_flight = options.at( "http-max-bytes-in-flight-mb" ).as<uint32_t>() * 1024 * 1024;

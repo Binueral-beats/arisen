@@ -1,14 +1,14 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
-#include <arisen/producer_plugin/producer_plugin.hpp>
-#include <arisen/chain/plugin_interface.hpp>
-#include <arisen/chain/global_property_object.hpp>
-#include <arisen/chain/generated_transaction_object.hpp>
-#include <arisen/chain/transaction_object.hpp>
-#include <arisen/chain/thread_utils.hpp>
-#include <arisen/chain/snapshot.hpp>
+#include <eosio/producer_plugin/producer_plugin.hpp>
+#include <eosio/chain/plugin_interface.hpp>
+#include <eosio/chain/global_property_object.hpp>
+#include <eosio/chain/generated_transaction_object.hpp>
+#include <eosio/chain/transaction_object.hpp>
+#include <eosio/chain/thread_utils.hpp>
+#include <eosio/chain/snapshot.hpp>
 
 #include <fc/io/json.hpp>
 #include <fc/log/logger_config.hpp>
@@ -73,12 +73,12 @@ fc::logger _log;
 const fc::string trx_trace_logger_name("transaction_tracing");
 fc::logger _trx_trace_log;
 
-namespace arisen {
+namespace eosio {
 
 static appbase::abstract_plugin& _producer_plugin = app().register_plugin<producer_plugin>();
 
-using namespace arisen::chain;
-using namespace arisen::chain::plugin_interface;
+using namespace eosio::chain;
+using namespace eosio::chain::plugin_interface;
 
 namespace {
    bool failure_is_subjective(const fc::exception& e, bool deadline_is_subjective) {
@@ -140,13 +140,13 @@ public:
 
       if (!in_chain) {
          bfs::remove(bfs::path(pending_path), ec);
-         RSN_THROW(snapshot_finalization_exception,
+         EOS_THROW(snapshot_finalization_exception,
                    "Snapshotted block was forked out of the chain.  ID: ${block_id}",
                    ("block_id", block_id));
       }
 
       bfs::rename(bfs::path(pending_path), bfs::path(final_path), ec);
-      RSN_ASSERT(!ec, snapshot_finalization_exception,
+      EOS_ASSERT(!ec, snapshot_finalization_exception,
                  "Unable to finalize valid snapshot of block number ${bn}: [code: ${ec}] ${message}",
                  ("bn", get_height())
                  ("ec", ec.value())
@@ -211,14 +211,15 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
       boost::program_options::variables_map _options;
       bool     _production_enabled                 = false;
       bool     _pause_production                   = false;
-      uint32_t _production_skip_flags              = 0; //arisen::chain::skip_nothing;
+      uint32_t _production_skip_flags              = 0; //eosio::chain::skip_nothing;
 
       using signature_provider_type = std::function<chain::signature_type(chain::digest_type)>;
       std::map<chain::public_key_type, signature_provider_type> _signature_providers;
       std::set<chain::account_name>                             _producers;
       boost::asio::deadline_timer                               _timer;
-      std::map<chain::account_name, uint32_t>                   _producer_watermarks;
-      pending_block_mode                                        _pending_block_mode;
+      using producer_watermark = std::pair<uint32_t, block_timestamp_type>;
+      std::map<chain::account_name, producer_watermark>         _producer_watermarks;
+      pending_block_mode                                        _pending_block_mode = pending_block_mode::speculating;
       transaction_id_with_expiry_index                          _persistent_transactions;
       fc::optional<named_thread_pool>                           _thread_pool;
 
@@ -228,7 +229,7 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
       int32_t                                                   _last_block_time_offset_us = 0;
       int32_t                                                   _max_scheduled_transaction_time_per_block_ms;
       fc::time_point                                            _irreversible_block_time;
-      fc::microseconds                                          _krsnd_provider_timeout_us;
+      fc::microseconds                                          _keosd_provider_timeout_us;
 
       std::vector<chain::digest_type>                           _protocol_features_to_activate;
       bool                                                      _protocol_features_signaled = false; // to mark whether it has been signaled in start_block
@@ -269,16 +270,17 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
       // path to write the snapshots to
       bfs::path _snapshots_dir;
 
-      void consider_new_watermark( account_name producer, uint32_t block_num ) {
+      void consider_new_watermark( account_name producer, uint32_t block_num, block_timestamp_type timestamp) {
          auto itr = _producer_watermarks.find( producer );
          if( itr != _producer_watermarks.end() ) {
-            itr->second = std::max( itr->second, block_num );
+            itr->second.first = std::max( itr->second.first, block_num );
+            itr->second.second = std::max( itr->second.second, timestamp );
          } else if( _producers.count( producer ) > 0 ) {
-            _producer_watermarks.emplace( producer, block_num );
+            _producer_watermarks.emplace( producer, std::make_pair(block_num, timestamp) );
          }
       }
 
-      std::optional<uint32_t> get_watermark( account_name producer ) const {
+      std::optional<producer_watermark> get_watermark( account_name producer ) const {
          auto itr = _producer_watermarks.find( producer );
 
          if( itr == _producer_watermarks.end() ) return {};
@@ -290,7 +292,7 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
       }
 
       void on_block_header( const block_state_ptr& bsp ) {
-         consider_new_watermark( bsp->header.producer, bsp->block_num );
+         consider_new_watermark( bsp->header.producer, bsp->block_num, bsp->block->timestamp );
       }
 
       void on_irreversible_block( const signed_block_ptr& lib ) {
@@ -354,7 +356,7 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
 
       bool on_incoming_block(const signed_block_ptr& block, const std::optional<block_id_type>& block_id) {
          auto& chain = chain_plug->chain();
-         if ( chain.is_building_block() && _pending_block_mode == pending_block_mode::producing ) {
+         if ( _pending_block_mode == pending_block_mode::producing ) {
             fc_wlog( _log, "dropped incoming block #${num} while producing #${pbn} for ${bt}, id: ${id}",
                      ("num", block->block_num())("pbn", chain.head_block_num() + 1)
                      ("bt", chain.pending_block_time())("id", block_id ? (*block_id).str() : "UNKNOWN") );
@@ -366,7 +368,7 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
 
          fc_dlog(_log, "received incoming block ${id}", ("id", id));
 
-         RSN_ASSERT( block->timestamp < (fc::time_point::now() + fc::seconds( 7 )), block_from_the_future,
+         EOS_ASSERT( block->timestamp < (fc::time_point::now() + fc::seconds( 7 )), block_from_the_future,
                      "received a block from the future, ignoring it: ${id}", ("id", id) );
 
          /* de-dupe here... no point in aborting block if we already know the block */
@@ -547,7 +549,8 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
       enum class start_block_result {
          succeeded,
          failed,
-         waiting,
+         waiting_for_block,
+         waiting_for_production,
          exhausted
       };
 
@@ -555,16 +558,18 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
 
       fc::time_point calculate_pending_block_time() const;
       fc::time_point calculate_block_deadline( const fc::time_point& ) const;
-      void schedule_delayed_production_loop(const std::weak_ptr<producer_plugin_impl>& weak_this, const block_timestamp_type& current_block_time);
+      void schedule_delayed_production_loop(const std::weak_ptr<producer_plugin_impl>& weak_this, optional<fc::time_point> wake_up_time);
+      optional<fc::time_point> calculate_producer_wake_up_time( const block_timestamp_type& ref_block_time ) const;
+
 };
 
-void new_chain_banner(const arisen::chain::controller& db)
+void new_chain_banner(const eosio::chain::controller& db)
 {
    std::cerr << "\n"
       "*******************************\n"
       "*                             *\n"
       "*   ------ NEW CHAIN ------   *\n"
-      "*   -  Welcome to ARISEN!  -   *\n"
+      "*   -  Welcome to EOSIO!  -   *\n"
       "*   -----------------------   *\n"
       "*                             *\n"
       "*******************************\n"
@@ -610,21 +615,25 @@ void producer_plugin::set_program_options(
          ("signature-provider", boost::program_options::value<vector<string>>()->composing()->multitoken()->default_value({std::string(default_priv_key.get_public_key()) + "=KEY:" + std::string(default_priv_key)}, std::string(default_priv_key.get_public_key()) + "=KEY:" + std::string(default_priv_key)),
           "Key=Value pairs in the form <public-key>=<provider-spec>\n"
           "Where:\n"
-          "   <public-key>    \tis a string form of a vaild ARISEN public key\n\n"
+          "   <public-key>    \tis a string form of a vaild EOSIO public key\n\n"
           "   <provider-spec> \tis a string in the form <provider-type>:<data>\n\n"
-          "   <provider-type> \tis KEY, or AWALLETD\n\n"
-          "   KEY:<data>      \tis a string form of a valid ARISEN private key which maps to the provided public key\n\n"
-          "   AWALLETD:<data>    \tis the URL where awalletd is available and the approptiate wallet(s) are unlocked")
-         ("awalletd-provider-timeout", boost::program_options::value<int32_t>()->default_value(5),
-          "Limits the maximum time (in milliseconds) that is allowed for sending blocks to a awalletd provider for signing")
+          "   <provider-type> \tis KEY, or KEOSD\n\n"
+          "   KEY:<data>      \tis a string form of a valid EOSIO private key which maps to the provided public key\n\n"
+          "   KEOSD:<data>    \tis the URL where keosd is available and the approptiate wallet(s) are unlocked")
+         ("keosd-provider-timeout", boost::program_options::value<int32_t>()->default_value(5),
+          "Limits the maximum time (in milliseconds) that is allowed for sending blocks to a keosd provider for signing")
          ("greylist-account", boost::program_options::value<vector<string>>()->composing()->multitoken(),
           "account that can not access to extended CPU/NET virtual resources")
          ("greylist-limit", boost::program_options::value<uint32_t>()->default_value(1000),
           "Limit (between 1 and 1000) on the multiple that CPU/NET virtual resources can extend during low usage (only enforced subjectively; use 1000 to not enforce any limit)")
          ("produce-time-offset-us", boost::program_options::value<int32_t>()->default_value(0),
-          "offset of non last block producing time in microseconds. Negative number results in blocks to go out sooner, and positive number results in blocks to go out later")
+          "Offset of non last block producing time in microseconds. Valid range 0 .. -block_time_interval.")
          ("last-block-time-offset-us", boost::program_options::value<int32_t>()->default_value(-200000),
-          "offset of last block producing time in microseconds. Negative number results in blocks to go out sooner, and positive number results in blocks to go out later")
+          "Offset of last block producing time in microseconds. Valid range 0 .. -block_time_interval.")
+         ("cpu-effort-percent", bpo::value<uint32_t>()->default_value(config::default_block_cpu_effort_pct / config::percent_1),
+          "Percentage of cpu block production time used to produce block. Whole number percentages, e.g. 80 for 80%")
+         ("last-block-cpu-effort-percent", bpo::value<uint32_t>()->default_value(config::default_block_cpu_effort_pct / config::percent_1),
+          "Percentage of cpu block production time used to produce last block. Whole number percentages, e.g. 80 for 80%")
          ("max-scheduled-transaction-time-per-block-ms", boost::program_options::value<int32_t>()->default_value(100),
           "Maximum wall-clock time, in milliseconds, spent retiring scheduled transactions in any block before returning to normal transaction processing.")
          ("subjective-cpu-leeway-us", boost::program_options::value<int32_t>()->default_value( config::default_subjective_cpu_leeway_us ),
@@ -651,7 +660,7 @@ chain::signature_type producer_plugin::sign_compact(const chain::public_key_type
 {
   if(key != chain::public_key_type()) {
     auto private_key_itr = my->_signature_providers.find(key);
-    RSN_ASSERT(private_key_itr != my->_signature_providers.end(), producer_priv_key_not_found, "Local producer has no private key in config.ini corresponding to public key ${key}", ("key", key));
+    EOS_ASSERT(private_key_itr != my->_signature_providers.end(), producer_priv_key_not_found, "Local producer has no private key in config.ini corresponding to public key ${key}", ("key", key));
 
     return private_key_itr->second(digest);
   }
@@ -679,23 +688,23 @@ make_key_signature_provider(const private_key_type& key) {
 }
 
 static producer_plugin_impl::signature_provider_type
-make_krsnd_signature_provider(const std::shared_ptr<producer_plugin_impl>& impl, const string& url_str, const public_key_type pubkey) {
-   fc::url krsnd_url;
+make_keosd_signature_provider(const std::shared_ptr<producer_plugin_impl>& impl, const string& url_str, const public_key_type pubkey) {
+   fc::url keosd_url;
    if(boost::algorithm::starts_with(url_str, "unix://"))
       //send the entire string after unix:// to http_plugin. It'll auto-detect which part
       // is the unix socket path, and which part is the url to hit on the server
-      krsnd_url = fc::url("unix", url_str.substr(7), ostring(), ostring(), ostring(), ostring(), ovariant_object(), fc::optional<uint16_t>());
+      keosd_url = fc::url("unix", url_str.substr(7), ostring(), ostring(), ostring(), ostring(), ovariant_object(), fc::optional<uint16_t>());
    else
-      krsnd_url = fc::url(url_str);
+      keosd_url = fc::url(url_str);
    std::weak_ptr<producer_plugin_impl> weak_impl = impl;
 
-   return [weak_impl, krsnd_url, pubkey]( const chain::digest_type& digest ) {
+   return [weak_impl, keosd_url, pubkey]( const chain::digest_type& digest ) {
       auto impl = weak_impl.lock();
       if (impl) {
          fc::variant params;
          fc::to_variant(std::make_pair(digest, pubkey), params);
-         auto deadline = impl->_krsnd_provider_timeout_us.count() >= 0 ? fc::time_point::now() + impl->_krsnd_provider_timeout_us : fc::time_point::maximum();
-         return app().get_plugin<http_client_plugin>().get_client().post_sync(krsnd_url, params, deadline).as<chain::signature_type>();
+         auto deadline = impl->_keosd_provider_timeout_us.count() >= 0 ? fc::time_point::now() + impl->_keosd_provider_timeout_us : fc::time_point::maximum();
+         return app().get_plugin<http_client_plugin>().get_client().post_sync(keosd_url, params, deadline).as<chain::signature_type>();
       } else {
          return signature_type();
       }
@@ -705,7 +714,7 @@ make_krsnd_signature_provider(const std::shared_ptr<producer_plugin_impl>& impl,
 void producer_plugin::plugin_initialize(const boost::program_options::variables_map& options)
 { try {
    my->chain_plug = app().find_plugin<chain_plugin>();
-   RSN_ASSERT( my->chain_plug, plugin_config_exception, "chain_plugin not found" );
+   EOS_ASSERT( my->chain_plug, plugin_config_exception, "chain_plugin not found" );
    my->_options = &options;
    LOAD_VALUE_SET(options, "producer-name", my->_producers, types::account_name)
 
@@ -732,12 +741,12 @@ void producer_plugin::plugin_initialize(const boost::program_options::variables_
       for (const auto& key_spec_pair : key_spec_pairs) {
          try {
             auto delim = key_spec_pair.find("=");
-            RSN_ASSERT(delim != std::string::npos, plugin_config_exception, "Missing \"=\" in the key spec pair");
+            EOS_ASSERT(delim != std::string::npos, plugin_config_exception, "Missing \"=\" in the key spec pair");
             auto pub_key_str = key_spec_pair.substr(0, delim);
             auto spec_str = key_spec_pair.substr(delim + 1);
 
             auto spec_delim = spec_str.find(":");
-            RSN_ASSERT(spec_delim != std::string::npos, plugin_config_exception, "Missing \":\" in the key spec pair");
+            EOS_ASSERT(spec_delim != std::string::npos, plugin_config_exception, "Missing \":\" in the key spec pair");
             auto spec_type_str = spec_str.substr(0, spec_delim);
             auto spec_data = spec_str.substr(spec_delim + 1);
 
@@ -745,8 +754,8 @@ void producer_plugin::plugin_initialize(const boost::program_options::variables_
 
             if (spec_type_str == "KEY") {
                my->_signature_providers[pubkey] = make_key_signature_provider(private_key_type(spec_data));
-            } else if (spec_type_str == "AWALLETD") {
-               my->_signature_providers[pubkey] = make_krsnd_signature_provider(my, spec_data, pubkey);
+            } else if (spec_type_str == "KEOSD") {
+               my->_signature_providers[pubkey] = make_keosd_signature_provider(my, spec_data, pubkey);
             }
 
          } catch (...) {
@@ -755,11 +764,32 @@ void producer_plugin::plugin_initialize(const boost::program_options::variables_
       }
    }
 
-   my->_krsnd_provider_timeout_us = fc::milliseconds(options.at("awalletd-provider-timeout").as<int32_t>());
+   my->_keosd_provider_timeout_us = fc::milliseconds(options.at("keosd-provider-timeout").as<int32_t>());
 
    my->_produce_time_offset_us = options.at("produce-time-offset-us").as<int32_t>();
+   EOS_ASSERT( my->_produce_time_offset_us <= 0 && my->_produce_time_offset_us >= -config::block_interval_us, plugin_config_exception,
+               "produce-time-offset-us ${o} must be 0 .. -${bi}", ("bi", config::block_interval_us)("o", my->_produce_time_offset_us) );
 
    my->_last_block_time_offset_us = options.at("last-block-time-offset-us").as<int32_t>();
+   EOS_ASSERT( my->_last_block_time_offset_us <= 0 && my->_last_block_time_offset_us >= -config::block_interval_us, plugin_config_exception,
+               "last-block-time-offset-us ${o} must be 0 .. -${bi}", ("bi", config::block_interval_us)("o", my->_last_block_time_offset_us) );
+
+   uint32_t cpu_effort_pct = options.at("cpu-effort-percent").as<uint32_t>();
+   EOS_ASSERT( cpu_effort_pct >= 0 && cpu_effort_pct <= 100, plugin_config_exception,
+               "cpu-effort-percent ${pct} must be 0 - 100", ("pct", cpu_effort_pct) );
+      cpu_effort_pct *= config::percent_1;
+   int32_t cpu_effort_offset_us =
+         -EOS_PERCENT( config::block_interval_us, chain::config::percent_100 - cpu_effort_pct );
+
+   uint32_t last_block_cpu_effort_pct = options.at("last-block-cpu-effort-percent").as<uint32_t>();
+   EOS_ASSERT( last_block_cpu_effort_pct >= 0 && last_block_cpu_effort_pct <= 100, plugin_config_exception,
+               "last-block-cpu-effort-percent ${pct} must be 0 - 100", ("pct", last_block_cpu_effort_pct) );
+      last_block_cpu_effort_pct *= config::percent_1;
+   int32_t last_block_cpu_effort_offset_us =
+         -EOS_PERCENT( config::block_interval_us, chain::config::percent_100 - last_block_cpu_effort_pct );
+
+   my->_produce_time_offset_us = std::min( my->_produce_time_offset_us, cpu_effort_offset_us );
+   my->_last_block_time_offset_us = std::min( my->_last_block_time_offset_us, last_block_cpu_effort_offset_us );
 
    my->_max_scheduled_transaction_time_per_block_ms = options.at("max-scheduled-transaction-time-per-block-ms").as<int32_t>();
 
@@ -774,7 +804,7 @@ void producer_plugin::plugin_initialize(const boost::program_options::variables_
    my->_incoming_defer_ratio = options.at("incoming-defer-ratio").as<double>();
 
    auto thread_pool_size = options.at( "producer-threads" ).as<uint16_t>();
-   RSN_ASSERT( thread_pool_size > 0, plugin_config_exception,
+   EOS_ASSERT( thread_pool_size > 0, plugin_config_exception,
                "producer-threads ${num} must be greater than 0", ("num", thread_pool_size));
    my->_thread_pool.emplace( "prod", thread_pool_size );
 
@@ -789,7 +819,7 @@ void producer_plugin::plugin_initialize(const boost::program_options::variables_
          my->_snapshots_dir = sd;
       }
 
-      RSN_ASSERT( fc::is_directory(my->_snapshots_dir), snapshot_directory_not_found_exception,
+      EOS_ASSERT( fc::is_directory(my->_snapshots_dir), snapshot_directory_not_found_exception,
                   "No such directory '${dir}'", ("dir", my->_snapshots_dir.generic_string()) );
    }
 
@@ -838,10 +868,10 @@ void producer_plugin::plugin_startup()
    ilog("producer plugin:  plugin_startup() begin");
 
    chain::controller& chain = my->chain_plug->chain();
-   RSN_ASSERT( my->_producers.empty() || chain.get_read_mode() == chain::db_read_mode::SPECULATIVE, plugin_config_exception,
+   EOS_ASSERT( my->_producers.empty() || chain.get_read_mode() == chain::db_read_mode::SPECULATIVE, plugin_config_exception,
               "node cannot have any producer-name configured because block production is impossible when read_mode is not \"speculative\"" );
 
-   RSN_ASSERT( my->_producers.empty() || chain.get_validation_mode() == chain::validation_mode::FULL, plugin_config_exception,
+   EOS_ASSERT( my->_producers.empty() || chain.get_validation_mode() == chain::validation_mode::FULL, plugin_config_exception,
               "node cannot have any producer-name configured because block production is not safe when validation_mode is not \"full\"" );
 
 
@@ -864,7 +894,7 @@ void producer_plugin::plugin_startup()
          if (chain.head_block_num() == 0) {
             new_chain_banner(chain);
          }
-         //_production_skip_flags |= arisen::chain::skip_undo_history_check;
+         //_production_skip_flags |= eosio::chain::skip_undo_history_check;
       }
    }
 
@@ -1083,7 +1113,7 @@ void producer_plugin::create_snapshot(producer_plugin::next_function<producer_pl
 
          boost::system::error_code ec;
          bfs::rename(temp_path, snapshot_path, ec);
-         RSN_ASSERT(!ec, snapshot_finalization_exception,
+         EOS_ASSERT(!ec, snapshot_finalization_exception,
                "Unable to finalize valid snapshot of block number ${bn}: [code: ${ec}] ${message}",
                ("bn", chain.head_block_num())
                ("ec", ec.value())
@@ -1115,7 +1145,7 @@ void producer_plugin::create_snapshot(producer_plugin::next_function<producer_pl
 
          boost::system::error_code ec;
          bfs::rename(temp_path, pending_path, ec);
-         RSN_ASSERT(!ec, snapshot_finalization_exception,
+         EOS_ASSERT(!ec, snapshot_finalization_exception,
                "Unable to promote temp snapshot to pending for block number ${bn}: [code: ${ec}] ${message}",
                ("bn", chain.head_block_num())
                ("ec", ec.value())
@@ -1135,13 +1165,13 @@ void producer_plugin::schedule_protocol_feature_activations( const scheduled_pro
    const chain::controller& chain = my->chain_plug->chain();
    std::set<digest_type> set_of_features_to_activate( schedule.protocol_features_to_activate.begin(),
                                                       schedule.protocol_features_to_activate.end() );
-   RSN_ASSERT( set_of_features_to_activate.size() == schedule.protocol_features_to_activate.size(),
+   EOS_ASSERT( set_of_features_to_activate.size() == schedule.protocol_features_to_activate.size(),
                invalid_protocol_features_to_activate, "duplicate digests" );
    chain.validate_protocol_features( schedule.protocol_features_to_activate );
    const auto& pfs = chain.get_protocol_feature_manager().get_protocol_feature_set();
    for (auto &feature_digest : set_of_features_to_activate) {
       const auto& pf = pfs.get_protocol_feature(feature_digest);
-      RSN_ASSERT( !pf.preactivation_required, protocol_feature_exception,
+      EOS_ASSERT( !pf.preactivation_required, protocol_feature_exception,
                   "protocol feature requires preactivation: ${digest}",
                   ("digest", feature_digest));
    }
@@ -1253,14 +1283,18 @@ optional<fc::time_point> producer_plugin_impl::calculate_next_block_time(const a
    // information then
    auto current_watermark = get_watermark(producer_name);
    if (current_watermark) {
-      auto watermark = *current_watermark;
+      const auto watermark = *current_watermark;
       auto block_num = chain.head_block_state()->block_num;
       if (chain.is_building_block()) {
          ++block_num;
       }
-      if (watermark > block_num) {
-         // if I have a watermark then I need to wait until after that watermark
-         minimum_offset = watermark - block_num + 1;
+      if (watermark.first > block_num) {
+         // if I have a watermark block number then I need to wait until after that watermark
+         minimum_offset = watermark.first - block_num + 1;
+      }
+      if (watermark.second > current_block_time) {
+          // if I have a watermark block timestamp then I need to wait until after that watermark timestamp
+          minimum_offset = std::max(minimum_offset, watermark.second.slot - current_block_time.slot + 1);
       }
    }
 
@@ -1316,10 +1350,8 @@ enum class tx_category {
 producer_plugin_impl::start_block_result producer_plugin_impl::start_block() {
    chain::controller& chain = chain_plug->chain();
 
-   if( chain.get_read_mode() == chain::db_read_mode::READ_ONLY )
-      return start_block_result::waiting;
-
-   fc_dlog(_log, "Starting block at ${time}", ("time", fc::time_point::now()));
+   if( chain.in_immutable_mode() )
+      return start_block_result::waiting_for_block;
 
    const auto& hbs = chain.head_block_state();
 
@@ -1328,11 +1360,12 @@ producer_plugin_impl::start_block_result producer_plugin_impl::start_block() {
    const fc::time_point now = fc::time_point::now();
    const fc::time_point block_time = calculate_pending_block_time();
 
+   const pending_block_mode previous_pending_mode = _pending_block_mode;
    _pending_block_mode = pending_block_mode::producing;
 
    // Not our turn
    const auto& scheduled_producer = hbs->get_scheduled_producer(block_time);
-   auto current_watermark = get_watermark(scheduled_producer.producer_name);
+   const auto current_watermark = get_watermark(scheduled_producer.producer_name);
    auto signature_provider_itr = _signature_providers.find(scheduled_producer.block_signing_key);
    auto irreversible_block_age = get_irreversible_block_age();
 
@@ -1354,20 +1387,47 @@ producer_plugin_impl::start_block_result producer_plugin_impl::start_block() {
 
    if (_pending_block_mode == pending_block_mode::producing) {
       // determine if our watermark excludes us from producing at this point
-      if (current_watermark && *current_watermark >= hbs->block_num + 1) {
-         elog("Not producing block because \"${producer}\" signed a block at a higher block number (${watermark}) than the current fork's head (${head_block_num})",
-             ("producer", scheduled_producer.producer_name)
-             ("watermark", *current_watermark)
-             ("head_block_num", hbs->block_num));
-         _pending_block_mode = pending_block_mode::speculating;
+      if (current_watermark) {
+         const block_timestamp_type block_timestamp{block_time};
+         if (current_watermark->first > hbs->block_num) {
+            elog("Not producing block because \"${producer}\" signed a block at a higher block number (${watermark}) than the current fork's head (${head_block_num})",
+                 ("producer", scheduled_producer.producer_name)
+                 ("watermark", current_watermark->first)
+                 ("head_block_num", hbs->block_num));
+            _pending_block_mode = pending_block_mode::speculating;
+         } else if (current_watermark->second >= block_timestamp) {
+            elog("Not producing block because \"${producer}\" signed a block at the next block time or later (${watermark}) than the pending block time (${block_timestamp})",
+                 ("producer", scheduled_producer.producer_name)
+                 ("watermark", current_watermark->second)
+                 ("block_timestamp", block_timestamp));
+            _pending_block_mode = pending_block_mode::speculating;
+         }
       }
    }
 
    if (_pending_block_mode == pending_block_mode::speculating) {
       auto head_block_age = now - chain.head_block_time();
       if (head_block_age > fc::seconds(5))
-         return start_block_result::waiting;
+         return start_block_result::waiting_for_block;
    }
+
+   if (_pending_block_mode == pending_block_mode::producing) {
+      const auto start_block_time = block_time - fc::microseconds( config::block_interval_us );
+      if( now < start_block_time ) {
+         fc_dlog(_log, "Not producing block waiting for production window ${n} ${bt}", ("n", hbs->block_num + 1)("bt", block_time) );
+         // start_block_time instead of block_time because schedule_delayed_production_loop calculates next block time from given time
+         schedule_delayed_production_loop(weak_from_this(), calculate_producer_wake_up_time(start_block_time));
+         return start_block_result::waiting_for_production;
+      }
+   } else if (previous_pending_mode == pending_block_mode::producing) {
+      // just produced our last block of our round
+      const auto start_block_time = block_time - fc::microseconds( config::block_interval_us );
+      fc_dlog(_log, "Not starting speculative block until ${bt}", ("bt", start_block_time) );
+      schedule_delayed_production_loop( weak_from_this(), start_block_time);
+      return start_block_result::waiting_for_production;
+   }
+
+   fc_dlog(_log, "Starting block #${n} ${bt} at ${time}", ("n", hbs->block_num + 1)("bt", block_time)("time", now));
 
    try {
       uint16_t blocks_to_confirm = 0;
@@ -1380,9 +1440,9 @@ producer_plugin_impl::start_block_result producer_plugin_impl::start_block() {
          // 3) if it is a producer on this node where this node knows the last block it produced, safely set it -UNLESS-
          // 4) the producer on this node's last watermark is higher (meaning on a different fork)
          if (current_watermark) {
-            auto watermark = *current_watermark;
-            if (watermark < hbs->block_num) {
-               blocks_to_confirm = (uint16_t)(std::min<uint32_t>(std::numeric_limits<uint16_t>::max(), (uint32_t)(hbs->block_num - watermark)));
+            auto watermark_bn = current_watermark->first;
+            if (watermark_bn < hbs->block_num) {
+               blocks_to_confirm = (uint16_t)(std::min<uint32_t>(std::numeric_limits<uint16_t>::max(), (uint32_t)(hbs->block_num - watermark_bn)));
             }
          }
 
@@ -1760,6 +1820,12 @@ bool producer_plugin_impl::process_incoming_trxs( const fc::time_point& deadline
    return !exhausted;
 }
 
+// Example:
+// --> Start block A (block time x.500) at time x.000
+// -> start_block()
+// --> deadline, produce block x.500 at time x.400 (assuming 80% cpu block effort)
+// -> Idle
+// --> Start block B (block time y.000) at time x.500
 void producer_plugin_impl::schedule_production_loop() {
    chain::controller& chain = chain_plug->chain();
    _timer.cancel();
@@ -1779,14 +1845,17 @@ void producer_plugin_impl::schedule_production_loop() {
                 self->schedule_production_loop();
              }
           } ) );
-   } else if (result == start_block_result::waiting){
+   } else if (result == start_block_result::waiting_for_block){
       if (!_producers.empty() && !production_disabled_by_policy()) {
          fc_dlog(_log, "Waiting till another block is received and scheduling Speculative/Production Change");
-         schedule_delayed_production_loop(weak_this, calculate_pending_block_time());
+         schedule_delayed_production_loop(weak_this, calculate_producer_wake_up_time(calculate_pending_block_time()));
       } else {
          fc_dlog(_log, "Waiting till another block is received");
          // nothing to do until more blocks arrive
       }
+
+   } else if (result == start_block_result::waiting_for_production) {
+      // scheduled in start_block()
 
    } else if (_pending_block_mode == pending_block_mode::producing) {
 
@@ -1796,12 +1865,12 @@ void producer_plugin_impl::schedule_production_loop() {
 
       if (deadline > fc::time_point::now()) {
          // ship this block off no later than its deadline
-         RSN_ASSERT( chain.is_building_block(), missing_pending_block_state, "producing without pending_block_state, start_block succeeded" );
+         EOS_ASSERT( chain.is_building_block(), missing_pending_block_state, "producing without pending_block_state, start_block succeeded" );
          _timer.expires_at( epoch + boost::posix_time::microseconds( deadline.time_since_epoch().count() ));
          fc_dlog(_log, "Scheduling Block Production on Normal Block #${num} for ${time}",
                        ("num", chain.head_block_num()+1)("time",deadline));
       } else {
-         RSN_ASSERT( chain.is_building_block(), missing_pending_block_state, "producing without pending_block_state" );
+         EOS_ASSERT( chain.is_building_block(), missing_pending_block_state, "producing without pending_block_state" );
          auto expect_time = chain.pending_block_time() - fc::microseconds(config::block_interval_us);
          // ship this block off up to 1 block time earlier or immediately
          if (fc::time_point::now() >= expect_time) {
@@ -1828,29 +1897,38 @@ void producer_plugin_impl::schedule_production_loop() {
             } ) );
    } else if (_pending_block_mode == pending_block_mode::speculating && !_producers.empty() && !production_disabled_by_policy()){
       fc_dlog(_log, "Speculative Block Created; Scheduling Speculative/Production Change");
-      RSN_ASSERT( chain.is_building_block(), missing_pending_block_state, "speculating without pending_block_state" );
-      schedule_delayed_production_loop(weak_this, chain.pending_block_time());
+      EOS_ASSERT( chain.is_building_block(), missing_pending_block_state, "speculating without pending_block_state" );
+      schedule_delayed_production_loop(weak_this, calculate_producer_wake_up_time(chain.pending_block_time()));
    } else {
       fc_dlog(_log, "Speculative Block Created");
    }
 }
 
-void producer_plugin_impl::schedule_delayed_production_loop(const std::weak_ptr<producer_plugin_impl>& weak_this, const block_timestamp_type& current_block_time) {
+optional<fc::time_point> producer_plugin_impl::calculate_producer_wake_up_time( const block_timestamp_type& ref_block_time ) const {
    // if we have any producers then we should at least set a timer for our next available slot
    optional<fc::time_point> wake_up_time;
-   for (const auto&p: _producers) {
-      auto next_producer_block_time = calculate_next_block_time(p, current_block_time);
+   for (const auto& p : _producers) {
+      auto next_producer_block_time = calculate_next_block_time(p, ref_block_time);
       if (next_producer_block_time) {
          auto producer_wake_up_time = *next_producer_block_time - fc::microseconds(config::block_interval_us);
          if (wake_up_time) {
             // wake up with a full block interval to the deadline
-            wake_up_time = std::min<fc::time_point>(*wake_up_time, producer_wake_up_time);
+            if( producer_wake_up_time < *wake_up_time ) {
+               wake_up_time = producer_wake_up_time;
+            }
          } else {
             wake_up_time = producer_wake_up_time;
          }
       }
    }
+   if( !wake_up_time ) {
+      fc_dlog(_log, "Not Scheduling Speculative/Production, no local producers had valid wake up times");
+   }
 
+   return wake_up_time;
+}
+
+void producer_plugin_impl::schedule_delayed_production_loop(const std::weak_ptr<producer_plugin_impl>& weak_this, optional<fc::time_point> wake_up_time) {
    if (wake_up_time) {
       fc_dlog(_log, "Scheduling Speculative/Production Change at ${time}", ("time", wake_up_time));
       static const boost::posix_time::ptime epoch(boost::gregorian::date(1970, 1, 1));
@@ -1862,8 +1940,6 @@ void producer_plugin_impl::schedule_delayed_production_loop(const std::weak_ptr<
                self->schedule_production_loop();
             }
          } ) );
-   } else {
-      fc_dlog(_log, "Not Scheduling Speculative/Production, no local producers had valid wake up times");
    }
 }
 
@@ -1901,13 +1977,13 @@ static auto maybe_make_debug_time_logger() -> fc::optional<decltype(make_debug_t
 
 void producer_plugin_impl::produce_block() {
    //ilog("produce_block ${t}", ("t", fc::time_point::now())); // for testing _produce_time_offset_us
-   RSN_ASSERT(_pending_block_mode == pending_block_mode::producing, producer_exception, "called produce_block while not actually producing");
+   EOS_ASSERT(_pending_block_mode == pending_block_mode::producing, producer_exception, "called produce_block while not actually producing");
    chain::controller& chain = chain_plug->chain();
    const auto& hbs = chain.head_block_state();
-   RSN_ASSERT(chain.is_building_block(), missing_pending_block_state, "pending_block_state does not exist but it should, another plugin may have corrupted it");
+   EOS_ASSERT(chain.is_building_block(), missing_pending_block_state, "pending_block_state does not exist but it should, another plugin may have corrupted it");
    auto signature_provider_itr = _signature_providers.find( chain.pending_block_signing_key() );
 
-   RSN_ASSERT(signature_provider_itr != _signature_providers.end(), producer_priv_key_not_found, "Attempting to produce a block for which we don't have the private key");
+   EOS_ASSERT(signature_provider_itr != _signature_providers.end(), producer_priv_key_not_found, "Attempting to produce a block for which we don't have the private key");
 
    if (_protocol_features_signaled) {
       _protocol_features_to_activate.clear(); // clear _protocol_features_to_activate as it is already set in pending_block
@@ -1931,4 +2007,4 @@ void producer_plugin_impl::produce_block() {
 
 }
 
-} // namespace arisen
+} // namespace eosio

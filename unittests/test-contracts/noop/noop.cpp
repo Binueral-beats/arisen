@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
 #include "noop.hpp"
 
-using namespace arisen;
+using namespace eosio;
 
 void noop::anyaction( name                       from,
                       const ignore<std::string>& type,

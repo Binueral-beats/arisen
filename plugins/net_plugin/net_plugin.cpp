@@ -1,18 +1,18 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in eos/LICENSE
  */
-#include <arisen/chain/types.hpp>
+#include <eosio/chain/types.hpp>
 
-#include <arisen/net_plugin/net_plugin.hpp>
-#include <arisen/net_plugin/protocol.hpp>
-#include <arisen/chain/controller.hpp>
-#include <arisen/chain/exceptions.hpp>
-#include <arisen/chain/block.hpp>
-#include <arisen/chain/plugin_interface.hpp>
-#include <arisen/chain/thread_utils.hpp>
-#include <arisen/producer_plugin/producer_plugin.hpp>
-#include <arisen/chain/contract_types.hpp>
+#include <eosio/net_plugin/net_plugin.hpp>
+#include <eosio/net_plugin/protocol.hpp>
+#include <eosio/chain/controller.hpp>
+#include <eosio/chain/exceptions.hpp>
+#include <eosio/chain/block.hpp>
+#include <eosio/chain/plugin_interface.hpp>
+#include <eosio/chain/thread_utils.hpp>
+#include <eosio/producer_plugin/producer_plugin.hpp>
+#include <eosio/chain/contract_types.hpp>
 
 #include <fc/network/message_buffer.hpp>
 #include <fc/network/ip.hpp>
@@ -28,9 +28,9 @@
 #include <boost/asio/ip/host_name.hpp>
 #include <boost/asio/steady_timer.hpp>
 
-using namespace arisen::chain::plugin_interface::compat;
+using namespace eosio::chain::plugin_interface::compat;
 
-namespace arisen {
+namespace eosio {
    static appbase::abstract_plugin& _net_plugin = app().register_plugin<net_plugin>();
 
    using std::vector;
@@ -42,8 +42,8 @@ namespace arisen {
 
    using fc::time_point;
    using fc::time_point_sec;
-   using arisen::chain::transaction_id_type;
-   using arisen::chain::sha256_less;
+   using eosio::chain::transaction_id_type;
+   using eosio::chain::sha256_less;
 
    class connection;
 
@@ -123,9 +123,9 @@ namespace arisen {
       unique_ptr<boost::asio::steady_timer> connector_check;
       unique_ptr<boost::asio::steady_timer> transaction_check;
       unique_ptr<boost::asio::steady_timer> keepalive_timer;
-      boost::asio::steady_timer::duration   connector_period;
-      boost::asio::steady_timer::duration   txn_exp_period;
-      boost::asio::steady_timer::duration   resp_expected_period;
+      boost::asio::steady_timer::duration   connector_period{0};
+      boost::asio::steady_timer::duration   txn_exp_period{0};
+      boost::asio::steady_timer::duration   resp_expected_period{0};
       boost::asio::steady_timer::duration   keepalive_interval{std::chrono::seconds{32}};
       int                           max_cleanup_time_ms = 0;
 
@@ -147,7 +147,7 @@ namespace arisen {
       channels::transaction_ack::channel_type::handle  incoming_transaction_ack_subscription;
 
       uint16_t                                  thread_pool_size = 1;
-      optional<arisen::chain::named_thread_pool> thread_pool;
+      optional<eosio::chain::named_thread_pool> thread_pool;
 
       void connect( const connection_ptr& c );
       void connect( const connection_ptr& c, const std::shared_ptr<tcp::resolver>& resolver, tcp::resolver::results_type endpoints );
@@ -289,6 +289,7 @@ namespace arisen {
    constexpr auto     def_send_buffer_size = 1024*1024*def_send_buffer_size_mb;
    constexpr auto     def_max_write_queue_size = def_send_buffer_size*10;
    constexpr auto     def_max_trx_in_progress_size = 100*1024*1024; // 100 MB
+   constexpr auto     def_max_consecutive_rejected_blocks = 13; // num of rejected blocks before disconnect
    constexpr auto     def_max_clients = 25; // 0 for unlimited clients
    constexpr auto     def_max_nodes_per_host = 1;
    constexpr auto     def_conn_retry_wait = 30;
@@ -348,20 +349,20 @@ namespace arisen {
     */
    struct peer_block_state {
       block_id_type id;
-      uint32_t      block_num;
+      uint32_t      block_num{0};
    };
 
    typedef multi_index_container<
-      arisen::peer_block_state,
+      eosio::peer_block_state,
       indexed_by<
-         ordered_unique< tag<by_id>, member<arisen::peer_block_state, block_id_type, &arisen::peer_block_state::id >, sha256_less >,
-         ordered_unique< tag<by_block_num>, member<arisen::peer_block_state, uint32_t, &arisen::peer_block_state::block_num > >
+         ordered_unique< tag<by_id>, member<eosio::peer_block_state, block_id_type, &eosio::peer_block_state::id >, sha256_less >,
+         ordered_unique< tag<by_block_num>, member<eosio::peer_block_state, uint32_t, &eosio::peer_block_state::block_num > >
          >
       > peer_block_state_index;
 
 
    struct update_block_num {
-      uint32_t new_bnum;
+      uint32_t new_bnum{0};
       update_block_num(uint32_t bnum) : new_bnum(bnum) {}
       void operator() (node_transaction_state& nts) {
          nts.block_num = new_bnum;
@@ -379,9 +380,9 @@ namespace arisen {
          :start_block( start ), end_block( end ), last( last_acted ),
           start_time(time_point::now())
       {}
-      uint32_t     start_block;
-      uint32_t     end_block;
-      uint32_t     last; ///< last sent or received
+      uint32_t     start_block{0};
+      uint32_t     end_block{0};
+      uint32_t     last{0}; ///< last sent or received
       time_point   start_time; ///< time request made or received
    };
 
@@ -432,7 +433,7 @@ namespace arisen {
             fill_out_buffer( bufs, _sync_write_queue );
          } else { // postpone real_time write_queue if sync queue is not empty
             fill_out_buffer( bufs, _write_queue );
-            RSN_ASSERT( _write_queue_size == 0, plugin_exception, "write queue size expected to be zero" );
+            EOS_ASSERT( _write_queue_size == 0, plugin_exception, "write queue size expected to be zero" );
          }
       }
 
@@ -498,6 +499,7 @@ namespace arisen {
       bool                    connecting = false;
       bool                    syncing = false;
       uint16_t                protocol_version  = 0;
+      uint16_t                consecutive_rejected_blocks = 0;
       string                  peer_addr;
       unique_ptr<boost::asio::steady_timer> response_expected;
       go_away_reason         no_retry = no_reason;
@@ -528,7 +530,7 @@ namespace arisen {
       double                         offset{0};       //!< peer offset
 
       static const size_t            ts_buffer_size{32};
-      char                           ts[ts_buffer_size];          //!< working buffer for making human readable timestamps
+      char                           ts[ts_buffer_size]{};          //!< working buffer for making human readable timestamps
       /** @} */
 
       bool connected();
@@ -571,11 +573,11 @@ namespace arisen {
       void enqueue( const net_message &msg, bool trigger_send = true );
       void enqueue_block( const signed_block_ptr& sb, bool trigger_send = true, bool to_sync_queue = false);
       void enqueue_buffer( const std::shared_ptr<std::vector<char>>& send_buffer,
-                           bool trigger_send, int priority, go_away_reason close_after_send,
+                           bool trigger_send, go_away_reason close_after_send,
                            bool to_sync_queue = false);
       void cancel_sync(go_away_reason);
       void flush_queues();
-      bool enqueue_sync_block();
+      void enqueue_sync_block();
       void request_sync_blocks(uint32_t start, uint32_t end);
 
       void cancel_wait();
@@ -586,10 +588,9 @@ namespace arisen {
 
       void queue_write(const std::shared_ptr<vector<char>>& buff,
                        bool trigger_send,
-                       int priority,
                        std::function<void(boost::system::error_code, std::size_t)> callback,
                        bool to_sync_queue = false);
-      void do_queue_write(int priority);
+      void do_queue_write();
 
       bool add_peer_block(const peer_block_state& pbs);
       bool peer_has_block(const block_id_type& blkid);
@@ -626,16 +627,16 @@ namespace arisen {
       msg_handler( net_plugin_impl &imp, const connection_ptr& conn) : impl(imp), c(conn) {}
 
       void operator()( const signed_block& msg ) const {
-         RSN_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
+         EOS_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
       }
       void operator()( signed_block& msg ) const {
-         RSN_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
+         EOS_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
       }
       void operator()( const packed_transaction& msg ) const {
-         RSN_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
+         EOS_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
       }
       void operator()( packed_transaction& msg ) const {
-         RSN_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
+         EOS_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
       }
 
       void operator()( signed_block&& msg ) const {
@@ -660,12 +661,12 @@ namespace arisen {
          in_sync
       };
 
-      uint32_t       sync_known_lib_num;
-      uint32_t       sync_last_requested_num;
-      uint32_t       sync_next_expected_num;
-      uint32_t       sync_req_span;
+      uint32_t       sync_known_lib_num{0};
+      uint32_t       sync_last_requested_num{0};
+      uint32_t       sync_next_expected_num{0};
+      uint32_t       sync_req_span{0};
       connection_ptr source;
-      stages         state;
+      stages         state{in_sync};
 
       chain_plugin* chain_plug = nullptr;
 
@@ -798,6 +799,7 @@ namespace arisen {
       flush_queues();
       connecting = false;
       syncing = false;
+      consecutive_rejected_blocks = 0;
       if( last_req ) {
          my_impl->dispatcher->retry_fetch(shared_from_this());
       }
@@ -818,7 +820,7 @@ namespace arisen {
       for(auto tx = my_impl->local_txns.begin(); tx != my_impl->local_txns.end(); ++tx ){
          const bool found = known_ids.find( tx->id ) != known_ids.cend();
          if( !found ) {
-            queue_write( tx->serialized_txn, true, priority::low, []( boost::system::error_code ec, std::size_t ) {} );
+            queue_write( tx->serialized_txn, true, []( boost::system::error_code ec, std::size_t ) {} );
          }
       }
    }
@@ -827,7 +829,7 @@ namespace arisen {
       for(const auto& t : ids) {
          auto tx = my_impl->local_txns.get<by_id>().find(t);
          if( tx != my_impl->local_txns.end() ) {
-            queue_write( tx->serialized_txn, true, priority::low, []( boost::system::error_code ec, std::size_t ) {} );
+            queue_write( tx->serialized_txn, true, []( boost::system::error_code ec, std::size_t ) {} );
          }
       }
    }
@@ -939,7 +941,6 @@ namespace arisen {
 
    void connection::queue_write(const std::shared_ptr<vector<char>>& buff,
                                 bool trigger_send,
-                                int priority,
                                 std::function<void(boost::system::error_code, std::size_t)> callback,
                                 bool to_sync_queue) {
       if( !buffer_queue.add_write_queue( buff, callback, to_sync_queue )) {
@@ -949,11 +950,11 @@ namespace arisen {
          return;
       }
       if( buffer_queue.is_out_queue_empty() && trigger_send) {
-         do_queue_write( priority );
+         do_queue_write();
       }
    }
 
-   void connection::do_queue_write(int priority) {
+   void connection::do_queue_write() {
       if( !buffer_queue.ready_to_send() )
          return;
       connection_wptr c(shared_from_this());
@@ -966,8 +967,8 @@ namespace arisen {
       buffer_queue.fill_out_buffer( bufs );
 
       boost::asio::async_write(*socket, bufs,
-            boost::asio::bind_executor(strand, [c, socket=socket, priority]( boost::system::error_code ec, std::size_t w ) {
-         app().post(priority, [c, priority, ec, w]() {
+            boost::asio::bind_executor(strand, [c, socket=socket]( boost::system::error_code ec, std::size_t w ) {
+         app().post(priority::high, [c, ec, w]() {
             try {
                auto conn = c.lock();
                if(!conn)
@@ -988,7 +989,7 @@ namespace arisen {
                }
                conn->buffer_queue.clear_out_queue();
                conn->enqueue_sync_block();
-               conn->do_queue_write( priority );
+               conn->do_queue_write();
             }
             catch(const std::exception &ex) {
                auto conn = c.lock();
@@ -1027,26 +1028,28 @@ namespace arisen {
       }
    }
 
-   bool connection::enqueue_sync_block() {
-      if (!peer_requested)
-         return false;
-      uint32_t num = ++peer_requested->last;
-      bool trigger_send = num == peer_requested->start_block;
-      if(num == peer_requested->end_block) {
-         peer_requested.reset();
-         fc_ilog( logger, "completing enqueue_sync_block ${num} to ${p}", ("num", num)("p", peer_name()) );
-      }
-      try {
-         controller& cc = my_impl->chain_plug->chain();
-         signed_block_ptr sb = cc.fetch_block_by_number(num);
-         if(sb) {
-            enqueue_block( sb, trigger_send, true);
-            return true;
+   void connection::enqueue_sync_block() {
+      connection_wptr c(shared_from_this());
+      app().post( priority::low, [c]() {
+         auto conn = c.lock();
+         if(!conn) return;
+         if( !conn->peer_requested )
+            return;
+         uint32_t num = ++conn->peer_requested->last;
+         if( num == conn->peer_requested->end_block ) {
+            conn->peer_requested.reset();
+            fc_ilog( logger, "completing enqueue_sync_block ${num} to ${p}", ("num", num)( "p", conn->peer_name() ) );
          }
-      } catch ( ... ) {
-         fc_wlog( logger, "write loop exception" );
-      }
-      return false;
+         try {
+            controller& cc = my_impl->chain_plug->chain();
+            signed_block_ptr sb = cc.fetch_block_by_number( num );
+            if( sb ) {
+               conn->enqueue_block( sb, true, true );
+            }
+         } catch( ... ) {
+            fc_wlog( logger, "write loop exception" );
+         }
+      } );
    }
 
    void connection::enqueue( const net_message& m, bool trigger_send ) {
@@ -1067,7 +1070,7 @@ namespace arisen {
       ds.write( header, header_size );
       fc::raw::pack( ds, m );
 
-      enqueue_buffer( send_buffer, trigger_send, priority::low, close_after_send );
+      enqueue_buffer( send_buffer, trigger_send, close_after_send );
    }
 
    template< typename T>
@@ -1103,15 +1106,15 @@ namespace arisen {
    }
 
    void connection::enqueue_block( const signed_block_ptr& sb, bool trigger_send, bool to_sync_queue) {
-      enqueue_buffer( create_send_buffer( sb ), trigger_send, priority::low, no_reason, to_sync_queue);
+      enqueue_buffer( create_send_buffer( sb ), trigger_send, no_reason, to_sync_queue);
    }
 
    void connection::enqueue_buffer( const std::shared_ptr<std::vector<char>>& send_buffer,
-                                    bool trigger_send, int priority, go_away_reason close_after_send,
+                                    bool trigger_send, go_away_reason close_after_send,
                                     bool to_sync_queue)
    {
       connection_wptr weak_this = shared_from_this();
-      queue_write(send_buffer,trigger_send, priority,
+      queue_write(send_buffer,trigger_send,
                   [weak_this, close_after_send](boost::system::error_code ec, std::size_t ) {
                      connection_ptr conn = weak_this.lock();
                      if (conn) {
@@ -1238,7 +1241,7 @@ namespace arisen {
       ,state(in_sync)
    {
       chain_plug = app().find_plugin<chain_plugin>();
-      RSN_ASSERT( chain_plug, chain::missing_chain_plugin_exception, ""  );
+      EOS_ASSERT( chain_plug, chain::missing_chain_plugin_exception, ""  );
    }
 
    constexpr auto sync_manager::stage_str(stages s) {
@@ -1588,7 +1591,7 @@ namespace arisen {
    }
 
    void sync_manager::rejected_block(const connection_ptr& c, uint32_t blk_num) {
-      if (state != in_sync ) {
+      if( ++c->consecutive_rejected_blocks > def_max_consecutive_rejected_blocks ) {
          fc_wlog( logger, "block ${bn} not accepted from ${p}, closing connection", ("bn",blk_num)("p",c->peer_name()) );
          sync_last_requested_num = 0;
          source.reset();
@@ -1615,6 +1618,7 @@ namespace arisen {
 
    void sync_manager::recv_block(const connection_ptr& c, const block_id_type& blk_id, uint32_t blk_num, bool blk_applied) {
       fc_dlog(logger, "got block ${bn} from ${p}",("bn",blk_num)("p",c->peer_name()));
+      c->consecutive_rejected_blocks = 0;
       sync_update_expected(c, blk_id, blk_num, blk_applied);
       if (state == head_catchup) {
          fc_dlog(logger, "sync_manager in head_catchup state");
@@ -1683,7 +1687,7 @@ namespace arisen {
                send_buffer = create_send_buffer( bs->block );
             }
             fc_dlog(logger, "bcast block ${b} to ${p}", ("b", bnum)("p", cp->peer_name()));
-            cp->enqueue_buffer( send_buffer, true, priority::high, no_reason );
+            cp->enqueue_buffer( send_buffer, true, no_reason );
          }
       }
 
@@ -2095,7 +2099,7 @@ namespace arisen {
                         fc_elog( logger,"async_read_some callback: bytes_transfered = ${bt}, buffer.bytes_to_write = ${btw}",
                                  ("bt",bytes_transferred)("btw",conn->pending_message_buffer.bytes_to_write()) );
                      }
-                     RSN_ASSERT(bytes_transferred <= conn->pending_message_buffer.bytes_to_write(), plugin_exception, "");
+                     EOS_ASSERT(bytes_transferred <= conn->pending_message_buffer.bytes_to_write(), plugin_exception, "");
                      conn->pending_message_buffer.advance_write_ptr(bytes_transferred);
                      while (conn->pending_message_buffer.bytes_to_read() > 0) {
                         uint32_t bytes_in_buffer = conn->pending_message_buffer.bytes_to_read();
@@ -2242,7 +2246,7 @@ namespace arisen {
    void net_plugin_impl::send_transaction_to_all(const std::shared_ptr<std::vector<char>>& send_buffer, VerifierFunc verify) {
       for( auto &c : connections) {
          if( c->current() && verify( c )) {
-            c->enqueue_buffer( send_buffer, true, priority::low, no_reason );
+            c->enqueue_buffer( send_buffer, true, no_reason );
          }
       }
    }
@@ -2560,7 +2564,7 @@ namespace arisen {
    void net_plugin_impl::handle_message(const connection_ptr& c, const packed_transaction_ptr& trx) {
       peer_dlog(c, "got a packed transaction, cancel wait");
       controller& cc = my_impl->chain_plug->chain();
-      if( cc.get_read_mode() == arisen::db_read_mode::READ_ONLY ) {
+      if( db_mode_is_immutable(cc.get_read_mode()) ) {
          fc_dlog(logger, "got a txn in read-only mode - dropping");
          return;
       }
@@ -2955,11 +2959,11 @@ namespace arisen {
    void net_plugin::set_program_options( options_description& /*cli*/, options_description& cfg )
    {
       cfg.add_options()
-         ( "p2p-listen-endpoint", bpo::value<string>()->default_value( "0.0.0.0:6620" ), "The actual host:port used to listen for incoming p2p connections.")
+         ( "p2p-listen-endpoint", bpo::value<string>()->default_value( "0.0.0.0:9876" ), "The actual host:port used to listen for incoming p2p connections.")
          ( "p2p-server-address", bpo::value<string>(), "An externally accessible host:port for identifying this node. Defaults to p2p-listen-endpoint.")
          ( "p2p-peer-address", bpo::value< vector<string> >()->composing(), "The public endpoint of a peer node to connect to. Use multiple p2p-peer-address options as needed to compose a network.")
          ( "p2p-max-nodes-per-host", bpo::value<int>()->default_value(def_max_nodes_per_host), "Maximum number of client nodes from any single IP address")
-         ( "agent-name", bpo::value<string>()->default_value("\"RSN Test Agent\""), "The name supplied to identify this node amongst the peers.")
+         ( "agent-name", bpo::value<string>()->default_value("\"EOS Test Agent\""), "The name supplied to identify this node amongst the peers.")
          ( "allowed-connection", bpo::value<vector<string>>()->multitoken()->default_value({"any"}, "any"), "Can be 'any' or 'producers' or 'specified' or 'none'. If 'specified', peer-key must be specified at least once. If only 'producers', peer-key is not required. 'producers' and 'specified' may be combined.")
          ( "peer-key", bpo::value<vector<string>>()->composing()->multitoken(), "Optional public key of peer allowed to connect.  May be used multiple times.")
          ( "peer-private-key", boost::program_options::value<vector<string>>()->composing()->multitoken(),
@@ -3016,17 +3020,17 @@ namespace arisen {
 
          if( options.count( "p2p-listen-endpoint" ) && options.at("p2p-listen-endpoint").as<string>().length()) {
             my->p2p_address = options.at( "p2p-listen-endpoint" ).as<string>();
-            RSN_ASSERT( my->p2p_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
+            EOS_ASSERT( my->p2p_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
                         "p2p-listen-endpoint to long, must be less than ${m}", ("m", max_p2p_address_length) );
          }
          if( options.count( "p2p-server-address" ) ) {
             my->p2p_server_address = options.at( "p2p-server-address" ).as<string>();
-            RSN_ASSERT( my->p2p_server_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
+            EOS_ASSERT( my->p2p_server_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
                         "p2p_server_address to long, must be less than ${m}", ("m", max_p2p_address_length) );
          }
 
          my->thread_pool_size = options.at( "net-threads" ).as<uint16_t>();
-         RSN_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
+         EOS_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
                      "net-threads ${num} must be greater than 0", ("num", my->thread_pool_size) );
 
          if( options.count( "p2p-peer-address" )) {
@@ -3034,7 +3038,7 @@ namespace arisen {
          }
          if( options.count( "agent-name" )) {
             my->user_agent_name = options.at( "agent-name" ).as<string>();
-            RSN_ASSERT( my->user_agent_name.length() <= max_handshake_str_length, chain::plugin_config_exception,
+            EOS_ASSERT( my->user_agent_name.length() <= max_handshake_str_length, chain::plugin_config_exception,
                         "agent-name to long, must be less than ${m}", ("m", max_handshake_str_length) );
          }
 
@@ -3053,7 +3057,7 @@ namespace arisen {
          }
 
          if( my->allowed_connections & net_plugin_impl::Specified )
-            RSN_ASSERT( options.count( "peer-key" ),
+            EOS_ASSERT( options.count( "peer-key" ),
                         plugin_config_exception,
                        "At least one peer-key must accompany 'allowed-connection=specified'" );
 
@@ -3074,7 +3078,7 @@ namespace arisen {
          }
 
          my->chain_plug = app().find_plugin<chain_plugin>();
-         RSN_ASSERT( my->chain_plug, chain::missing_chain_plugin_exception, ""  );
+         EOS_ASSERT( my->chain_plug, chain::missing_chain_plugin_exception, ""  );
          my->chain_id = my->chain_plug->get_chain_id();
          fc::rand_pseudo_bytes( my->node_id.data(), my->node_id.data_size());
          fc_ilog( logger, "my node_id is ${id}", ("id", my->node_id ));
@@ -3142,7 +3146,7 @@ namespace arisen {
 
       my->incoming_transaction_ack_subscription = app().get_channel<channels::transaction_ack>().subscribe(boost::bind(&net_plugin_impl::transaction_ack, my.get(), _1));
 
-      if( cc.get_read_mode() == chain::db_read_mode::READ_ONLY ) {
+      if( cc.in_immutable_mode() ) {
          my->max_nodes_per_host = 0;
          fc_ilog( logger, "node in read-only mode setting max_nodes_per_host to 0 to prevent connections" );
       }

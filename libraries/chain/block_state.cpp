@@ -1,7 +1,7 @@
-#include <arisen/chain/block_state.hpp>
-#include <arisen/chain/exceptions.hpp>
+#include <eosio/chain/block_state.hpp>
+#include <eosio/chain/exceptions.hpp>
 
-namespace arisen { namespace chain {
+namespace eosio { namespace chain {
 
    block_state::block_state( const block_header_state& prev,
                              signed_block_ptr b,
@@ -41,4 +41,4 @@ namespace arisen { namespace chain {
    ,trxs( std::move(trx_metas) )
    {}
 
-} } /// arisen::chain
+} } /// eosio::chain
