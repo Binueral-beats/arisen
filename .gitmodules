@@ -30,3 +30,6 @@
 [submodule "libraries/wabt"]
 	path = libraries/wabt
 	url = https://github.com/ArisenIO/wabt.git
+[submodule "libraries/yubihsm"]
+	path = libraries/yubihsm
+	url = https://github.com/ArisenIO/yubihsm-shell.git
