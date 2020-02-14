@@ -1,18 +1,18 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/chain/types.hpp>
+#include <arisen/chain/types.hpp>
 
-#include <eosio/net_plugin/net_plugin.hpp>
-#include <eosio/net_plugin/protocol.hpp>
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/block.hpp>
-#include <eosio/chain/plugin_interface.hpp>
-#include <eosio/chain/thread_utils.hpp>
-#include <eosio/producer_plugin/producer_plugin.hpp>
-#include <eosio/chain/contract_types.hpp>
+#include <arisen/net_plugin/net_plugin.hpp>
+#include <arisen/net_plugin/protocol.hpp>
+#include <arisen/chain/controller.hpp>
+#include <arisen/chain/exceptions.hpp>
+#include <arisen/chain/block.hpp>
+#include <arisen/chain/plugin_interface.hpp>
+#include <arisen/chain/thread_utils.hpp>
+#include <arisen/producer_plugin/producer_plugin.hpp>
+#include <arisen/chain/contract_types.hpp>
 
 #include <fc/network/message_buffer.hpp>
 #include <fc/network/ip.hpp>
@@ -28,9 +28,9 @@
 #include <boost/asio/ip/host_name.hpp>
 #include <boost/asio/steady_timer.hpp>
 
-using namespace eosio::chain::plugin_interface::compat;
+using namespace arisen::chain::plugin_interface::compat;
 
-namespace eosio {
+namespace arisen {
    static appbase::abstract_plugin& _net_plugin = app().register_plugin<net_plugin>();
 
    using std::vector;
@@ -42,8 +42,8 @@ namespace eosio {
 
    using fc::time_point;
    using fc::time_point_sec;
-   using eosio::chain::transaction_id_type;
-   using eosio::chain::sha256_less;
+   using arisen::chain::transaction_id_type;
+   using arisen::chain::sha256_less;
 
    class connection;
 
@@ -147,7 +147,7 @@ namespace eosio {
       channels::transaction_ack::channel_type::handle  incoming_transaction_ack_subscription;
 
       uint16_t                                  thread_pool_size = 1;
-      optional<eosio::chain::named_thread_pool> thread_pool;
+      optional<arisen::chain::named_thread_pool> thread_pool;
 
       void connect( const connection_ptr& c );
       void connect( const connection_ptr& c, const std::shared_ptr<tcp::resolver>& resolver, tcp::resolver::results_type endpoints );
@@ -353,10 +353,10 @@ namespace eosio {
    };
 
    typedef multi_index_container<
-      eosio::peer_block_state,
+      arisen::peer_block_state,
       indexed_by<
-         ordered_unique< tag<by_id>, member<eosio::peer_block_state, block_id_type, &eosio::peer_block_state::id >, sha256_less >,
-         ordered_unique< tag<by_block_num>, member<eosio::peer_block_state, uint32_t, &eosio::peer_block_state::block_num > >
+         ordered_unique< tag<by_id>, member<arisen::peer_block_state, block_id_type, &arisen::peer_block_state::id >, sha256_less >,
+         ordered_unique< tag<by_block_num>, member<arisen::peer_block_state, uint32_t, &arisen::peer_block_state::block_num > >
          >
       > peer_block_state_index;
 
@@ -2959,11 +2959,11 @@ namespace eosio {
    void net_plugin::set_program_options( options_description& /*cli*/, options_description& cfg )
    {
       cfg.add_options()
-         ( "p2p-listen-endpoint", bpo::value<string>()->default_value( "0.0.0.0:9876" ), "The actual host:port used to listen for incoming p2p connections.")
+         ( "p2p-listen-endpoint", bpo::value<string>()->default_value( "0.0.0.0:6620" ), "The actual host:port used to listen for incoming p2p connections.")
          ( "p2p-server-address", bpo::value<string>(), "An externally accessible host:port for identifying this node. Defaults to p2p-listen-endpoint.")
          ( "p2p-peer-address", bpo::value< vector<string> >()->composing(), "The public endpoint of a peer node to connect to. Use multiple p2p-peer-address options as needed to compose a network.")
          ( "p2p-max-nodes-per-host", bpo::value<int>()->default_value(def_max_nodes_per_host), "Maximum number of client nodes from any single IP address")
-         ( "agent-name", bpo::value<string>()->default_value("\"EOS Test Agent\""), "The name supplied to identify this node amongst the peers.")
+         ( "agent-name", bpo::value<string>()->default_value("\"RSN Test Agent\""), "The name supplied to identify this node amongst the peers.")
          ( "allowed-connection", bpo::value<vector<string>>()->multitoken()->default_value({"any"}, "any"), "Can be 'any' or 'producers' or 'specified' or 'none'. If 'specified', peer-key must be specified at least once. If only 'producers', peer-key is not required. 'producers' and 'specified' may be combined.")
          ( "peer-key", bpo::value<vector<string>>()->composing()->multitoken(), "Optional public key of peer allowed to connect.  May be used multiple times.")
          ( "peer-private-key", boost::program_options::value<vector<string>>()->composing()->multitoken(),

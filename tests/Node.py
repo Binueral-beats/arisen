@@ -741,7 +741,7 @@ class Node(object):
 
     @staticmethod
     def currencyStrToInt(balanceStr):
-        """Converts currency string of form "12.3456 SYS" to int 123456"""
+        """Converts currency string of form "12.3456 RSN" to int 123456"""
         assert(isinstance(balanceStr, str))
         balanceStr=balanceStr.split()[0]
         #balance=int(decimal.Decimal(balanceStr[1:])*10000)
@@ -751,7 +751,7 @@ class Node(object):
 
     @staticmethod
     def currencyIntToStr(balance, symbol):
-        """Converts currency int of form 123456 to string "12.3456 SYS" where SYS is symbol string"""
+        """Converts currency int of form 123456 to string "12.3456 RSN" where RSN is symbol string"""
         assert(isinstance(balance, int))
         assert(isinstance(symbol, str))
         balanceStr="%.04f %s" % (balance/10000.0, symbol)
@@ -759,7 +759,7 @@ class Node(object):
         return balanceStr
 
     def validateFunds(self, initialBalances, transferAmount, source, accounts):
-        """Validate each account has the expected SYS balance. Validate cumulative balance matches expectedTotal."""
+        """Validate each account has the expected RSN balance. Validate cumulative balance matches expectedTotal."""
         assert(source)
         assert(isinstance(source, Account))
         assert(accounts)
@@ -809,7 +809,7 @@ class Node(object):
         msg="key=%s" % (key);
         return self.processCleosCmd(cmd, cmdDesc, exitOnError=exitOnError, exitMsg=msg)
 
-    # Get actions mapped to an account (cleos get actions)
+    # Get actions mapped to an account (arisecli get actions)
     def getActions(self, account, pos=-1, offset=-1, exitOnError=False):
         assert(isinstance(account, Account))
         assert(isinstance(pos, int))
@@ -870,15 +870,15 @@ class Node(object):
         return servants
 
     def getAccountEosBalanceStr(self, scope):
-        """Returns SYS currency0000 account balance from cleos get table command. Returned balance is string following syntax "98.0311 SYS". """
+        """Returns RSN currency0000 account balance from arisecli get table command. Returned balance is string following syntax "98.0311 RSN". """
         assert isinstance(scope, str)
-        amount=self.getTableAccountBalance("eosio.token", scope)
+        amount=self.getTableAccountBalance("arisen.token", scope)
         if Utils.Debug: Utils.Print("getNodeAccountEosBalance %s %s" % (scope, amount))
         assert isinstance(amount, str)
         return amount
 
     def getAccountEosBalance(self, scope):
-        """Returns SYS currency0000 account balance from cleos get table command. Returned balance is an integer e.g. 980311. """
+        """Returns RSN currency0000 account balance from arisecli get table command. Returned balance is an integer e.g. 980311. """
         balanceStr=self.getAccountEosBalanceStr(scope)
         balance=Node.currencyStrToInt(balanceStr)
         return balance
@@ -1199,7 +1199,7 @@ class Node(object):
         return False if info is None else True
 
     def getHeadBlockNum(self):
-        """returns head block number(string) as returned by cleos get info."""
+        """returns head block number(string) as returned by arisecli get info."""
         if not self.enableMongo:
             info=self.getInfo(exitOnError=True)
             if info is not None:
@@ -1352,7 +1352,7 @@ class Node(object):
 
     # TBD: make nodeId an internal property
     # pylint: disable=too-many-locals
-    # If nodeosPath is equal to None, it will use the existing nodeos path
+    # If nodeosPath is equal to None, it will use the existing aos path
     def relaunch(self, nodeId, chainArg=None, newChain=False, timeout=Utils.systemWaitTimeout, addOrSwapFlags=None, cachePopen=False, nodeosPath=None):
 
         assert(self.pid is None)
@@ -1546,19 +1546,19 @@ class Node(object):
                     break
         return protocolFeatures
 
-    # Require PREACTIVATE_FEATURE to be activated and require eosio.bios with preactivate_feature
+    # Require PREACTIVATE_FEATURE to be activated and require arisen.bios with preactivate_feature
     def preactivateProtocolFeatures(self, featureDigests:list):
         for digest in featureDigests:
             Utils.Print("push activate action with digest {}".format(digest))
             data="{{\"feature_digest\":{}}}".format(digest)
-            opts="--permission eosio@active"
-            trans=self.pushMessage("eosio", "activate", data, opts)
+            opts="--permission arisen@active"
+            trans=self.pushMessage("arisen", "activate", data, opts)
             if trans is None or not trans[0]:
                 Utils.Print("ERROR: Failed to preactive digest {}".format(digest))
                 return None
         self.waitForHeadToAdvance()
 
-    # Require PREACTIVATE_FEATURE to be activated and require eosio.bios with preactivate_feature
+    # Require PREACTIVATE_FEATURE to be activated and require arisen.bios with preactivate_feature
     def preactivateAllBuiltinProtocolFeature(self):
         allBuiltinProtocolFeatureDigests = self.getAllBuiltinFeatureDigestsToPreactivate()
         self.preactivateProtocolFeatures(allBuiltinProtocolFeatureDigests)

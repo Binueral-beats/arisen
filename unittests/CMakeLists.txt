@@ -3,16 +3,16 @@ find_package( Gperftools QUIET )
 ### Build contracts with cdt if available ###
 include(ExternalProject)
 
-if( EOSIO_COMPILE_TEST_CONTRACTS )
-   set(EOSIO_WASM_OLD_BEHAVIOR "Off")
-   find_package(eosio.cdt REQUIRED)
+if( ARISEN_COMPILE_TEST_CONTRACTS )
+   set(ARISEN_WASM_OLD_BEHAVIOR "Off")
+   find_package(arisen.cdt REQUIRED)
 
-   message( STATUS "Building contracts in directory `eos/unittests/test-contracts/`" )
+   message( STATUS "Building contracts in directory `rsn/unittests/test-contracts/`" )
    ExternalProject_Add(
       test_contracts_project
       SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-contracts
       BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/test-contracts
-      CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${EOSIO_CDT_ROOT}/lib/cmake/eosio.cdt/EosioWasmToolchain.cmake -DEOSIO_COMPILE_TEST_CONTRACTS=${EOSIO_COMPILE_TEST_CONTRACTS}
+      CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${ARISEN_CDT_ROOT}/lib/cmake/arisen.cdt/ARISENWasmToolchain.cmake -DARISEN_COMPILE_TEST_CONTRACTS=${ARISEN_COMPILE_TEST_CONTRACTS}
       UPDATE_COMMAND ""
       PATCH_COMMAND ""
       TEST_COMMAND ""
@@ -20,7 +20,7 @@ if( EOSIO_COMPILE_TEST_CONTRACTS )
       BUILD_ALWAYS 1
    )
 else()
-  message( STATUS "Not building contracts in directory `eos/unittests/test-contracts/`" )
+  message( STATUS "Not building contracts in directory `rsn/unittests/test-contracts/`" )
   add_subdirectory(test-contracts)
 endif()
 
@@ -41,7 +41,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/contracts.hpp.in ${CMAKE_CURRENT_BINA
 file(GLOB UNIT_TESTS "*.cpp") # find all unit test suites
 add_executable( unit_test ${UNIT_TESTS}) # build unit tests as one executable
 
-target_link_libraries( unit_test eosio_chain chainbase eosio_testing fc appbase ${PLATFORM_SPECIFIC_LIBS} )
+target_link_libraries( unit_test ARISEN_chain chainbase ARISEN_testing fc appbase ${PLATFORM_SPECIFIC_LIBS} )
 
 target_compile_options(unit_test PUBLIC -DDISABLE_EOSLIB_SERIALIZE)
 target_include_directories( unit_test PUBLIC

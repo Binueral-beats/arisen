@@ -1,14 +1,14 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/producer_plugin/producer_plugin.hpp>
-#include <eosio/chain/plugin_interface.hpp>
-#include <eosio/chain/global_property_object.hpp>
-#include <eosio/chain/generated_transaction_object.hpp>
-#include <eosio/chain/transaction_object.hpp>
-#include <eosio/chain/thread_utils.hpp>
-#include <eosio/chain/snapshot.hpp>
+#include <arisen/producer_plugin/producer_plugin.hpp>
+#include <arisen/chain/plugin_interface.hpp>
+#include <arisen/chain/global_property_object.hpp>
+#include <arisen/chain/generated_transaction_object.hpp>
+#include <arisen/chain/transaction_object.hpp>
+#include <arisen/chain/thread_utils.hpp>
+#include <arisen/chain/snapshot.hpp>
 
 #include <fc/io/json.hpp>
 #include <fc/log/logger_config.hpp>
@@ -73,12 +73,12 @@ fc::logger _log;
 const fc::string trx_trace_logger_name("transaction_tracing");
 fc::logger _trx_trace_log;
 
-namespace eosio {
+namespace arisen {
 
 static appbase::abstract_plugin& _producer_plugin = app().register_plugin<producer_plugin>();
 
-using namespace eosio::chain;
-using namespace eosio::chain::plugin_interface;
+using namespace arisen::chain;
+using namespace arisen::chain::plugin_interface;
 
 namespace {
    bool failure_is_subjective(const fc::exception& e, bool deadline_is_subjective) {
@@ -211,7 +211,7 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
       boost::program_options::variables_map _options;
       bool     _production_enabled                 = false;
       bool     _pause_production                   = false;
-      uint32_t _production_skip_flags              = 0; //eosio::chain::skip_nothing;
+      uint32_t _production_skip_flags              = 0; //arisen::chain::skip_nothing;
 
       using signature_provider_type = std::function<chain::signature_type(chain::digest_type)>;
       std::map<chain::public_key_type, signature_provider_type> _signature_providers;
@@ -563,13 +563,13 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
 
 };
 
-void new_chain_banner(const eosio::chain::controller& db)
+void new_chain_banner(const arisen::chain::controller& db)
 {
    std::cerr << "\n"
       "*******************************\n"
       "*                             *\n"
       "*   ------ NEW CHAIN ------   *\n"
-      "*   -  Welcome to EOSIO!  -   *\n"
+      "*   -  Welcome to ARISEN!  -   *\n"
       "*   -----------------------   *\n"
       "*                             *\n"
       "*******************************\n"
@@ -615,13 +615,13 @@ void producer_plugin::set_program_options(
          ("signature-provider", boost::program_options::value<vector<string>>()->composing()->multitoken()->default_value({std::string(default_priv_key.get_public_key()) + "=KEY:" + std::string(default_priv_key)}, std::string(default_priv_key.get_public_key()) + "=KEY:" + std::string(default_priv_key)),
           "Key=Value pairs in the form <public-key>=<provider-spec>\n"
           "Where:\n"
-          "   <public-key>    \tis a string form of a vaild EOSIO public key\n\n"
+          "   <public-key>    \tis a string form of a vaild ARISEN public key\n\n"
           "   <provider-spec> \tis a string in the form <provider-type>:<data>\n\n"
-          "   <provider-type> \tis KEY, or KEOSD\n\n"
-          "   KEY:<data>      \tis a string form of a valid EOSIO private key which maps to the provided public key\n\n"
-          "   KEOSD:<data>    \tis the URL where keosd is available and the approptiate wallet(s) are unlocked")
-         ("keosd-provider-timeout", boost::program_options::value<int32_t>()->default_value(5),
-          "Limits the maximum time (in milliseconds) that is allowed for sending blocks to a keosd provider for signing")
+          "   <provider-type> \tis KEY, or AWALLETD\n\n"
+          "   KEY:<data>      \tis a string form of a valid ARISEN private key which maps to the provided public key\n\n"
+          "   AWALLETD:<data>    \tis the URL where awalletd is available and the approptiate wallet(s) are unlocked")
+         ("awalletd-provider-timeout", boost::program_options::value<int32_t>()->default_value(5),
+          "Limits the maximum time (in milliseconds) that is allowed for sending blocks to a awalletd provider for signing")
          ("greylist-account", boost::program_options::value<vector<string>>()->composing()->multitoken(),
           "account that can not access to extended CPU/NET virtual resources")
          ("greylist-limit", boost::program_options::value<uint32_t>()->default_value(1000),
@@ -754,7 +754,7 @@ void producer_plugin::plugin_initialize(const boost::program_options::variables_
 
             if (spec_type_str == "KEY") {
                my->_signature_providers[pubkey] = make_key_signature_provider(private_key_type(spec_data));
-            } else if (spec_type_str == "KEOSD") {
+            } else if (spec_type_str == "AWALLETD") {
                my->_signature_providers[pubkey] = make_keosd_signature_provider(my, spec_data, pubkey);
             }
 
@@ -764,7 +764,7 @@ void producer_plugin::plugin_initialize(const boost::program_options::variables_
       }
    }
 
-   my->_keosd_provider_timeout_us = fc::milliseconds(options.at("keosd-provider-timeout").as<int32_t>());
+   my->_keosd_provider_timeout_us = fc::milliseconds(options.at("awalletd-provider-timeout").as<int32_t>());
 
    my->_produce_time_offset_us = options.at("produce-time-offset-us").as<int32_t>();
    EOS_ASSERT( my->_produce_time_offset_us <= 0 && my->_produce_time_offset_us >= -config::block_interval_us, plugin_config_exception,
@@ -894,7 +894,7 @@ void producer_plugin::plugin_startup()
          if (chain.head_block_num() == 0) {
             new_chain_banner(chain);
          }
-         //_production_skip_flags |= eosio::chain::skip_undo_history_check;
+         //_production_skip_flags |= arisen::chain::skip_undo_history_check;
       }
    }
 
@@ -2007,4 +2007,4 @@ void producer_plugin_impl::produce_block() {
 
 }
 
-} // namespace eosio
+} // namespace arisen

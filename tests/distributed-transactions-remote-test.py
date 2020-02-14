@@ -40,7 +40,7 @@ clusterMapJsonTemplate="""{
         "defproducerbPrivateKey": "%s"
     },
     "nodes": [
-        {"port": 8888, "host": "localhost"},
+        {"port": 12618, "host": "localhost"},
         {"port": 8889, "host": "localhost"},
         {"port": 8890, "host": "localhost"}
     ]
@@ -59,7 +59,7 @@ try:
            (pnodes, total_nodes-pnodes, topo, delay))
     Print("Stand up cluster")
     if cluster.launch(pnodes=pnodes, totalNodes=total_nodes, prodCount=prodCount, topo=topo, delay=delay) is False:
-        errorExit("Failed to stand up eos cluster.")
+        errorExit("Failed to stand up rsn cluster.")
 
     Print ("Wait for Cluster stabilization")
     # wait for cluster to start producing blocks

@@ -1,7 +1,7 @@
 #!/bin/bash
-# The purpose of this test is to ensure that the output of the "nodeos --version" command matches the version string defined by our CMake files
+# The purpose of this test is to ensure that the output of the "aos --version" command matches the version string defined by our CMake files
 # If the environment variable BUILDKITE_TAG is empty or unset, this test will echo success
-echo '##### Nodeos Version Label Test #####'
+echo '##### Aos Version Label Test #####'
 if [[ "$BUILDKITE_TAG" == '' || "$BUILDKITE" != 'true' ]]; then
     echo 'This test is only run in Buildkite against tagged builds.'
     [[ "$BUILDKITE" != 'true' ]] && echo 'This is not Buildkite.'
@@ -11,13 +11,13 @@ if [[ "$BUILDKITE_TAG" == '' || "$BUILDKITE" != 'true' ]]; then
 fi
 echo 'Tagged build detected, running test.'
 # orient ourselves
-[[ "$EOSIO_ROOT" == '' ]] && EOSIO_ROOT=$(echo $(pwd)/ | grep -ioe '.*/eos/')
-[[ "$EOSIO_ROOT" == '' ]] && EOSIO_ROOT=$(echo $(pwd)/ | grep -ioe '.*/EOSIO/eosio/')
-[[ "$EOSIO_ROOT" == '' ]] && EOSIO_ROOT=$(echo $(pwd)/ | grep -ioe '.*/build/' | sed 's,/build/,,')
-echo "Using EOSIO_ROOT=\"$EOSIO_ROOT\"."
+[[ "$arisen_ROOT" == '' ]] && arisen_ROOT=$(echo $(pwd)/ | grep -ioe '.*/rsn/')
+[[ "$arisen_ROOT" == '' ]] && arisen_ROOT=$(echo $(pwd)/ | grep -ioe '.*/arisen/arisen/')
+[[ "$arisen_ROOT" == '' ]] && arisen_ROOT=$(echo $(pwd)/ | grep -ioe '.*/build/' | sed 's,/build/,,')
+echo "Using arisen_ROOT=\"$arisen_ROOT\"."
 # determine expected value
-CMAKE_CACHE="$EOSIO_ROOT/build/CMakeCache.txt"
-CMAKE_LISTS="$EOSIO_ROOT/CMakeLists.txt"
+CMAKE_CACHE="$arisen_ROOT/build/CMakeCache.txt"
+CMAKE_LISTS="$arisen_ROOT/CMakeLists.txt"
 if [[ -f "$CMAKE_CACHE" && $(cat "$CMAKE_CACHE" | grep -c 'DOXY_EOS_VERSION') > 0 ]]; then
     echo "Parsing \"$CMAKE_CACHE\"..."
     EXPECTED="v$(cat "$CMAKE_CACHE" | grep 'DOXY_EOS_VERSION' | cut -d '=' -f 2)"
@@ -40,7 +40,7 @@ fi
 if [[ "$EXPECTED" == '' ]]; then
     echo 'ERROR: Could not determine expected value for version label!'
     set +e
-    echo "EOSIO_ROOT=\"$EOSIO_ROOT\""
+    echo "arisen_ROOT=\"$arisen_ROOT\""
     echo "CMAKE_CACHE=\"$CMAKE_CACHE\""
     echo "CMAKE_LISTS=\"$CMAKE_LISTS\""
     echo ''
@@ -54,15 +54,15 @@ if [[ "$EXPECTED" == '' ]]; then
     cat "$CMAKE_CACHE" | grep "DOXY_EOS_VERSION"
     echo '$ pwd'
     pwd
-    echo '$ ls -la "$EOSIO_ROOT"'
-    ls -la "$EOSIO_ROOT"
-    echo '$ ls -la "$EOSIO_ROOT/build"'
-    ls -la "$EOSIO_ROOT/build"
+    echo '$ ls -la "$arisen_ROOT"'
+    ls -la "$arisen_ROOT"
+    echo '$ ls -la "$arisen_ROOT/build"'
+    ls -la "$arisen_ROOT/build"
     exit 1
 fi
 echo "Expecting \"$EXPECTED\"..."
-# get nodeos version
-ACTUAL=$($EOSIO_ROOT/build/bin/nodeos --version) || : # nodeos currently returns -1 for --version
+# get aos version
+ACTUAL=$($arisen_ROOT/build/bin/aos --version) || : # aos currently returns -1 for --version
 # test
 if [[ "$EXPECTED" == "$ACTUAL" ]]; then
     echo 'Passed with \"$ACTUAL\".'

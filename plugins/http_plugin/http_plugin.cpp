@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/http_plugin/http_plugin.hpp>
-#include <eosio/http_plugin/local_endpoint.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/thread_utils.hpp>
+#include <arisen/http_plugin/http_plugin.hpp>
+#include <arisen/http_plugin/local_endpoint.hpp>
+#include <arisen/chain/exceptions.hpp>
+#include <arisen/chain/thread_utils.hpp>
 
 #include <fc/network/ip.hpp>
 #include <fc/log/logger_config.hpp>
@@ -28,7 +28,7 @@
 #include <memory>
 #include <regex>
 
-namespace eosio {
+namespace arisen {
 
    static appbase::abstract_plugin& _http_plugin = app().register_plugin<http_plugin>();
 
@@ -146,7 +146,7 @@ namespace eosio {
          websocket_server_type    server;
 
          uint16_t                                    thread_pool_size = 2;
-         optional<eosio::chain::named_thread_pool>   thread_pool;
+         optional<arisen::chain::named_thread_pool>   thread_pool;
          std::atomic<size_t>                         bytes_in_flight{0};
          size_t                                      max_bytes_in_flight = 0;
          fc::microseconds                            max_response_time{30*1000};

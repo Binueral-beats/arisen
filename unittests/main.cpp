@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include <cstdlib>
 
 #include <iostream>
 
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/exceptions.hpp>
 
 #include <fc/log/logger.hpp>
 

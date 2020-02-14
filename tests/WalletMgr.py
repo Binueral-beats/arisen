@@ -18,8 +18,8 @@ class WalletMgr(object):
     __MaxPort=9999
 
     # pylint: disable=too-many-arguments
-    # walletd [True|False] True=Launch wallet(keosd) process; False=Manage launch process externally.
-    def __init__(self, walletd, nodeosPort=8888, nodeosHost="localhost", port=9899, host="localhost"):
+    # walletd [True|False] True=Launch wallet(awalletd) process; False=Manage launch process externally.
+    def __init__(self, walletd, nodeosPort=12618, nodeosHost="localhost", port=8889, host="localhost"):
         self.walletd=walletd
         self.nodeosPort=nodeosPort
         self.nodeosHost=nodeosHost
@@ -56,7 +56,7 @@ class WalletMgr(object):
 
     def launch(self):
         if not self.walletd:
-            Utils.Print("ERROR: Wallet Manager wasn't configured to launch keosd")
+            Utils.Print("ERROR: Wallet Manager wasn't configured to launch awalletd")
             return False
 
         if self.isLaunched():
@@ -87,7 +87,7 @@ class WalletMgr(object):
             popen=subprocess.Popen(cmd.split(), stdout=sout, stderr=serr)
             self.__walletPid=popen.pid
 
-        # Give keosd time to warm up
+        # Give awalletd time to warm up
         time.sleep(2)
 
         try:
@@ -284,7 +284,7 @@ class WalletMgr(object):
                 shutil.copyfileobj(f, sys.stdout)
 
     def killall(self, allInstances=False):
-        """Kill keos instances. allInstances will kill all keos instances running on the system."""
+        """Kill awallet instances. allInstances will kill all awallet instances running on the system."""
         if self.__walletPid:
             Utils.Print("Killing wallet manager process %d" % (self.__walletPid))
             os.kill(self.__walletPid, signal.SIGKILL)

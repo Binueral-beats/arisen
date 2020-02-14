@@ -1,18 +1,18 @@
 /**
  *  @file api_tests.cpp
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in rsn/LICENSE.txt
  */
 #include <algorithm>
 
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/resource_limits.hpp>
-#include <eosio/testing/chainbase_fixture.hpp>
+#include <arisen/chain/config.hpp>
+#include <arisen/chain/resource_limits.hpp>
+#include <arisen/testing/chainbase_fixture.hpp>
 
 #include <boost/test/unit_test.hpp>
 
-using namespace eosio::chain::resource_limits;
-using namespace eosio::testing;
-using namespace eosio::chain;
+using namespace arisen::chain::resource_limits;
+using namespace arisen::testing;
+using namespace arisen::chain;
 
 class resource_limits_fixture: private chainbase_fixture<1024*1024>, public resource_limits_manager
 {

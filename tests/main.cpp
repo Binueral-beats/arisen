@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include <cstdlib>
 #include <iostream>
 #include <boost/test/included/unit_test.hpp>
 #include <fc/log/logger.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/chain/exceptions.hpp>
 
 //extern uint32_t EOS_TESTING_GENESIS_TIMESTAMP;
 

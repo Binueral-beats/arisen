@@ -1,17 +1,17 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/test_control_api_plugin/test_control_api_plugin.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisen/test_control_api_plugin/test_control_api_plugin.hpp>
+#include <arisen/chain/exceptions.hpp>
 
 #include <fc/io/json.hpp>
 
-namespace eosio {
+namespace arisen {
 
 static appbase::abstract_plugin& _test_control_api_plugin = app().register_plugin<test_control_api_plugin>();
 
-using namespace eosio;
+using namespace arisen;
 
 class test_control_api_plugin_impl {
 public:
