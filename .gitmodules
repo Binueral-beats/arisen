@@ -20,10 +20,10 @@
 	url = https://github.com/ArisenIO/appbase.git
 [submodule "libraries/chainbase"]
 	path = libraries/chainbase
-	url = git://github.com/ArisenIO/chainbase.git
+	url = https://github.com/ArisenIO/chainbase.git
 [submodule "libraries/fc"]
 	path = libraries/fc
-	url = git://github.com/ArisenIO/fc.git
+	url = https://github.com/ArisenIO/fc.git
 [submodule "libraries/softfloat"]
 	path = libraries/softfloat
 	url = https://github.com/ArisenIO/berkeley-softfloat-3.git
