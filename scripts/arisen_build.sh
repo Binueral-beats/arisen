@@ -169,13 +169,13 @@ if [[ $ARCH == "Linux" ]]; then
    case $NAME in
       "Amazon Linux AMI" | "Amazon Linux")
          echo "${COLOR_CYAN}[Ensuring YUM installation]${COLOR_NC}"
-         FILE="${REPO_ROOT}/scripts/arisenio_build_amazonlinux.sh"
+         FILE="${REPO_ROOT}/scripts/arisen_build_amazonlinux.sh"
       ;;
       "CentOS Linux")
-         FILE="${REPO_ROOT}/scripts/arisenio_build_centos.sh"
+         FILE="${REPO_ROOT}/scripts/arisen_build_centos.sh"
       ;;
       "Ubuntu")
-         FILE="${REPO_ROOT}/scripts/arisenio_build_ubuntu.sh"
+         FILE="${REPO_ROOT}/scripts/arisen_build_ubuntu.sh"
       ;;
       *) print_supported_linux_distros_and_exit;;
    esac
@@ -186,7 +186,7 @@ if [ "$ARCH" == "Darwin" ]; then
    # opt/gettext: arisecli requires Intl, which requires gettext; it's keg only though and we don't want to force linking: https://github.com/Arisenio/arisen/issues/2240#issuecomment-396309884
    # ARISENIO_INSTALL_DIR/lib/cmake: mongo_db_plugin.cpp:25:10: fatal error: 'bsoncxx/builder/basic/kvp.hpp' file not found
    CMAKE_PREFIX_PATHS="/usr/local/opt/gettext;${ARISENIO_INSTALL_DIR}"
-   FILE="${SCRIPT_DIR}/arisenio_build_darwin.sh"
+   FILE="${SCRIPT_DIR}/arisen_build_darwin.sh"
    export CMAKE=${CMAKE}
 fi
 
@@ -236,8 +236,8 @@ echo "\t| )   ( || ) \ \_____) (___/\____) || (____/\| )  \  |\n"
 echo "\t|/     \||/   \__/\_______/\_______)(_______/|/    )_)\n${txtrst}"
 
 echo "${COLOR_GREEN}ARISENIO has been successfully built. $(($TIME_END/3600)):$(($TIME_END%3600/60)):$(($TIME_END%60))"
-echo "${COLOR_GREEN}You can now install using: ${SCRIPT_DIR}/arisenio_install.sh${COLOR_NC}"
-echo "${COLOR_YELLOW}Uninstall with: ${SCRIPT_DIR}/arisenio_uninstall.sh${COLOR_NC}"
+echo "${COLOR_GREEN}You can now install using: ${SCRIPT_DIR}/arisen_install.sh${COLOR_NC}"
+echo "${COLOR_YELLOW}Uninstall with: ${SCRIPT_DIR}/arisen_uninstall.sh${COLOR_NC}"
 
 echo ""
 echo "${COLOR_CYAN}If you wish to perform tests to ensure functional code:${COLOR_NC}"
