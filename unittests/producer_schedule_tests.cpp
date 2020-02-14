@@ -1,9 +1,9 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in rsn/LICENSE.txt
  */
-#include <eosio/chain/global_property_object.hpp>
-#include <eosio/testing/tester.hpp>
+#include <arisenio/chain/global_property_object.hpp>
+#include <arisenio/testing/tester.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -15,8 +15,8 @@
 #define TESTER validating_tester
 #endif
 
-using namespace eosio::testing;
-using namespace eosio::chain;
+using namespace arisenio::testing;
+using namespace arisenio::chain;
 using mvo = fc::mutable_variant_object;
 
 BOOST_AUTO_TEST_SUITE(producer_schedule_tests)

@@ -1,16 +1,16 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include <algorithm>
 #include <iterator>
 #include <vector>
 
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/permission_object.hpp>
-#include <eosio/chain/global_property_object.hpp>
-#include <eosio/testing/tester.hpp>
+#include <arisenio/chain/controller.hpp>
+#include <arisenio/chain/exceptions.hpp>
+#include <arisenio/chain/permission_object.hpp>
+#include <arisenio/chain/global_property_object.hpp>
+#include <arisenio/testing/tester.hpp>
 
 #include <fc/crypto/digest.hpp>
 
@@ -19,9 +19,9 @@
 #include <boost/range/algorithm/permutation.hpp>
 #include <boost/test/unit_test.hpp>
 
-using namespace eosio;
+using namespace arisenio;
 using namespace chain;
-using tester = eosio::testing::tester;
+using tester = arisenio::testing::tester;
 
 BOOST_AUTO_TEST_SUITE(special_account_tests)
 

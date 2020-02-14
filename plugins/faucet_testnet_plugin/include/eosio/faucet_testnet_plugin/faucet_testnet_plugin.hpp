@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 #include <appbase/application.hpp>
-#include <eosio/http_plugin/http_plugin.hpp>
+#include <arisenio/http_plugin/http_plugin.hpp>
 
-namespace eosio {
+namespace arisenio {
 
 using namespace appbase;
 

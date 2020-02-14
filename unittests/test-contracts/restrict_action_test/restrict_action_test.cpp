@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include "restrict_action_test.hpp"
-#include <eosio/transaction.hpp>
+#include <arisenio/transaction.hpp>
 
-using namespace eosio;
+using namespace arisenio;
 
 void restrict_action_test::noop( ) {
 

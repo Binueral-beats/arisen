@@ -59,7 +59,7 @@ sudo make install
 cd ../..
 rm -rf llvm
 # install boost from source
-## Boost Fix: eosio/install/bin/../include/c++/v1/stdlib.h:94:15: fatal error: 'stdlib.h' file not found
+## Boost Fix: arisenio/install/bin/../include/c++/v1/stdlib.h:94:15: fatal error: 'stdlib.h' file not found
 export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
 curl -LO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2
 tar -xjf boost_1_70_0.tar.bz2

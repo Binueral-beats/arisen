@@ -1,15 +1,15 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/history_api_plugin/history_api_plugin.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisenio/history_api_plugin/history_api_plugin.hpp>
+#include <arisenio/chain/exceptions.hpp>
 
 #include <fc/io/json.hpp>
 
-namespace eosio {
+namespace arisenio {
 
-using namespace eosio;
+using namespace arisenio;
 
 static appbase::abstract_plugin& _history_api_plugin = app().register_plugin<history_api_plugin>();
 

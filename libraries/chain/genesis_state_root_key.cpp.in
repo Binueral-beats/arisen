@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 
-#include <eosio/chain/genesis_state.hpp>
+#include <arisenio/chain/genesis_state.hpp>
 
-namespace eosio { namespace chain {
+namespace arisenio { namespace chain {
 
-const string genesis_state::eosio_root_key = "${EOSIO_ROOT_KEY}";
+const string genesis_state::arisenio_root_key = "${ARISENIO_ROOT_KEY}";
 
-} } // namespace eosio::chain
+} } // namespace arisenio::chain

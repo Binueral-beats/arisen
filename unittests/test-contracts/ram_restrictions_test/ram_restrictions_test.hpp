@@ -1,45 +1,45 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[eosio::contract]] ram_restrictions_test : public eosio::contract {
+class [[arisenio::contract]] ram_restrictions_test : public arisenio::contract {
 public:
-   struct [[eosio::table]] data {
+   struct [[arisenio::table]] data {
       uint64_t           key;
       std::vector<char>  value;
 
       uint64_t primary_key() const { return key; }
    };
 
-   typedef eosio::multi_index<"tablea"_n, data> tablea;
-   typedef eosio::multi_index<"tableb"_n, data> tableb;
+   typedef arisenio::multi_index<"tablea"_n, data> tablea;
+   typedef arisenio::multi_index<"tableb"_n, data> tableb;
 
 public:
-   using eosio::contract::contract;
+   using arisenio::contract::contract;
 
-   [[eosio::action]]
+   [[arisenio::action]]
    void noop();
 
-   [[eosio::action]]
-   void setdata( uint32_t len1, uint32_t len2, eosio::name payer );
+   [[arisenio::action]]
+   void setdata( uint32_t len1, uint32_t len2, arisenio::name payer );
 
-   [[eosio::action]]
-   void notifysetdat( eosio::name acctonotify, uint32_t len1, uint32_t len2, eosio::name payer );
+   [[arisenio::action]]
+   void notifysetdat( arisenio::name acctonotify, uint32_t len1, uint32_t len2, arisenio::name payer );
 
-   [[eosio::on_notify("tester2::notifysetdat")]]
-   void on_notify_setdata( eosio::name acctonotify, uint32_t len1, uint32_t len2, eosio::name payer );
+   [[arisenio::on_notify("tester2::notifysetdat")]]
+   void on_notify_setdata( arisenio::name acctonotify, uint32_t len1, uint32_t len2, arisenio::name payer );
 
-   [[eosio::action]]
-   void senddefer( uint64_t senderid, eosio::name payer );
+   [[arisenio::action]]
+   void senddefer( uint64_t senderid, arisenio::name payer );
 
-   [[eosio::action]]
-   void notifydefer( eosio::name acctonotify, uint64_t senderid, eosio::name payer );
+   [[arisenio::action]]
+   void notifydefer( arisenio::name acctonotify, uint64_t senderid, arisenio::name payer );
 
-   [[eosio::on_notify("tester2::notifydefer")]]
-   void on_notifydefer( eosio::name acctonotify, uint64_t senderid, eosio::name payer );
+   [[arisenio::on_notify("tester2::notifydefer")]]
+   void on_notifydefer( arisenio::name acctonotify, uint64_t senderid, arisenio::name payer );
 
 };

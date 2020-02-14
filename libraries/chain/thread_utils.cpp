@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in rsn/LICENSE.txt
  */
 
-#include <eosio/chain/thread_utils.hpp>
+#include <arisenio/chain/thread_utils.hpp>
 #include <fc/log/logger_config.hpp>
 
-namespace eosio { namespace chain {
+namespace arisenio { namespace chain {
 
 
 //
@@ -37,4 +37,4 @@ void named_thread_pool::stop() {
 }
 
 
-} } // eosio::chain
+} } // arisenio::chain

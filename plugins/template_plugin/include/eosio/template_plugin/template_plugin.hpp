@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 #include <appbase/application.hpp>
 
-namespace eosio {
+namespace arisenio {
 
 using namespace appbase;
 

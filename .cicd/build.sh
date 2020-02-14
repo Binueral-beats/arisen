@@ -32,7 +32,7 @@ else # Linux
     if [[ "$BUILDKITE" == 'true' ]]; then
         # Generate Base Images
         $CICD_DIR/generate-base-images.sh
-        [[ "$ENABLE_INSTALL" == 'true' ]] && COMMANDS="cp -r $MOUNTED_DIR /root/eosio && cd /root/eosio/build &&"
+        [[ "$ENABLE_INSTALL" == 'true' ]] && COMMANDS="cp -r $MOUNTED_DIR /root/arisenio && cd /root/arisenio/build &&"
         COMMANDS="$COMMANDS $BUILD_COMMANDS"
         [[ "$ENABLE_INSTALL" == 'true' ]] && COMMANDS="$COMMANDS && make install"
     elif [[ "$GITHUB_ACTIONS" == 'true' ]]; then

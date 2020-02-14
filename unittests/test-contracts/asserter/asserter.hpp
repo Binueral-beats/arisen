@@ -1,18 +1,18 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[eosio::contract]] asserter : public eosio::contract {
+class [[arisenio::contract]] asserter : public arisenio::contract {
 public:
-   using eosio::contract::contract;
+   using arisenio::contract::contract;
 
-   [[eosio::action]]
+   [[arisenio::action]]
    void procassert( int8_t condition, std::string message );
 
-   [[eosio::action]]
+   [[arisenio::action]]
    void provereset();
 };

@@ -19,25 +19,25 @@ class Utils:
     Debug=False
     FNull = open(os.devnull, 'w')
 
-    EosClientPath="programs/cleos/cleos"
-    MiscEosClientArgs="--no-auto-keosd"
+    EosClientPath="programs/arisecli/arisecli"
+    MiscEosClientArgs="--no-auto-awalletd"
 
-    EosWalletName="keosd"
-    EosWalletPath="programs/keosd/"+ EosWalletName
+    EosWalletName="awalletd"
+    EosWalletPath="programs/awalletd/"+ EosWalletName
 
-    EosServerName="nodeos"
-    EosServerPath="programs/nodeos/"+ EosServerName
+    EosServerName="aos"
+    EosServerPath="programs/aos/"+ EosServerName
 
-    EosLauncherPath="programs/eosio-launcher/eosio-launcher"
+    EosLauncherPath="programs/arisenio-launcher/arisenio-launcher"
     MongoPath="mongo"
     ShuttingDown=False
     CheckOutputDeque=deque(maxlen=10)
 
-    EosBlockLogPath="programs/eosio-blocklog/eosio-blocklog"
+    EosBlockLogPath="programs/arisenio-blocklog/arisenio-blocklog"
 
     FileDivider="================================================================="
     DataDir="var/lib/"
-    ConfigDir="etc/eosio/"
+    ConfigDir="etc/arisenio/"
 
     @staticmethod
     def Print(*args, **kwargs):

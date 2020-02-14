@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include <boost/test/unit_test.hpp>
-#include <eosio/testing/tester.hpp>
+#include <arisenio/testing/tester.hpp>
 
-using namespace eosio;
+using namespace arisenio;
 using namespace testing;
 using namespace chain;
 

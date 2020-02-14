@@ -1,16 +1,16 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 
 #pragma once
-#include <eosio/history_plugin/history_plugin.hpp>
-#include <eosio/chain_plugin/chain_plugin.hpp>
-#include <eosio/http_plugin/http_plugin.hpp>
+#include <arisenio/history_plugin/history_plugin.hpp>
+#include <arisenio/chain_plugin/chain_plugin.hpp>
+#include <arisenio/http_plugin/http_plugin.hpp>
 
 #include <appbase/application.hpp>
 
-namespace eosio {
+namespace arisenio {
 
    using namespace appbase;
 

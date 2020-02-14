@@ -1,15 +1,15 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[eosio::contract]] payloadless : public eosio::contract {
+class [[arisenio::contract]] payloadless : public arisenio::contract {
 public:
-   using eosio::contract::contract;
+   using arisenio::contract::contract;
 
-   [[eosio::action]]
+   [[arisenio::action]]
    void doit();
 };

@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in rsn/LICENSE.txt
  */
-#include <eosio/chain/abi_serializer.hpp>
-#include <eosio/chain/abi_serializer.hpp>
-#include <eosio/testing/tester.hpp>
+#include <arisenio/chain/abi_serializer.hpp>
+#include <arisenio/chain/abi_serializer.hpp>
+#include <arisenio/testing/tester.hpp>
 
-#include <eosio/chain/fork_database.hpp>
+#include <arisenio/chain/fork_database.hpp>
 
 #include <Runtime/Runtime.h>
 
@@ -18,8 +18,8 @@
 
 #include "fork_test_utilities.hpp"
 
-using namespace eosio::chain;
-using namespace eosio::testing;
+using namespace arisenio::chain;
+using namespace arisenio::testing;
 
 BOOST_AUTO_TEST_SUITE(forked_tests)
 
@@ -150,26 +150,26 @@ BOOST_AUTO_TEST_CASE( forking ) try {
    wlog("set producer schedule to [dan,sam,pam]");
    c.produce_blocks(30);
 
-   auto r2 = c.create_accounts( {N(eosio.token)} );
+   auto r2 = c.create_accounts( {N(arisenio.token)} );
    wdump((fc::json::to_pretty_string(r2)));
-   c.set_code( N(eosio.token), contracts::eosio_token_wasm() );
-   c.set_abi( N(eosio.token), contracts::eosio_token_abi().data() );
+   c.set_code( N(arisenio.token), contracts::arisenio_token_wasm() );
+   c.set_abi( N(arisenio.token), contracts::arisenio_token_abi().data() );
    c.produce_blocks(10);
 
 
-   auto cr = c.push_action( N(eosio.token), N(create), N(eosio.token), mutable_variant_object()
-              ("issuer",       "eosio" )
+   auto cr = c.push_action( N(arisenio.token), N(create), N(arisenio.token), mutable_variant_object()
+              ("issuer",       "arisenio" )
               ("maximum_supply", core_from_string("10000000.0000"))
       );
 
-   cr = c.push_action( N(eosio.token), N(issue), config::system_account_name, mutable_variant_object()
-              ("to",       "eosio" )
+   cr = c.push_action( N(arisenio.token), N(issue), config::system_account_name, mutable_variant_object()
+              ("to",       "arisenio" )
               ("quantity", core_from_string("100.0000"))
               ("memo", "")
       );
 
-   cr = c.push_action( N(eosio.token), N(transfer), config::system_account_name, mutable_variant_object()
-              ("from",     "eosio")
+   cr = c.push_action( N(arisenio.token), N(transfer), config::system_account_name, mutable_variant_object()
+              ("from",     "arisenio")
               ("to",       "dan" )
               ("quantity", core_from_string("100.0000"))
               ("memo", "")

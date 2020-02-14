@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
-#include <eosio/chain/block.hpp>
-#include <eosio/chain/types.hpp>
+#include <arisenio/chain/block.hpp>
+#include <arisenio/chain/types.hpp>
 #include <chrono>
 
-namespace eosio {
+namespace arisenio {
    using namespace chain;
    using namespace fc;
 
@@ -149,23 +149,23 @@ namespace eosio {
                                       signed_block,         // which = 7
                                       packed_transaction>;  // which = 8
 
-} // namespace eosio
+} // namespace arisenio
 
-FC_REFLECT( eosio::select_ids<fc::sha256>, (mode)(pending)(ids) )
-FC_REFLECT( eosio::chain_size_message,
+FC_REFLECT( arisenio::select_ids<fc::sha256>, (mode)(pending)(ids) )
+FC_REFLECT( arisenio::chain_size_message,
             (last_irreversible_block_num)(last_irreversible_block_id)
             (head_num)(head_id))
-FC_REFLECT( eosio::handshake_message,
+FC_REFLECT( arisenio::handshake_message,
             (network_version)(chain_id)(node_id)(key)
             (time)(token)(sig)(p2p_address)
             (last_irreversible_block_num)(last_irreversible_block_id)
             (head_num)(head_id)
             (os)(agent)(generation) )
-FC_REFLECT( eosio::go_away_message, (reason)(node_id) )
-FC_REFLECT( eosio::time_message, (org)(rec)(xmt)(dst) )
-FC_REFLECT( eosio::notice_message, (known_trx)(known_blocks) )
-FC_REFLECT( eosio::request_message, (req_trx)(req_blocks) )
-FC_REFLECT( eosio::sync_request_message, (start_block)(end_block) )
+FC_REFLECT( arisenio::go_away_message, (reason)(node_id) )
+FC_REFLECT( arisenio::time_message, (org)(rec)(xmt)(dst) )
+FC_REFLECT( arisenio::notice_message, (known_trx)(known_blocks) )
+FC_REFLECT( arisenio::request_message, (req_trx)(req_blocks) )
+FC_REFLECT( arisenio::sync_request_message, (start_block)(end_block) )
 
 /**
  *

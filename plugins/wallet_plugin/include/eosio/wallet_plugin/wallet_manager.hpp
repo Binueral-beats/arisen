@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
-#include <eosio/chain/transaction.hpp>
-#include <eosio/wallet_plugin/wallet_api.hpp>
+#include <arisenio/chain/transaction.hpp>
+#include <arisenio/wallet_plugin/wallet_api.hpp>
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/interprocess/sync/file_lock.hpp>
@@ -12,7 +12,7 @@
 
 namespace fc { class variant; }
 
-namespace eosio {
+namespace arisenio {
 namespace wallet {
 
 /// Provides associate of wallet name to wallet and manages the interaction with each wallet.
@@ -114,7 +114,7 @@ public:
    /// Wallet must be opened and unlocked.
    /// @param name the name of the wallet to remove the key from.
    /// @param password the plaintext password returned from ::create.
-   /// @param key the Public Key to remove, e.g. EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+   /// @param key the Public Key to remove, e.g. ARISEN6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
    /// @throws fc::exception if wallet not found or locked or key is not removed.
    void remove_key(const std::string& name, const std::string& password, const std::string& key);
 
@@ -148,6 +148,6 @@ private:
 };
 
 } // namespace wallet
-} // namespace eosio
+} // namespace arisenio
 
 

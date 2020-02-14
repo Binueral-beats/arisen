@@ -1,15 +1,15 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/wallet_plugin/wallet_plugin.hpp>
-#include <eosio/http_plugin/http_plugin.hpp>
+#include <arisenio/wallet_plugin/wallet_plugin.hpp>
+#include <arisenio/http_plugin/http_plugin.hpp>
 
 #include <appbase/application.hpp>
 
-namespace eosio {
+namespace arisenio {
 
 using namespace appbase;
 

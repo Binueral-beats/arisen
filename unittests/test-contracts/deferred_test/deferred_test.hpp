@@ -1,33 +1,33 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <arisenio/arisenio.hpp>
 #include <vector>
 
-class [[eosio::contract]] deferred_test : public eosio::contract {
+class [[arisenio::contract]] deferred_test : public arisenio::contract {
 public:
-   using eosio::contract::contract;
+   using arisenio::contract::contract;
 
-   [[eosio::action]]
-   void defercall( eosio::name payer, uint64_t sender_id, eosio::name contract, uint64_t payload );
+   [[arisenio::action]]
+   void defercall( arisenio::name payer, uint64_t sender_id, arisenio::name contract, uint64_t payload );
 
-   [[eosio::action]]
-   void delayedcall( eosio::name payer, uint64_t sender_id, eosio::name contract,
+   [[arisenio::action]]
+   void delayedcall( arisenio::name payer, uint64_t sender_id, arisenio::name contract,
                      uint64_t payload, uint32_t delay_sec, bool replace_existing );
 
-   [[eosio::action]]
+   [[arisenio::action]]
    void deferfunc( uint64_t payload );
-   using deferfunc_action = eosio::action_wrapper<"deferfunc"_n, &deferred_test::deferfunc>;
+   using deferfunc_action = arisenio::action_wrapper<"deferfunc"_n, &deferred_test::deferfunc>;
 
-   [[eosio::action]]
-   void inlinecall( eosio::name contract, eosio::name authorizer, uint64_t payload );
+   [[arisenio::action]]
+   void inlinecall( arisenio::name contract, arisenio::name authorizer, uint64_t payload );
 
-   [[eosio::action]]
+   [[arisenio::action]]
    void fail();
 
-   [[eosio::on_notify("eosio::onerror")]]
-   void on_error( uint128_t sender_id, eosio::ignore<std::vector<char>> sent_trx );
+   [[arisenio::on_notify("arisenio::onerror")]]
+   void on_error( uint128_t sender_id, arisenio::ignore<std::vector<char>> sent_trx );
 };

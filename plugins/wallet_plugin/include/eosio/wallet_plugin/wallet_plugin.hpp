@@ -1,16 +1,16 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 #include <appbase/application.hpp>
 #include <fc/variant.hpp>
-#include <eosio/chain/contract_types.hpp>
-#include <eosio/chain/transaction.hpp>
+#include <arisenio/chain/contract_types.hpp>
+#include <arisenio/chain/transaction.hpp>
 
 namespace fc { class variant; }
 
-namespace eosio {
+namespace arisenio {
    using namespace appbase;
 
    namespace wallet {

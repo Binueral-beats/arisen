@@ -1,16 +1,16 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/chain/types.hpp>
-#include <eosio/chain/transaction.hpp>
+#include <arisenio/chain/types.hpp>
+#include <arisenio/chain/transaction.hpp>
 
 using namespace std;
-using namespace eosio::chain;
+using namespace arisenio::chain;
 
-namespace eosio { namespace wallet {
+namespace arisenio { namespace wallet {
 
 class wallet_api
 {
@@ -85,7 +85,7 @@ class wallet_api
 
       /** Removes a key from the wallet.
        *
-       * example: remove_key EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+       * example: remove_key ARISEN6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
        *
        * @param key the Public Key to remove
        */

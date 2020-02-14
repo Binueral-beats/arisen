@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/wallet_plugin/wallet_plugin.hpp>
-#include <eosio/wallet_plugin/wallet_manager.hpp>
-#include <eosio/wallet_plugin/yubihsm_wallet.hpp>
-#include <eosio/chain/exceptions.hpp>
+#include <arisenio/wallet_plugin/wallet_plugin.hpp>
+#include <arisenio/wallet_plugin/wallet_manager.hpp>
+#include <arisenio/wallet_plugin/yubihsm_wallet.hpp>
+#include <arisenio/chain/exceptions.hpp>
 #include <boost/filesystem/path.hpp>
 #include <chrono>
 
@@ -13,7 +13,7 @@
 
 namespace fc { class variant; }
 
-namespace eosio {
+namespace arisenio {
 
 static appbase::abstract_plugin& _wallet_plugin = app().register_plugin<wallet_plugin>();
 
@@ -52,7 +52,7 @@ void wallet_plugin::plugin_initialize(const variables_map& options) {
       }
       if (options.count("unlock-timeout")) {
          auto timeout = options.at("unlock-timeout").as<int64_t>();
-         EOS_ASSERT(timeout > 0, chain::invalid_lock_timeout_exception, "Please specify a positive timeout ${t}", ("t", timeout));
+         ARISEN_ASSERT(timeout > 0, chain::invalid_lock_timeout_exception, "Please specify a positive timeout ${t}", ("t", timeout));
          std::chrono::seconds t(timeout);
          wallet_manager_ptr->set_timeout(t);
       }
@@ -68,4 +68,4 @@ void wallet_plugin::plugin_initialize(const variables_map& options) {
    } FC_LOG_AND_RETHROW()
 }
 
-} // namespace eosio
+} // namespace arisenio

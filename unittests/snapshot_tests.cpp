@@ -1,18 +1,18 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #include <sstream>
 
-#include <eosio/chain/snapshot.hpp>
-#include <eosio/testing/tester.hpp>
+#include <arisenio/chain/snapshot.hpp>
+#include <arisenio/testing/tester.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <contracts.hpp>
 
-using namespace eosio;
+using namespace arisenio;
 using namespace testing;
 using namespace chain;
 

@@ -1,46 +1,46 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
 #pragma once
 
-#include <eosio/eosio.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[eosio::contract]] test_api_db : public eosio::contract {
+class [[arisenio::contract]] test_api_db : public arisenio::contract {
 public:
-   using eosio::contract::contract;
+   using arisenio::contract::contract;
 
-   [[eosio::action("pg")]]
+   [[arisenio::action("pg")]]
    void primary_i64_general();
 
-   [[eosio::action("pl")]]
+   [[arisenio::action("pl")]]
    void primary_i64_lowerbound();
 
-   [[eosio::action("pu")]]
+   [[arisenio::action("pu")]]
    void primary_i64_upperbound();
 
-   [[eosio::action("s1g")]]
+   [[arisenio::action("s1g")]]
    void idx64_general();
 
-   [[eosio::action("s1l")]]
+   [[arisenio::action("s1l")]]
    void idx64_lowerbound();
 
-   [[eosio::action("s1u")]]
+   [[arisenio::action("s1u")]]
    void idx64_upperbound();
 
-   [[eosio::action("tia")]]
-   void test_invalid_access( eosio::name code, uint64_t val, uint32_t index, bool store );
+   [[arisenio::action("tia")]]
+   void test_invalid_access( arisenio::name code, uint64_t val, uint32_t index, bool store );
 
-   [[eosio::action("sdnancreate")]]
+   [[arisenio::action("sdnancreate")]]
    void idx_double_nan_create_fail();
 
-   [[eosio::action("sdnanmodify")]]
+   [[arisenio::action("sdnanmodify")]]
    void idx_double_nan_modify_fail();
 
-   [[eosio::action("sdnanlookup")]]
+   [[arisenio::action("sdnanlookup")]]
    void idx_double_nan_lookup_fail( uint32_t lookup_type );
 
-   [[eosio::action("sk32align")]]
+   [[arisenio::action("sk32align")]]
    void misaligned_secondary_key256_tests();
 
 };

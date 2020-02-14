@@ -1,18 +1,18 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in rsn/LICENSE
  */
-#include <eosio/chain/types.hpp>
+#include <arisenio/chain/types.hpp>
 
-#include <eosio/net_plugin/net_plugin.hpp>
-#include <eosio/net_plugin/protocol.hpp>
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/block.hpp>
-#include <eosio/chain/plugin_interface.hpp>
-#include <eosio/chain/thread_utils.hpp>
-#include <eosio/producer_plugin/producer_plugin.hpp>
-#include <eosio/chain/contract_types.hpp>
+#include <arisenio/net_plugin/net_plugin.hpp>
+#include <arisenio/net_plugin/protocol.hpp>
+#include <arisenio/chain/controller.hpp>
+#include <arisenio/chain/exceptions.hpp>
+#include <arisenio/chain/block.hpp>
+#include <arisenio/chain/plugin_interface.hpp>
+#include <arisenio/chain/thread_utils.hpp>
+#include <arisenio/producer_plugin/producer_plugin.hpp>
+#include <arisenio/chain/contract_types.hpp>
 
 #include <fc/network/message_buffer.hpp>
 #include <fc/network/ip.hpp>
@@ -28,9 +28,9 @@
 #include <boost/asio/ip/host_name.hpp>
 #include <boost/asio/steady_timer.hpp>
 
-using namespace eosio::chain::plugin_interface::compat;
+using namespace arisenio::chain::plugin_interface::compat;
 
-namespace eosio {
+namespace arisenio {
    static appbase::abstract_plugin& _net_plugin = app().register_plugin<net_plugin>();
 
    using std::vector;
@@ -42,8 +42,8 @@ namespace eosio {
 
    using fc::time_point;
    using fc::time_point_sec;
-   using eosio::chain::transaction_id_type;
-   using eosio::chain::sha256_less;
+   using arisenio::chain::transaction_id_type;
+   using arisenio::chain::sha256_less;
 
    class connection;
 
@@ -147,7 +147,7 @@ namespace eosio {
       channels::transaction_ack::channel_type::handle  incoming_transaction_ack_subscription;
 
       uint16_t                                  thread_pool_size = 1;
-      optional<eosio::chain::named_thread_pool> thread_pool;
+      optional<arisenio::chain::named_thread_pool> thread_pool;
 
       void connect( const connection_ptr& c );
       void connect( const connection_ptr& c, const std::shared_ptr<tcp::resolver>& resolver, tcp::resolver::results_type endpoints );
@@ -353,10 +353,10 @@ namespace eosio {
    };
 
    typedef multi_index_container<
-      eosio::peer_block_state,
+      arisenio::peer_block_state,
       indexed_by<
-         ordered_unique< tag<by_id>, member<eosio::peer_block_state, block_id_type, &eosio::peer_block_state::id >, sha256_less >,
-         ordered_unique< tag<by_block_num>, member<eosio::peer_block_state, uint32_t, &eosio::peer_block_state::block_num > >
+         ordered_unique< tag<by_id>, member<arisenio::peer_block_state, block_id_type, &arisenio::peer_block_state::id >, sha256_less >,
+         ordered_unique< tag<by_block_num>, member<arisenio::peer_block_state, uint32_t, &arisenio::peer_block_state::block_num > >
          >
       > peer_block_state_index;
 
@@ -433,7 +433,7 @@ namespace eosio {
             fill_out_buffer( bufs, _sync_write_queue );
          } else { // postpone real_time write_queue if sync queue is not empty
             fill_out_buffer( bufs, _write_queue );
-            EOS_ASSERT( _write_queue_size == 0, plugin_exception, "write queue size expected to be zero" );
+            ARISEN_ASSERT( _write_queue_size == 0, plugin_exception, "write queue size expected to be zero" );
          }
       }
 
@@ -627,16 +627,16 @@ namespace eosio {
       msg_handler( net_plugin_impl &imp, const connection_ptr& conn) : impl(imp), c(conn) {}
 
       void operator()( const signed_block& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
+         ARISEN_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
       }
       void operator()( signed_block& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
+         ARISEN_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
       }
       void operator()( const packed_transaction& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
+         ARISEN_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
       }
       void operator()( packed_transaction& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
+         ARISEN_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
       }
 
       void operator()( signed_block&& msg ) const {
@@ -1241,7 +1241,7 @@ namespace eosio {
       ,state(in_sync)
    {
       chain_plug = app().find_plugin<chain_plugin>();
-      EOS_ASSERT( chain_plug, chain::missing_chain_plugin_exception, ""  );
+      ARISEN_ASSERT( chain_plug, chain::missing_chain_plugin_exception, ""  );
    }
 
    constexpr auto sync_manager::stage_str(stages s) {
@@ -2099,7 +2099,7 @@ namespace eosio {
                         fc_elog( logger,"async_read_some callback: bytes_transfered = ${bt}, buffer.bytes_to_write = ${btw}",
                                  ("bt",bytes_transferred)("btw",conn->pending_message_buffer.bytes_to_write()) );
                      }
-                     EOS_ASSERT(bytes_transferred <= conn->pending_message_buffer.bytes_to_write(), plugin_exception, "");
+                     ARISEN_ASSERT(bytes_transferred <= conn->pending_message_buffer.bytes_to_write(), plugin_exception, "");
                      conn->pending_message_buffer.advance_write_ptr(bytes_transferred);
                      while (conn->pending_message_buffer.bytes_to_read() > 0) {
                         uint32_t bytes_in_buffer = conn->pending_message_buffer.bytes_to_read();
@@ -2959,11 +2959,11 @@ namespace eosio {
    void net_plugin::set_program_options( options_description& /*cli*/, options_description& cfg )
    {
       cfg.add_options()
-         ( "p2p-listen-endpoint", bpo::value<string>()->default_value( "0.0.0.0:9876" ), "The actual host:port used to listen for incoming p2p connections.")
+         ( "p2p-listen-endpoint", bpo::value<string>()->default_value( "0.0.0.0:6620" ), "The actual host:port used to listen for incoming p2p connections.")
          ( "p2p-server-address", bpo::value<string>(), "An externally accessible host:port for identifying this node. Defaults to p2p-listen-endpoint.")
          ( "p2p-peer-address", bpo::value< vector<string> >()->composing(), "The public endpoint of a peer node to connect to. Use multiple p2p-peer-address options as needed to compose a network.")
          ( "p2p-max-nodes-per-host", bpo::value<int>()->default_value(def_max_nodes_per_host), "Maximum number of client nodes from any single IP address")
-         ( "agent-name", bpo::value<string>()->default_value("\"EOS Test Agent\""), "The name supplied to identify this node amongst the peers.")
+         ( "agent-name", bpo::value<string>()->default_value("\"ARISEN Test Agent\""), "The name supplied to identify this node amongst the peers.")
          ( "allowed-connection", bpo::value<vector<string>>()->multitoken()->default_value({"any"}, "any"), "Can be 'any' or 'producers' or 'specified' or 'none'. If 'specified', peer-key must be specified at least once. If only 'producers', peer-key is not required. 'producers' and 'specified' may be combined.")
          ( "peer-key", bpo::value<vector<string>>()->composing()->multitoken(), "Optional public key of peer allowed to connect.  May be used multiple times.")
          ( "peer-private-key", boost::program_options::value<vector<string>>()->composing()->multitoken(),
@@ -3020,17 +3020,17 @@ namespace eosio {
 
          if( options.count( "p2p-listen-endpoint" ) && options.at("p2p-listen-endpoint").as<string>().length()) {
             my->p2p_address = options.at( "p2p-listen-endpoint" ).as<string>();
-            EOS_ASSERT( my->p2p_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
+            ARISEN_ASSERT( my->p2p_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
                         "p2p-listen-endpoint to long, must be less than ${m}", ("m", max_p2p_address_length) );
          }
          if( options.count( "p2p-server-address" ) ) {
             my->p2p_server_address = options.at( "p2p-server-address" ).as<string>();
-            EOS_ASSERT( my->p2p_server_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
+            ARISEN_ASSERT( my->p2p_server_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
                         "p2p_server_address to long, must be less than ${m}", ("m", max_p2p_address_length) );
          }
 
          my->thread_pool_size = options.at( "net-threads" ).as<uint16_t>();
-         EOS_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
+         ARISEN_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
                      "net-threads ${num} must be greater than 0", ("num", my->thread_pool_size) );
 
          if( options.count( "p2p-peer-address" )) {
@@ -3038,7 +3038,7 @@ namespace eosio {
          }
          if( options.count( "agent-name" )) {
             my->user_agent_name = options.at( "agent-name" ).as<string>();
-            EOS_ASSERT( my->user_agent_name.length() <= max_handshake_str_length, chain::plugin_config_exception,
+            ARISEN_ASSERT( my->user_agent_name.length() <= max_handshake_str_length, chain::plugin_config_exception,
                         "agent-name to long, must be less than ${m}", ("m", max_handshake_str_length) );
          }
 
@@ -3057,7 +3057,7 @@ namespace eosio {
          }
 
          if( my->allowed_connections & net_plugin_impl::Specified )
-            EOS_ASSERT( options.count( "peer-key" ),
+            ARISEN_ASSERT( options.count( "peer-key" ),
                         plugin_config_exception,
                        "At least one peer-key must accompany 'allowed-connection=specified'" );
 
@@ -3078,7 +3078,7 @@ namespace eosio {
          }
 
          my->chain_plug = app().find_plugin<chain_plugin>();
-         EOS_ASSERT( my->chain_plug, chain::missing_chain_plugin_exception, ""  );
+         ARISEN_ASSERT( my->chain_plug, chain::missing_chain_plugin_exception, ""  );
          my->chain_id = my->chain_plug->get_chain_id();
          fc::rand_pseudo_bytes( my->node_id.data(), my->node_id.data_size());
          fc_ilog( logger, "my node_id is ${id}", ("id", my->node_id ));
