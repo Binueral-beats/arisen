@@ -1,13 +1,13 @@
 /**
  *  @file
  *  @copyright defined in rsn/LICENSE
- *  @defgroup eosclienttool ARISEN Command Line Client Reference
+ *  @defgroup arisenclienttool ARISEN Command Line Client Reference
  *  @brief Tool for sending transactions and querying state from @ref aos
- *  @ingroup eosclienttool
+ *  @ingroup arisenclienttool
  */
 
 /**
-  @defgroup eosclienttool
+  @defgroup arisenclienttool
 
   @section intro Introduction to arisecli
 
@@ -181,7 +181,7 @@ bool   tx_skip_sign = false;
 bool   tx_print_json = false;
 bool   print_request = false;
 bool   print_response = false;
-bool   no_auto_keosd = false;
+bool   no_auto_karisend = false;
 bool   verbose = false;
 
 uint8_t  tx_max_cpu_usage = 0;
@@ -885,8 +885,8 @@ void try_local_port(uint32_t duration) {
    }
 }
 
-void ensure_keosd_running(CLI::App* app) {
-    if (no_auto_keosd)
+void ensure_karisend_running(CLI::App* app) {
+    if (no_auto_karisend)
         return;
     // get, version, net do not require awalletd
     if (tx_skip_sign || app->got_subcommand("get") || app->got_subcommand("version") || app->got_subcommand("net"))
@@ -987,7 +987,7 @@ struct create_account_subcommand {
    string stake_cpu;
    uint32_t buy_ram_bytes_in_kbytes = 0;
    uint32_t buy_ram_bytes = 0;
-   string buy_ram_eos;
+   string buy_ram_arisen;
    bool transfer;
    bool simple;
 
@@ -1011,7 +1011,7 @@ struct create_account_subcommand {
                                    (localized("The amount of RAM bytes to purchase for the new account in kibibytes (KiB)")));
          createAccount->add_option("--buy-ram-bytes", buy_ram_bytes,
                                    (localized("The amount of RAM bytes to purchase for the new account in bytes")));
-         createAccount->add_option("--buy-ram", buy_ram_eos,
+         createAccount->add_option("--buy-ram", buy_ram_arisen,
                                    (localized("The amount of RAM bytes to purchase for the new account in tokens")));
          createAccount->add_flag("--transfer", transfer,
                                  (localized("Transfer voting power and right to unstake tokens to receiver")));
@@ -1046,9 +1046,9 @@ struct create_account_subcommand {
 
             auto create = create_newaccount(creator, account_name, owner, active);
             if (!simple) {
-               ARISENC_ASSERT( buy_ram_eos.size() || buy_ram_bytes_in_kbytes || buy_ram_bytes, "ERROR: One of --buy-ram, --buy-ram-kbytes or --buy-ram-bytes should have non-zero value" );
+               ARISENC_ASSERT( buy_ram_arisen.size() || buy_ram_bytes_in_kbytes || buy_ram_bytes, "ERROR: One of --buy-ram, --buy-ram-kbytes or --buy-ram-bytes should have non-zero value" );
                ARISENC_ASSERT( !buy_ram_bytes_in_kbytes || !buy_ram_bytes, "ERROR: --buy-ram-kbytes and --buy-ram-bytes cannot be set at the same time" );
-               action buyram = !buy_ram_eos.empty() ? create_buyram(creator, account_name, to_asset(buy_ram_eos))
+               action buyram = !buy_ram_arisen.empty() ? create_buyram(creator, account_name, to_asset(buy_ram_arisen))
                   : create_buyrambytes(creator, account_name, (buy_ram_bytes_in_kbytes) ? (buy_ram_bytes_in_kbytes * 1024) : buy_ram_bytes);
                auto net = to_asset(stake_net);
                auto cpu = to_asset(stake_cpu);
@@ -2345,8 +2345,8 @@ int main( int argc, char** argv ) {
 
    app.add_option( "-r,--header", header_opt_callback, localized("pass specific HTTP header; repeat this option to pass multiple headers"));
    app.add_flag( "-n,--no-verify", no_verify, localized("don't verify peer certificate when using HTTPS"));
-   app.add_flag( "--no-auto-" + string(key_store_executable_name), no_auto_keosd, localized("don't automatically launch a ${k} if one is not currently running", ("k", key_store_executable_name)));
-   app.set_callback([&app]{ ensure_keosd_running(&app);});
+   app.add_flag( "--no-auto-" + string(key_store_executable_name), no_auto_karisend, localized("don't automatically launch a ${k} if one is not currently running", ("k", key_store_executable_name)));
+   app.set_callback([&app]{ ensure_karisend_running(&app);});
 
    app.add_flag( "-v,--verbose", verbose, localized("output verbose errors and action console output"));
    app.add_flag("--print-request", print_request, localized("print HTTP request to STDERR"));
@@ -3274,9 +3274,9 @@ int main( int argc, char** argv ) {
       std::cout << fc::json::to_pretty_string(v) << std::endl;
    });
 
-   auto stopKeosd = wallet->add_subcommand("stop", localized("Stop ${k}.", ("k", key_store_executable_name)), false);
-   stopKeosd->set_callback([] {
-      const auto& v = call(wallet_url, keosd_stop);
+   auto stopKarisend = wallet->add_subcommand("stop", localized("Stop ${k}.", ("k", key_store_executable_name)), false);
+   stopKarisend->set_callback([] {
+      const auto& v = call(wallet_url, karisend_stop);
       if ( !v.is_object() || v.get_object().size() != 0 ) { //on success awalletd responds with empty object
          std::cerr << fc::json::to_pretty_string(v) << std::endl;
       } else {

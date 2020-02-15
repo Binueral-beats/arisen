@@ -7,9 +7,9 @@ from TestHelper import TestHelper
 import subprocess
 
 ###############################################################
-# nodeos_run_remote_test
-#  Tests remote capability of the nodeos_run_test. Test will setup cluster and pass nodes info to nodeos_run_test. E.g.
-#  nodeos_run_remote_test.py -v --clean-run --dump-error-detail
+# nodarisen_run_remote_test
+#  Tests remote capability of the nodarisen_run_test. Test will setup cluster and pass nodes info to nodarisen_run_test. E.g.
+#  nodarisen_run_remote_test.py -v --clean-run --dump-error-detail
 ###############################################################
 
 Print=Utils.Print
@@ -24,13 +24,13 @@ killAll=args.clean_run
 
 Utils.Debug=debug
 
-killEosInstances=not dontKill
+killArisenInstances=not dontKill
 topo="mesh"
 delay=1
 prodCount=1 # producers per producer node
 pnodes=1
 total_nodes=pnodes
-actualTest="tests/nodeos_run_test.py"
+actualTest="tests/nodarisen_run_test.py"
 testSuccessful=False
 
 cluster=Cluster(walletd=True)
@@ -63,6 +63,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, None, testSuccessful, killEosInstances, False, False, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, None, testSuccessful, killArisenInstances, False, False, killAll, dumpErrorDetails)
 
 exit(0)

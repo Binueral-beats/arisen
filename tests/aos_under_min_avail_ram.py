@@ -50,7 +50,7 @@ class NamedAccounts:
 
 
 ###############################################################
-# nodeos_voting_test
+# nodarisen_voting_test
 # --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
@@ -67,10 +67,10 @@ walletPort=args.wallet_port
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killArisenInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
+WalletdName=Utils.ArisenWalletName
 ClientName="arisecli"
 
 try:
@@ -84,8 +84,8 @@ try:
     minRAMValue=1002
     maxRAMFlag="--chain-state-db-size-mb"
     maxRAMValue=1010
-    extraNodeosArgs=" %s %d %s %d  --http-max-response-time-ms 990000 " % (minRAMFlag, minRAMValue, maxRAMFlag, maxRAMValue)
-    if cluster.launch(onlyBios=False, pnodes=totalNodes, totalNodes=totalNodes, totalProducers=totalNodes, extraNodeosArgs=extraNodeosArgs, useBiosBootFile=False) is False:
+    extraNodarisenArgs=" %s %d %s %d  --http-max-response-time-ms 990000 " % (minRAMFlag, minRAMValue, maxRAMFlag, maxRAMValue)
+    if cluster.launch(onlyBios=False, pnodes=totalNodes, totalNodes=totalNodes, totalProducers=totalNodes, extraNodarisenArgs=extraNodarisenArgs, useBiosBootFile=False) is False:
         Utils.cmdError("launcher")
         errorExit("Failed to stand up rsn cluster.")
 
@@ -331,6 +331,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killArisenInstances=killArisenInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

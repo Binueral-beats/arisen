@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include <arisen/chain/arisen_contract.hpp>
 #include <arisen/chain/contract_table_objects.hpp>

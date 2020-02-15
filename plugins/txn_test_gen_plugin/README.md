@@ -1,6 +1,6 @@
 # txn\_test\_gen\_plugin
 
-This plugin provides a way to generate a given amount of transactions per second against the currency contract. It runs internally to eosd to reduce overhead.
+This plugin provides a way to generate a given amount of transactions per second against the currency contract. It runs internally to arisend to reduce overhead.
 
 This general procedure was used when doing Dawn 3.0 performance testing as mentioned in https://github.com/arisenio/arisen/issues/2078.
 

@@ -36,7 +36,7 @@ debug=args.v
 total_nodes = pnodes
 killCount=args.kill_count if args.kill_count > 0 else 1
 killSignal=args.kill_sig
-killEosInstances= not args.leave_running
+killArisenInstances= not args.leave_running
 dumpErrorDetails=args.dump_error_details
 keepLogs=args.keep_logs
 killAll=args.clean_run
@@ -99,7 +99,7 @@ try:
         errorExit("Cluster sync wait failed.")
 
     Print("Kill %d cluster node instances." % (killCount))
-    if cluster.killSomeEosInstances(killCount, killSignal) is False:
+    if cluster.killSomeArisenInstances(killCount, killSignal) is False:
         errorExit("Failed to kill Rsn instances")
     Print("aos instances killed.")
 
@@ -112,7 +112,7 @@ try:
         errorExit("Cluster sync wait failed.")
 
     Print ("Relaunch dead cluster nodes instances.")
-    if cluster.relaunchEosInstances(cachePopen=True) is False:
+    if cluster.relaunchArisenInstances(cachePopen=True) is False:
         errorExit("Failed to relaunch Rsn instances")
     Print("aos instances relaunched.")
 
@@ -129,7 +129,7 @@ try:
     if not cluster.waitOnClusterSync():
         errorExit("Cluster sync wait failed.")
 
-    if killEosInstances:
+    if killArisenInstances:
         atLeastOne=False
         for node in cluster.getNodes():
             if node.popenProc is not None:
@@ -139,6 +139,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killEosInstances, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killArisenInstances=killArisenInstances, killWallet=killArisenInstances, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

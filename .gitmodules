@@ -15,12 +15,6 @@
 [submodule "externals/magic_get"]
 	path = externals/magic_get
 	url = https://github.com/ArisenIO/magic_get
-[submodule "libraries/chainbase"]
-	path = libraries/chainbase
-	url = https://github.com/ArisenIO/chainbase.git
-[submodule "libraries/fc"]
-	path = libraries/fc
-	url = https://github.com/ArisenIO/fc.git
 [submodule "libraries/softfloat"]
 	path = libraries/softfloat
 	url = https://github.com/ArisenIO/berkeley-softfloat-3.git
@@ -33,3 +27,9 @@
 [submodule "libraries/appbase"]
 	path = libraries/appbase
 	url = https://github.com/ArisenIO/appbase.git
+[submodule "libraries/chainbase"]
+	path = libraries/chainbase
+	url = https://github.com/ArisenIO/chainbase.git
+[submodule "libraries/fc"]
+	path = libraries/fc
+	url = https://github.com/ArisenIO/fc.git

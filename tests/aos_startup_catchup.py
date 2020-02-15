@@ -16,7 +16,7 @@ import math
 import re
 
 ###############################################################
-# nodeos_startup_catchup
+# nodarisen_startup_catchup
 #  Test configures a producing node and <--txn-plugins count> non-producing nodes with the
 #  txn_test_gen_plugin.  Each non-producing node starts generating transactions and sending them
 #  to the producing node.
@@ -53,10 +53,10 @@ totalNodes=startedNonProdNodes+pnodes+catchupCount
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killArisenInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
+WalletdName=Utils.ArisenWalletName
 ClientName="arisecli"
 
 try:
@@ -65,13 +65,13 @@ try:
 
     cluster.killall(allInstances=killAll)
     cluster.cleanup()
-    specificExtraNodeosArgs={}
+    specificExtraNodarisenArgs={}
     txnGenNodeNum=pnodes  # next node after producer nodes
     for nodeNum in range(txnGenNodeNum, txnGenNodeNum+startedNonProdNodes):
-        specificExtraNodeosArgs[nodeNum]="--plugin arisen::txn_test_gen_plugin --txn-test-gen-account-prefix txntestacct"
+        specificExtraNodarisenArgs[nodeNum]="--plugin arisen::txn_test_gen_plugin --txn-test-gen-account-prefix txntestacct"
     Print("Stand up cluster")
     if cluster.launch(prodCount=prodCount, onlyBios=False, pnodes=pnodes, totalNodes=totalNodes, totalProducers=pnodes*prodCount,
-                      useBiosBootFile=False, specificExtraNodeosArgs=specificExtraNodeosArgs, unstartedNodes=catchupCount, loadSystemContract=False) is False:
+                      useBiosBootFile=False, specificExtraNodarisenArgs=specificExtraNodarisenArgs, unstartedNodes=catchupCount, loadSystemContract=False) is False:
         Utils.errorExit("Failed to stand up rsn cluster.")
 
     Print("Validating system accounts after bootstrap")
@@ -187,6 +187,6 @@ try:
     testSuccessful=True
 
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killArisenInstances=killArisenInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)

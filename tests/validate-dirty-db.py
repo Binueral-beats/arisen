@@ -26,7 +26,7 @@ total_nodes = pnodes
 killCount=1
 killSignal=Utils.SigKillTag
 
-killEosInstances= not args.leave_running
+killArisenInstances= not args.leave_running
 dumpErrorDetails=args.dump_error_details
 keepLogs=args.keep_logs
 killAll=args.clean_run
@@ -35,7 +35,7 @@ seed=1
 Utils.Debug=debug
 testSuccessful=False
 
-def runNodeosAndGetOutput(myTimeout=3):
+def runNodarisenAndGetOutput(myTimeout=3):
     """Startup aos, wait for timeout (before forced shutdown) and collect output. Stdout, stderr and return code are returned in a dictionary."""
     Print("Launching aos process.")
     cmd="programs/aos/aos --config-dir etc/arisen/node_bios --data-dir var/lib/node_bios --verbose-http-errors --http-validate-host=false"
@@ -87,7 +87,7 @@ try:
 
     for i in range(1,4):
         Print("Attempt %d." % (i))
-        ret = runNodeosAndGetOutput(timeout)
+        ret = runNodarisenAndGetOutput(timeout)
         assert(ret)
         assert(isinstance(ret, tuple))
         if not ret[0]:
@@ -108,7 +108,7 @@ try:
     testSuccessful=True
 finally:
     if debug: Print("Cleanup in finally block.")
-    TestHelper.shutdown(cluster, None, testSuccessful, killEosInstances, False, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, None, testSuccessful, killArisenInstances, False, keepLogs, killAll, dumpErrorDetails)
 
 if debug: Print("Exiting test, exit value 0.")
 exit(0)

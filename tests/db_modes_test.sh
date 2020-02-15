@@ -34,7 +34,7 @@ NODARISEN_LAUNCH_PARAMS="./programs/aos/aos -d $arisen_STUFF_DIR --config-dir $a
 --chain-state-db-size-mb 8 --chain-state-db-guard-size-mb 0 --reversible-blocks-db-size-mb 1 \
 --reversible-blocks-db-guard-size-mb 0 -e -parisen"
 
-run_nodeos() {
+run_nodarisen() {
    if (( $VERBOSE == 0 )); then
       $NODARISEN_LAUNCH_PARAMS --http-server-address '' --p2p-listen-endpoint '' "$@" 2>/dev/null &
    else
@@ -43,7 +43,7 @@ run_nodeos() {
 }
 
 run_expect_success() {
-   run_nodeos "$@"
+   run_nodarisen "$@"
    local NODARISEN_PID=$!
    sleep 10
    kill $NODARISEN_PID
@@ -51,7 +51,7 @@ run_expect_success() {
 }
 
 run_and_kill() {
-   run_nodeos "$@"
+   run_nodarisen "$@"
    local NODARISEN_PID=$!
    sleep 10
    kill -KILL $NODARISEN_PID
@@ -59,7 +59,7 @@ run_and_kill() {
 }
 
 run_expect_failure() {
-   run_nodeos "$@"
+   run_nodarisen "$@"
    local NODARISEN_PID=$!
    MYPID=$$
    (sleep 20; kill -ALRM $MYPID) & local TIMER_PID=$!

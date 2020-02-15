@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include <arisen/chain/abi_serializer.hpp>
 #include <arisen/chain/chain_config.hpp>

@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 #include <arisen/chain/block.hpp>

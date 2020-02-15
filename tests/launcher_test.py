@@ -10,7 +10,7 @@ import decimal
 import re
 
 ###############################################################
-# nodeos_run_test
+# nodarisen_run_test
 # --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
@@ -34,10 +34,10 @@ Utils.Debug=debug
 cluster=Cluster(walletd=True, defproduceraPrvtKey=defproduceraPrvtKey)
 walletMgr=WalletMgr(True)
 testSuccessful=False
-killEosInstances=not dontKill
+killArisenInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
+WalletdName=Utils.ArisenWalletName
 ClientName="arisecli"
 timeout = .5 * 12 * 2 + 60 # time for finalization with 1 producer + 60 seconds padding
 Utils.setIrreversibleTimeout(timeout)
@@ -59,7 +59,7 @@ try:
         walletMgr.killall(allInstances=killAll)
         walletMgr.cleanup()
         cluster.initializeNodes(defproduceraPrvtKey=defproduceraPrvtKey)
-        killEosInstances=False
+        killArisenInstances=False
 
         print("Stand up walletd")
         if walletMgr.launch() is False:
@@ -146,7 +146,7 @@ try:
 
     expectedAmount=transferAmount
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(testeraAccount.name)
+    actualAmount=node.getAccountArisenBalanceStr(testeraAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -158,7 +158,7 @@ try:
 
     expectedAmount="97.5421 {0}".format(CORE_SYMBOL)
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(testeraAccount.name)
+    actualAmount=node.getAccountArisenBalanceStr(testeraAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -175,7 +175,7 @@ try:
 
     expectedAmount="98.0311 {0}".format(CORE_SYMBOL) # 5000 initial deposit
     Print("Verify transfer, Expected: %s" % (expectedAmount))
-    actualAmount=node.getAccountEosBalanceStr(currencyAccount.name)
+    actualAmount=node.getAccountArisenBalanceStr(currencyAccount.name)
     if expectedAmount != actualAmount:
         cmdError("FAILURE - transfer failed")
         errorExit("Transfer verification failed. Excepted %s, actual: %s" % (expectedAmount, actualAmount))
@@ -243,6 +243,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killArisenInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exit(0)

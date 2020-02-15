@@ -46,11 +46,11 @@ localTest=True
 cluster=Cluster(host=server, port=port, walletd=True, enableMongo=enableMongo, defproduceraPrvtKey=defproduceraPrvtKey, defproducerbPrvtKey=defproducerbPrvtKey)
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killArisenInstances=not dontKill
 killWallet=not dontKill
 dontBootstrap=sanityTest
 
-WalletdName=Utils.EosWalletName
+WalletdName=Utils.ArisenWalletName
 ClientName="arisecli"
 
 try:
@@ -68,7 +68,7 @@ try:
         Print("Stand up cluster")
         if cluster.launch(pnodes=prodCount, totalNodes=prodCount, prodCount=1, onlyBios=onlyBios,
                          dontBootstrap=dontBootstrap, useBiosBootFile=False,
-                         pfSetupPolicy=PFSetupPolicy.NONE, extraNodeosArgs=" --plugin arisen::producer_api_plugin  --http-max-response-time-ms 990000 ") is False:
+                         pfSetupPolicy=PFSetupPolicy.NONE, extraNodarisenArgs=" --plugin arisen::producer_api_plugin  --http-max-response-time-ms 990000 ") is False:
             cmdError("launcher")
             errorExit("Failed to stand up rsn cluster.")
 
@@ -175,6 +175,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killArisenInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exit(0)

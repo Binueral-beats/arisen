@@ -1,7 +1,7 @@
 
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 

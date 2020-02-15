@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include <arisen/chain/wast_to_wasm.hpp>
 #include <Inline/BasicTypes.h>

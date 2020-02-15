@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include <arisen/chain/whitelisted_intrinsics.hpp>
 #include <arisen/chain/exceptions.hpp>

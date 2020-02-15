@@ -15,7 +15,7 @@ import re
 import signal
 
 ###############################################################
-# nodeos_forked_chain_test
+# nodarisen_forked_chain_test
 # --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
@@ -131,10 +131,10 @@ walletPort=args.wallet_port
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killArisenInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
+WalletdName=Utils.ArisenWalletName
 ClientName="arisecli"
 
 try:
@@ -144,9 +144,9 @@ try:
     cluster.killall(allInstances=killAll)
     cluster.cleanup()
     Print("Stand up cluster")
-    specificExtraNodeosArgs={}
+    specificExtraNodarisenArgs={}
     # producer nodes will be mapped to 0 through totalProducerNodes-1, so the number totalProducerNodes will be the non-producing node
-    specificExtraNodeosArgs[totalProducerNodes]="--plugin arisen::test_control_api_plugin"
+    specificExtraNodarisenArgs[totalProducerNodes]="--plugin arisen::test_control_api_plugin"
 
 
     # ***   setup topogrophy   ***
@@ -156,7 +156,7 @@ try:
 
     if cluster.launch(prodCount=prodCount, topo="bridge", pnodes=totalProducerNodes,
                       totalNodes=totalNodes, totalProducers=totalProducers,
-                      useBiosBootFile=False, specificExtraNodeosArgs=specificExtraNodeosArgs) is False:
+                      useBiosBootFile=False, specificExtraNodarisenArgs=specificExtraNodarisenArgs) is False:
         Utils.cmdError("launcher")
         Utils.errorExit("Failed to stand up rsn cluster.")
     Print("Validating system accounts after bootstrap")
@@ -468,7 +468,7 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killArisenInstances=killArisenInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
     if not testSuccessful:
         Print(Utils.FileDivider)

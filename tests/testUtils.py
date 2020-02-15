@@ -19,21 +19,21 @@ class Utils:
     Debug=False
     FNull = open(os.devnull, 'w')
 
-    EosClientPath="programs/arisecli/arisecli"
-    MiscEosClientArgs="--no-auto-awalletd"
+    ArisenClientPath="programs/arisecli/arisecli"
+    MiscArisenClientArgs="--no-auto-awalletd"
 
-    EosWalletName="awalletd"
-    EosWalletPath="programs/awalletd/"+ EosWalletName
+    ArisenWalletName="awalletd"
+    ArisenWalletPath="programs/awalletd/"+ ArisenWalletName
 
-    EosServerName="aos"
-    EosServerPath="programs/aos/"+ EosServerName
+    ArisenServerName="aos"
+    ArisenServerPath="programs/aos/"+ ArisenServerName
 
-    EosLauncherPath="programs/arisen-launcher/arisen-launcher"
+    ArisenLauncherPath="programs/arisen-launcher/arisen-launcher"
     MongoPath="mongo"
     ShuttingDown=False
     CheckOutputDeque=deque(maxlen=10)
 
-    EosBlockLogPath="programs/arisen-blocklog/arisen-blocklog"
+    ArisenBlockLogPath="programs/arisen-blocklog/arisen-blocklog"
 
     FileDivider="================================================================="
     DataDir="var/lib/"
@@ -273,7 +273,7 @@ class Utils:
     @staticmethod
     def getBlockLog(blockLogLocation, silentErrors=False, exitOnError=False):
         assert(isinstance(blockLogLocation, str))
-        cmd="%s --blocks-dir %s --as-json-array" % (Utils.EosBlockLogPath, blockLogLocation)
+        cmd="%s --blocks-dir %s --as-json-array" % (Utils.ArisenBlockLogPath, blockLogLocation)
         if Utils.Debug: Utils.Print("cmd: %s" % (cmd))
         rtn=None
         try:

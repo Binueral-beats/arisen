@@ -20,7 +20,7 @@ Utils.Debug=args.v
 killAll=args.clean_run
 dumpErrorDetails=args.dump_error_details
 dontKill=args.leave_running
-killEosInstances=not dontKill
+killArisenInstances=not dontKill
 killWallet=not dontKill
 keepLogs=args.keep_logs
 alternateVersionLabelsFile=args.alternate_version_labels_file
@@ -29,11 +29,11 @@ walletMgr=WalletMgr(True)
 cluster=Cluster(walletd=True)
 cluster.setWalletMgr(walletMgr)
 
-def restartNode(node: Node, nodeId, chainArg=None, addOrSwapFlags=None, nodeosPath=None):
+def restartNode(node: Node, nodeId, chainArg=None, addOrSwapFlags=None, nodarisenPath=None):
     if not node.killed:
         node.kill(signal.SIGTERM)
     isRelaunchSuccess = node.relaunch(nodeId, chainArg, addOrSwapFlags=addOrSwapFlags,
-                                      timeout=5, cachePopen=True, nodeosPath=nodeosPath)
+                                      timeout=5, cachePopen=True, nodarisenPath=nodarisenPath)
     assert isRelaunchSuccess, "Fail to relaunch"
 
 def shouldNodeContainPreactivateFeature(node):
@@ -85,9 +85,9 @@ try:
     Utils.Print("Alternate Version Labels File is {}".format(alternateVersionLabelsFile))
     assert exists(alternateVersionLabelsFile), "Alternate version labels file does not exist"
     assert cluster.launch(pnodes=4, totalNodes=4, prodCount=1, totalProducers=4,
-                          extraNodeosArgs=" --plugin arisen::producer_api_plugin ",
+                          extraNodarisenArgs=" --plugin arisen::producer_api_plugin ",
                           useBiosBootFile=False,
-                          specificExtraNodeosArgs={
+                          specificExtraNodarisenArgs={
                              0:"--http-max-response-time-ms 990000",
                              1:"--http-max-response-time-ms 990000",
                              2:"--http-max-response-time-ms 990000"},
@@ -182,10 +182,10 @@ try:
     oldNode.kill(signal.SIGTERM)
     # Note, for the following relaunch, these will fail to relaunch immediately (expected behavior of export/import), so the chainArg will not replace the old cmd
     oldNode.relaunch(oldNodeId, chainArg="--export-reversible-blocks {}".format(portableRevBlkPath), timeout=1)
-    oldNode.relaunch(oldNodeId, chainArg="--import-reversible-blocks {}".format(portableRevBlkPath), timeout=1, nodeosPath="programs/aos/aos")
+    oldNode.relaunch(oldNodeId, chainArg="--import-reversible-blocks {}".format(portableRevBlkPath), timeout=1, nodarisenPath="programs/aos/aos")
     os.remove(portableRevBlkPath)
 
-    restartNode(oldNode, oldNodeId, chainArg="--replay", nodeosPath="programs/aos/aos")
+    restartNode(oldNode, oldNodeId, chainArg="--replay", nodarisenPath="programs/aos/aos")
     time.sleep(2) # Give some time to replay
 
     assert shouldNodesBeInSync(allNodes), "All nodes should be in sync"
@@ -193,7 +193,7 @@ try:
 
     testSuccessful = True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killEosInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful, killArisenInstances, killWallet, keepLogs, killAll, dumpErrorDetails)
 
 exitCode = 0 if testSuccessful else 1
 exit(exitCode)

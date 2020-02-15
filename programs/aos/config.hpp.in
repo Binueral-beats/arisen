@@ -10,7 +10,7 @@
 #define CONFIG_HPP_IN
 
 namespace arisen { namespace aos { namespace config {
-  constexpr uint64_t version = 0x${nodeos_BUILD_VERSION};
+  constexpr uint64_t version = 0x${nodarisen_BUILD_VERSION};
   const string node_executable_name = "${NODE_EXECUTABLE_NAME}";
 }}}
 

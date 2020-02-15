@@ -13,7 +13,7 @@ import math
 import re
 
 ###############################################################
-# nodeos_producer_watermark_test
+# nodarisen_producer_watermark_test
 # --dump-error-details <Upon error print etc/arisen/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
@@ -166,10 +166,10 @@ walletPort=args.wallet_port
 
 walletMgr=WalletMgr(True, port=walletPort)
 testSuccessful=False
-killEosInstances=not dontKill
+killArisenInstances=not dontKill
 killWallet=not dontKill
 
-WalletdName=Utils.EosWalletName
+WalletdName=Utils.ArisenWalletName
 ClientName="arisecli"
 
 try:
@@ -252,6 +252,6 @@ try:
 
     testSuccessful=True
 finally:
-    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killEosInstances=killEosInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
+    TestHelper.shutdown(cluster, walletMgr, testSuccessful=testSuccessful, killArisenInstances=killArisenInstances, killWallet=killWallet, keepLogs=keepLogs, cleanRun=killAll, dumpErrorDetails=dumpErrorDetails)
 
 exit(0)
