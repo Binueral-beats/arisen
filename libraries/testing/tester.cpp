@@ -1,19 +1,19 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <arisen/testing/tester.hpp>
-#include <arisen/chain/wast_to_wasm.hpp>
-#include <arisen/chain/ARISEN_contract.hpp>
-#include <arisen/chain/generated_transaction_object.hpp>
+#include <eosio/testing/tester.hpp>
+#include <eosio/chain/wast_to_wasm.hpp>
+#include <eosio/chain/eosio_contract.hpp>
+#include <eosio/chain/generated_transaction_object.hpp>
 
 #include <fstream>
 
 #include <contracts.hpp>
 
-arisen::chain::asset core_from_string(const std::string& s) {
-  return arisen::chain::asset::from_string(s + " " CORE_SYMBOL_NAME);
+eosio::chain::asset core_from_string(const std::string& s) {
+  return eosio::chain::asset::from_string(s + " " CORE_SYMBOL_NAME);
 }
 
-namespace arisen { namespace testing {
+namespace eosio { namespace testing {
    std::string read_wast( const char* fn ) {
       std::ifstream wast_file(fn);
       FC_ASSERT( wast_file.is_open(), "wast file cannot be found" );
@@ -418,10 +418,10 @@ namespace arisen { namespace testing {
       if( include_code ) {
          FC_ASSERT( owner_auth.threshold <= std::numeric_limits<weight_type>::max(), "threshold is too high" );
          FC_ASSERT( active_auth.threshold <= std::numeric_limits<weight_type>::max(), "threshold is too high" );
-         owner_auth.accounts.push_back( permission_level_weight{ {a, config::ARISEN_code_name},
+         owner_auth.accounts.push_back( permission_level_weight{ {a, config::eosio_code_name},
                                                                  static_cast<weight_type>(owner_auth.threshold) } );
          sort_permissions(owner_auth);
-         active_auth.accounts.push_back( permission_level_weight{ {a, config::ARISEN_code_name},
+         active_auth.accounts.push_back( permission_level_weight{ {a, config::eosio_code_name},
                                                                   static_cast<weight_type>(active_auth.threshold) } );
          sort_permissions(active_auth);
       }
@@ -931,7 +931,7 @@ namespace arisen { namespace testing {
             if( block ) { //&& !b.control->is_known_block(block->id()) ) {
                auto bs = b.control->create_block_state_future( block );
                b.control->abort_block();
-               b.control->push_block(bs); //, arisen::chain::validation_steps::created_block);
+               b.control->push_block(bs); //, eosio::chain::validation_steps::created_block);
             }
          }
       };
@@ -941,13 +941,13 @@ namespace arisen { namespace testing {
    }
 
    void base_tester::set_before_preactivate_bios_contract() {
-      set_code(config::system_account_name, contracts::before_preactivate_ARISEN_bios_wasm());
-      set_abi(config::system_account_name, contracts::before_preactivate_ARISEN_bios_abi().data());
+      set_code(config::system_account_name, contracts::before_preactivate_eosio_bios_wasm());
+      set_abi(config::system_account_name, contracts::before_preactivate_eosio_bios_abi().data());
    }
 
    void base_tester::set_bios_contract() {
-      set_code(config::system_account_name, contracts::ARISEN_bios_wasm());
-      set_abi(config::system_account_name, contracts::ARISEN_bios_abi().data());
+      set_code(config::system_account_name, contracts::eosio_bios_wasm());
+      set_abi(config::system_account_name, contracts::eosio_bios_abi().data());
    }
 
 
@@ -1071,7 +1071,7 @@ namespace arisen { namespace testing {
       return match;
    }
 
-   bool ARISEN_assert_message_is::operator()( const ARISEN_assert_message_exception& ex ) {
+   bool eosio_assert_message_is::operator()( const eosio_assert_message_exception& ex ) {
       auto message = ex.get_log().at( 0 ).get_message();
       bool match = (message == expected);
       if( !match ) {
@@ -1080,7 +1080,7 @@ namespace arisen { namespace testing {
       return match;
    }
 
-   bool ARISEN_assert_message_starts_with::operator()( const ARISEN_assert_message_exception& ex ) {
+   bool eosio_assert_message_starts_with::operator()( const eosio_assert_message_exception& ex ) {
       auto message = ex.get_log().at( 0 ).get_message();
       bool match = boost::algorithm::starts_with( message, expected );
       if( !match ) {
@@ -1089,7 +1089,7 @@ namespace arisen { namespace testing {
       return match;
    }
 
-   bool ARISEN_assert_code_is::operator()( const ARISEN_assert_code_exception& ex ) {
+   bool eosio_assert_code_is::operator()( const eosio_assert_code_exception& ex ) {
       auto message = ex.get_log().at( 0 ).get_message();
       bool match = (message == expected);
       if( !match ) {
@@ -1098,7 +1098,7 @@ namespace arisen { namespace testing {
       return match;
    }
 
-} }  /// arisen::testing
+} }  /// eosio::testing
 
 std::ostream& operator<<( std::ostream& osm, const fc::variant& v ) {
    //fc::json::to_stream( osm, v );

@@ -15,9 +15,6 @@
 [submodule "externals/magic_get"]
 	path = externals/magic_get
 	url = https://github.com/ArisenIO/magic_get
-[submodule "libraries/appbase"]
-	path = libraries/appbase
-	url = https://github.com/ArisenIO/appbase.git
 [submodule "libraries/chainbase"]
 	path = libraries/chainbase
 	url = https://github.com/ArisenIO/chainbase.git
@@ -33,3 +30,6 @@
 [submodule "libraries/yubihsm"]
 	path = libraries/yubihsm
 	url = https://github.com/ArisenIO/yubihsm-shell.git
+[submodule "libraries/appbase"]
+	path = libraries/appbase
+	url = https://github.com/ArisenIO/appbase.git
