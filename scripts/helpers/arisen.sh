@@ -120,7 +120,7 @@ function previous-install-prompt() {
 
 function resources() {
     echo "${COLOR_CYAN}arisen website:${COLOR_NC} https://rsn.io"
-    echo "${COLOR_CYAN}arisen Telegram channel:${COLOR_NC} https://t.me/EOSProject"
+    echo "${COLOR_CYAN}arisen Telegram channel:${COLOR_NC} https://t.me/ARISENProject"
     echo "${COLOR_CYAN}arisen resources:${COLOR_NC} https://rsn.io/resources/"
     echo "${COLOR_CYAN}arisen Stack Exchange:${COLOR_NC} https://arisen.stackexchange.com"
 }

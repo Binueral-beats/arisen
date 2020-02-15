@@ -387,7 +387,7 @@ commands = [
     ('l', 'log',                stepLog,                    True,    "Show tail of node's log"),
 ]
 
-parser.add_argument('--public-key', metavar='', help="ARISEN Public Key", default='EOS8Znrtgwt8TfpmbVpTKvA2oB8Nqey625CLN8bCN3TEbgx86Dsvr', dest="public_key")
+parser.add_argument('--public-key', metavar='', help="ARISEN Public Key", default='ARISEN8Znrtgwt8TfpmbVpTKvA2oB8Nqey625CLN8bCN3TEbgx86Dsvr', dest="public_key")
 parser.add_argument('--private-Key', metavar='', help="ARISEN Private Key", default='5K463ynhZoCDDa4RDcr63cUwWLTnKqmdcoTKTHBjqoKfv4u5V7p', dest="private_key")
 parser.add_argument('--arisecli', metavar='', help="Arisecli command", default='../../build/programs/arisecli/arisecli --wallet-url http://127.0.0.1:6666 ')
 parser.add_argument('--aos', metavar='', help="Path to aos binary", default='../../build/programs/aos/aos')

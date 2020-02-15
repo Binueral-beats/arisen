@@ -2,9 +2,9 @@
  *  @file
  *  @copyright defined in eos/LICENSE
  */
-#include <eosio/chain/trace.hpp>
+#include <arisen/chain/trace.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 action_trace::action_trace(
    const transaction_trace& trace, const action& act, account_name receiver, bool context_free,
@@ -38,4 +38,4 @@ action_trace::action_trace(
 ,producer_block_id( trace.producer_block_id )
 {}
 
-} } // eosio::chain
+} } // arisen::chain

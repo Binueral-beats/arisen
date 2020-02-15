@@ -7,7 +7,7 @@ Third parties are encouraged to make pull requests to this file (`develop` branc
 | Description | URL |
 | ----------- | --- |
 | BP Heartbeat  | https://github.com/bancorprotocol/rsn-producer-heartbeat-plugin |
-| ElasticSearch | https://github.com/EOSLaoMao/elasticsearch_plugin |
+| ElasticSearch | https://github.com/ARISENLaoMao/elasticsearch_plugin |
 | Kafka | https://github.com/TP-Lab/kafka_plugin |
 | MySQL | https://github.com/eosBLACK/ARISEN_mysqldb_plugin |
 | SQL | https://github.com/asiniscalchi/ARISEN_sql_plugin |
@@ -18,7 +18,7 @@ Third parties are encouraged to make pull requests to this file (`develop` branc
 | Mongo History API | https://github.com/CryptoLions/RSN-mongo-history-API |
 | State History API | https://github.com/acoutts/RSN-state-history-API |
 | Hyperion History API | https://github.com/eosrio/Hyperion-History-API |
-| Chronicle	| https://github.com/EOSChronicleProject/rsn-chronicle |
+| Chronicle	| https://github.com/ARISENChronicleProject/rsn-chronicle |
 
 ## DISCLAIMER:
 

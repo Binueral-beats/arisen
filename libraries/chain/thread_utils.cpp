@@ -3,10 +3,10 @@
  *  @copyright defined in eos/LICENSE.txt
  */
 
-#include <eosio/chain/thread_utils.hpp>
+#include <arisen/chain/thread_utils.hpp>
 #include <fc/log/logger_config.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
 
 //
@@ -37,4 +37,4 @@ void named_thread_pool::stop() {
 }
 
 
-} } // eosio::chain
+} } // arisen::chain

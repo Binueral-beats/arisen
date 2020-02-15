@@ -30,42 +30,42 @@ done
 
 arisen_STUFF_DIR=$(mktemp -d)
 trap "rm -rf $arisen_STUFF_DIR" EXIT
-NODEOS_LAUNCH_PARAMS="./programs/aos/aos -d $arisen_STUFF_DIR --config-dir $arisen_STUFF_DIR \
+NODARISEN_LAUNCH_PARAMS="./programs/aos/aos -d $arisen_STUFF_DIR --config-dir $arisen_STUFF_DIR \
 --chain-state-db-size-mb 8 --chain-state-db-guard-size-mb 0 --reversible-blocks-db-size-mb 1 \
 --reversible-blocks-db-guard-size-mb 0 -e -parisen"
 
 run_nodeos() {
    if (( $VERBOSE == 0 )); then
-      $NODEOS_LAUNCH_PARAMS --http-server-address '' --p2p-listen-endpoint '' "$@" 2>/dev/null &
+      $NODARISEN_LAUNCH_PARAMS --http-server-address '' --p2p-listen-endpoint '' "$@" 2>/dev/null &
    else
-      $NODEOS_LAUNCH_PARAMS --http-server-address '' --p2p-listen-endpoint '' "$@" &
+      $NODARISEN_LAUNCH_PARAMS --http-server-address '' --p2p-listen-endpoint '' "$@" &
    fi
 }
 
 run_expect_success() {
    run_nodeos "$@"
-   local NODEOS_PID=$!
+   local NODARISEN_PID=$!
    sleep 10
-   kill $NODEOS_PID
-   wait $NODEOS_PID
+   kill $NODARISEN_PID
+   wait $NODARISEN_PID
 }
 
 run_and_kill() {
    run_nodeos "$@"
-   local NODEOS_PID=$!
+   local NODARISEN_PID=$!
    sleep 10
-   kill -KILL $NODEOS_PID
-   ! wait $NODEOS_PID
+   kill -KILL $NODARISEN_PID
+   ! wait $NODARISEN_PID
 }
 
 run_expect_failure() {
    run_nodeos "$@"
-   local NODEOS_PID=$!
+   local NODARISEN_PID=$!
    MYPID=$$
    (sleep 20; kill -ALRM $MYPID) & local TIMER_PID=$!
-   trap "kill $NODEOS_PID; wait $NODEOS_PID; exit 1" ALRM
+   trap "kill $NODARISEN_PID; wait $NODARISEN_PID; exit 1" ALRM
    sleep 10
-   if wait $NODEOS_PID; then exit 1; fi
+   if wait $NODARISEN_PID; then exit 1; fi
    kill $TIMER_PID
    trap ALRM
 }

@@ -18,9 +18,9 @@ echo "Using arisen_ROOT=\"$arisen_ROOT\"."
 # determine expected value
 CMAKE_CACHE="$arisen_ROOT/build/CMakeCache.txt"
 CMAKE_LISTS="$arisen_ROOT/CMakeLists.txt"
-if [[ -f "$CMAKE_CACHE" && $(cat "$CMAKE_CACHE" | grep -c 'DOXY_EOS_VERSION') > 0 ]]; then
+if [[ -f "$CMAKE_CACHE" && $(cat "$CMAKE_CACHE" | grep -c 'DOXY_ARISEN_VERSION') > 0 ]]; then
     echo "Parsing \"$CMAKE_CACHE\"..."
-    EXPECTED="v$(cat "$CMAKE_CACHE" | grep 'DOXY_EOS_VERSION' | cut -d '=' -f 2)"
+    EXPECTED="v$(cat "$CMAKE_CACHE" | grep 'DOXY_ARISEN_VERSION' | cut -d '=' -f 2)"
 elif [[ -f "$CMAKE_LISTS" ]]; then
     echo "Parsing \"$CMAKE_LISTS\"..."
     export $(cat $CMAKE_LISTS | grep -ie 'set *( *VERSION_MAJOR' | cut -d '(' -f 2 | cut -d ')' -f 1 | awk '{print $1"="$2}')
@@ -50,8 +50,8 @@ if [[ "$EXPECTED" == '' ]]; then
     echo "VERSION_SUFFIX=\"$VERSION_SUFFIX\""
     echo "VERSION_FULL=\"$VERSION_FULL\""
     echo ''
-    echo '$ cat "$CMAKE_CACHE" | grep "DOXY_EOS_VERSION"'
-    cat "$CMAKE_CACHE" | grep "DOXY_EOS_VERSION"
+    echo '$ cat "$CMAKE_CACHE" | grep "DOXY_ARISEN_VERSION"'
+    cat "$CMAKE_CACHE" | grep "DOXY_ARISEN_VERSION"
     echo '$ pwd'
     pwd
     echo '$ ls -la "$arisen_ROOT"'

@@ -49,7 +49,7 @@ class Cluster(object):
     # pylint: disable=too-many-arguments
     # walletd [True|False] Is awalletd running. If not load the wallet plugin
     def __init__(self, walletd=False, localCluster=True, host="localhost", port=12618, walletHost="localhost", walletPort=8889, enableMongo=False
-                 , mongoHost="localhost", mongoPort=27017, mongoDb="EOStest", defproduceraPrvtKey=None, defproducerbPrvtKey=None, staging=False):
+                 , mongoHost="localhost", mongoPort=27017, mongoDb="ARISENtest", defproduceraPrvtKey=None, defproducerbPrvtKey=None, staging=False):
         """Cluster container.
         walletd [True|False] Is wallet awalletd running. If not load the wallet plugin
         localCluster [True|False] Is cluster local to host.

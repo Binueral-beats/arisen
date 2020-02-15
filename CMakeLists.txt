@@ -209,7 +209,7 @@ endif()
 message( STATUS "Using '${CORE_SYMBOL_NAME}' as CORE symbol name" )
 
 if ("${arisen_ROOT_KEY}" STREQUAL "")
-   set(arisen_ROOT_KEY "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
+   set(arisen_ROOT_KEY "RSN6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
 endif()
 
 message( STATUS "Using '${arisen_ROOT_KEY}' as public key for 'arisen' account" )
@@ -233,11 +233,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/testnet.template ${CMAKE_CURRENT_BINA
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/arisen.version.in ${CMAKE_CURRENT_BINARY_DIR}/arisen.version.hpp)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/arisen.version.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
 
-set(EOS_ROOT_DIR ${CMAKE_BINARY_DIR})
+set(ARISEN_ROOT_DIR ${CMAKE_BINARY_DIR})
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisen-config.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/arisen-config.cmake @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisenTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/arisenTester.cmake @ONLY)
 
-set(EOS_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
+set(ARISEN_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisen-config.cmake.in ${CMAKE_BINARY_DIR}/modules/arisen-config.cmake @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/modules/arisen-config.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisen)
 configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisenTester.cmake.in ${CMAKE_BINARY_DIR}/modules/arisenTester.cmake @ONLY)

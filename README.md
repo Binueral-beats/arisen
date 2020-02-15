@@ -86,7 +86,7 @@ ARISEN currently supports the following operating systems:
 1. [Blog](https://medium.com/arisen)
 1. [Developer Portal](https://developers.rsn.io)
 1. [StackExchange for Q&A](https://arisen.stackexchange.com/)
-1. [Community Telegram Group](https://t.me/EOSProject)
+1. [Community Telegram Group](https://t.me/ARISENProject)
 1. [Developer Telegram Group](https://t.me/joinchat/EaEnSUPktgfoI-XPfMYtcQ)
 1. [White Paper](https://github.com/arisenio/Documentation/blob/master/TechnicalWhitePaper.md)
 1. [Roadmap](https://github.com/arisenio/Documentation/blob/master/Roadmap.md)

@@ -2,9 +2,9 @@
  *  @file
  *  @copyright defined in eos/LICENSE
  */
-#include <eosio/chain/protocol_state_object.hpp>
+#include <arisen/chain/protocol_state_object.hpp>
 
-namespace eosio { namespace chain {
+namespace arisen { namespace chain {
 
    namespace detail {
 

@@ -43,7 +43,7 @@ add_executable( unit_test ${UNIT_TESTS}) # build unit tests as one executable
 
 target_link_libraries( unit_test ARISEN_chain chainbase ARISEN_testing fc appbase ${PLATFORM_SPECIFIC_LIBS} )
 
-target_compile_options(unit_test PUBLIC -DDISABLE_EOSLIB_SERIALIZE)
+target_compile_options(unit_test PUBLIC -DDISABLE_ARISENLIB_SERIALIZE)
 target_include_directories( unit_test PUBLIC
                             ${CMAKE_SOURCE_DIR}/libraries/testing/include
                             ${CMAKE_SOURCE_DIR}/test-contracts
