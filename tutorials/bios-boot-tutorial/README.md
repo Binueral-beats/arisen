@@ -46,7 +46,7 @@ Minimal command line to launch the script below, make sure you replace `arisenio
 $ cd ~
 $ git clone https://github.com/ARISENIO/arisen.git
 $ cd ./arisen/tutorials/bios-boot-tutorial/
-$ python3 bios-boot-tutorial.py --clrsn="clrsn --wallet-url http://127.0.0.1:6666 " --nodrsn=nodrsn --krsnd=krsnd --contracts-dir="arisenio_CONTRACTS_DIRECTORY" -w -a
+$ python3 bios-boot-tutorial.py --clrsn="clrsn --wallet-url http://127.0.0.1:6666 " --aos=aos --krsnd=krsnd --contracts-dir="arisenio_CONTRACTS_DIRECTORY" -w -a
 ```
 
 See [ARISENIO Documentation Wiki: Tutorial - Bios Boot](https://github.com/ARISENIO/arisen/wiki/Tutorial-Bios-Boot-Sequence) for additional information.

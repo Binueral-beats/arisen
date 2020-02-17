@@ -9,7 +9,7 @@ import subprocess
 import signal
 
 ###############################################################
-# Test for validating the dirty db flag sticks repeated nodrsn restart attempts
+# Test for validating the dirty db flag sticks repeated aos restart attempts
 ###############################################################
 
 
@@ -36,23 +36,23 @@ Utils.Debug=debug
 testSuccessful=False
 
 def runNodrsnAndGetOutput(myTimeout=3):
-    """Startup nodrsn, wait for timeout (before forced shutdown) and collect output. Stdout, stderr and return code are returned in a dictionary."""
-    Print("Launching nodrsn process.")
-    cmd="programs/nodrsn/nodrsn --config-dir etc/arisenio/node_bios --data-dir var/lib/node_bios --verbose-http-errors --http-validate-host=false"
+    """Startup aos, wait for timeout (before forced shutdown) and collect output. Stdout, stderr and return code are returned in a dictionary."""
+    Print("Launching aos process.")
+    cmd="programs/aos/aos --config-dir etc/arisenio/node_bios --data-dir var/lib/node_bios --verbose-http-errors --http-validate-host=false"
     Print("cmd: %s" % (cmd))
     proc=subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if debug: Print("Nodrsn process launched.")
 
     output={}
     try:
-        if debug: Print("Setting nodrsn process timeout.")
+        if debug: Print("Setting aos process timeout.")
         outs,errs = proc.communicate(timeout=myTimeout)
         if debug: Print("Nodrsn process has exited.")
         output["stdout"] = outs.decode("utf-8")
         output["stderr"] = errs.decode("utf-8")
         output["returncode"] = proc.returncode
     except (subprocess.TimeoutExpired) as _:
-        Print("ERROR: Nodrsn is running beyond the defined wait time. Hard killing nodrsn instance.")
+        Print("ERROR: Nodrsn is running beyond the defined wait time. Hard killing aos instance.")
         proc.send_signal(signal.SIGKILL)
         return (False, None)
 
@@ -82,7 +82,7 @@ try:
     Print("Kill cluster nodes.")
     cluster.killall(allInstances=killAll)
 
-    Print("Restart nodrsn repeatedly to ensure dirty database flag sticks.")
+    Print("Restart aos repeatedly to ensure dirty database flag sticks.")
     timeout=6
 
     for i in range(1,4):
@@ -91,7 +91,7 @@ try:
         assert(ret)
         assert(isinstance(ret, tuple))
         if not ret[0]:
-            errorExit("Failed to startup nodrsn successfully on try number %d" % (i))
+            errorExit("Failed to startup aos successfully on try number %d" % (i))
         assert(ret[1])
         assert(isinstance(ret[1], dict))
         # pylint: disable=unsubscriptable-object

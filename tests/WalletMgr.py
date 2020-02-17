@@ -19,10 +19,10 @@ class WalletMgr(object):
 
     # pylint: disable=too-many-arguments
     # walletd [True|False] True=Launch wallet(krsnd) process; False=Manage launch process externally.
-    def __init__(self, walletd, nodrsnPort=12618, nodrsnHost="localhost", port=12618, host="localhost"):
+    def __init__(self, walletd, aosPort=12618, aosHost="localhost", port=12618, host="localhost"):
         self.walletd=walletd
-        self.nodrsnPort=nodrsnPort
-        self.nodrsnHost=nodrsnHost
+        self.aosPort=aosPort
+        self.aosHost=aosHost
         self.port=port
         self.host=host
         self.wallets={}
@@ -35,7 +35,7 @@ class WalletMgr(object):
         return " --wallet-url http://%s:%d" % (self.host, self.port)
 
     def getArgs(self):
-        return " --url http://%s:%d%s %s" % (self.nodrsnHost, self.nodrsnPort, self.getWalletEndpointArgs(), Utils.MiscrsnClientArgs)
+        return " --url http://%s:%d%s %s" % (self.aosHost, self.aosPort, self.getWalletEndpointArgs(), Utils.MiscrsnClientArgs)
 
     def isLaunched(self):
         return self.__walletPid is not None

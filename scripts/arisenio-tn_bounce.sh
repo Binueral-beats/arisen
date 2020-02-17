@@ -13,8 +13,8 @@
 
 pushd $arisenio_HOME
 
-if [ ! -f programs/nodrsn/nodrsn ]; then
-    echo unable to locate binary for nodrsn
+if [ ! -f programs/aos/aos ]; then
+    echo unable to locate binary for aos
     exit 1
 fi
 

@@ -16,7 +16,7 @@ import random
 # -d <delay between nodes startup>
 # -v <verbose logging>
 # --kill-sig <kill signal [term|kill]>
-# --kill-count <nodrsn instances to kill>
+# --kill-count <aos instances to kill>
 # --dont-kill <Leave cluster running after test finishes>
 # --dump-error-details <Upon error print etc/arisenio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
@@ -101,7 +101,7 @@ try:
     Print("Kill %d cluster node instances." % (killCount))
     if cluster.killSomersnInstances(killCount, killSignal) is False:
         errorExit("Failed to kill rsn instances")
-    Print("nodrsn instances killed.")
+    Print("aos instances killed.")
 
     Print("Spread funds and validate")
     if not cluster.spreadFundsAndValidate(10):
@@ -114,7 +114,7 @@ try:
     Print ("Relaunch dead cluster nodes instances.")
     if cluster.relaunchrsnInstances(cachePopen=True) is False:
         errorExit("Failed to relaunch rsn instances")
-    Print("nodrsn instances relaunched.")
+    Print("aos instances relaunched.")
 
     Print ("Resyncing cluster nodes.")
     if not cluster.waitOnClusterSync():
@@ -135,7 +135,7 @@ try:
             if node.popenProc is not None:
                 atLeastOne=True
                 node.interruptAndVerifyExitStatus()
-        assert atLeastOne, "Test is setup to verify that a cleanly interrupted nodrsn exits with an exit status of 0, but this test may no longer be setup to do that"
+        assert atLeastOne, "Test is setup to verify that a cleanly interrupted aos exits with an exit status of 0, but this test may no longer be setup to do that"
 
     testSuccessful=True
 finally:

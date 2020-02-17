@@ -30,11 +30,11 @@ done
 
 arisenio_STUFF_DIR=$(mktemp -d)
 trap "rm -rf $arisenio_STUFF_DIR" EXIT
-NODrsn_LAUNCH_PARAMS="./programs/nodrsn/nodrsn -d $arisenio_STUFF_DIR --config-dir $arisenio_STUFF_DIR \
+NODrsn_LAUNCH_PARAMS="./programs/aos/aos -d $arisenio_STUFF_DIR --config-dir $arisenio_STUFF_DIR \
 --chain-state-db-size-mb 8 --chain-state-db-guard-size-mb 0 --reversible-blocks-db-size-mb 1 \
 --reversible-blocks-db-guard-size-mb 0 -e -parisenio"
 
-run_nodrsn() {
+run_aos() {
    if (( $VERBOSE == 0 )); then
       $NODrsn_LAUNCH_PARAMS --http-server-address '' --p2p-listen-endpoint '' "$@" 2>/dev/null &
    else
@@ -43,7 +43,7 @@ run_nodrsn() {
 }
 
 run_expect_success() {
-   run_nodrsn "$@"
+   run_aos "$@"
    local NODrsn_PID=$!
    sleep 10
    kill $NODrsn_PID
@@ -51,7 +51,7 @@ run_expect_success() {
 }
 
 run_and_kill() {
-   run_nodrsn "$@"
+   run_aos "$@"
    local NODrsn_PID=$!
    sleep 10
    kill -KILL $NODrsn_PID
@@ -59,7 +59,7 @@ run_and_kill() {
 }
 
 run_expect_failure() {
-   run_nodrsn "$@"
+   run_aos "$@"
    local NODrsn_PID=$!
    MYPID=$$
    (sleep 20; kill -ALRM $MYPID) & local TIMER_PID=$!

@@ -2,7 +2,7 @@
  *  @file
  *  @copyright defined in arisen/LICENSE
  *  @defgroup rsnclienttool ARISENIO Command Line Client Reference
- *  @brief Tool for sending transactions and querying state from @ref nodrsn
+ *  @brief Tool for sending transactions and querying state from @ref aos
  *  @ingroup rsnclienttool
  */
 
@@ -11,8 +11,8 @@
 
   @section intro Introduction to clrsn
 
-  `clrsn` is a command line tool that interfaces with the REST api exposed by @ref nodrsn. In order to use `clrsn` you will need to
-  have a local copy of `nodrsn` running and configured to load the 'arisenio::chain_api_plugin'.
+  `clrsn` is a command line tool that interfaces with the REST api exposed by @ref aos. In order to use `clrsn` you will need to
+  have a local copy of `aos` running and configured to load the 'arisenio::chain_api_plugin'.
 
    clrsn contains documentation for all of its commands. For a list of all commands known to clrsn, simply run it with no arguments:
 ```
@@ -23,7 +23,7 @@ Usage: programs/clrsn/clrsn [OPTIONS] SUBCOMMAND
 Options:
   -h,--help                   Print this help message and exit
   -u,--url TEXT=http://localhost:12618/
-                              the http/https URL where nodrsn is running
+                              the http/https URL where aos is running
   --wallet-url TEXT=http://localhost:12618/
                               the http/https URL where krsnd is running
   -r,--header                 pass specific HTTP header, repeat this option to pass multiple headers
@@ -1146,12 +1146,12 @@ struct approve_producer_subcommand {
                                ("table_key", "owner")
                                ("lower_bound", voter.value)
                                ("upper_bound", voter.value + 1)
-                               // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy nodrsn versions
-                               // Change to voter.value when clrsn no longer needs to support nodrsn versions older than 1.5.0
+                               // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy aos versions
+                               // Change to voter.value when clrsn no longer needs to support aos versions older than 1.5.0
                                ("limit", 1)
             );
             auto res = result.as<arisenio::chain_apis::read_only::get_table_rows_result>();
-            // Condition in if statement below can simply be res.rows.empty() when clrsn no longer needs to support nodrsn versions older than 1.5.0
+            // Condition in if statement below can simply be res.rows.empty() when clrsn no longer needs to support aos versions older than 1.5.0
             // Although since this subcommand will actually change the voter's vote, it is probably better to just keep this check to protect
             //  against future potential chain_plugin bugs.
             if( res.rows.empty() || res.rows[0].get_object()["owner"].as_string() != name(voter).to_string() ) {
@@ -1199,12 +1199,12 @@ struct unapprove_producer_subcommand {
                                ("table_key", "owner")
                                ("lower_bound", voter.value)
                                ("upper_bound", voter.value + 1)
-                               // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy nodrsn versions
-                               // Change to voter.value when clrsn no longer needs to support nodrsn versions older than 1.5.0
+                               // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy aos versions
+                               // Change to voter.value when clrsn no longer needs to support aos versions older than 1.5.0
                                ("limit", 1)
             );
             auto res = result.as<arisenio::chain_apis::read_only::get_table_rows_result>();
-            // Condition in if statement below can simply be res.rows.empty() when clrsn no longer needs to support nodrsn versions older than 1.5.0
+            // Condition in if statement below can simply be res.rows.empty() when clrsn no longer needs to support aos versions older than 1.5.0
             // Although since this subcommand will actually change the voter's vote, it is probably better to just keep this check to protect
             //  against future potential chain_plugin bugs.
             if( res.rows.empty() || res.rows[0].get_object()["owner"].as_string() != name(voter).to_string() ) {
@@ -1462,15 +1462,15 @@ struct bidname_info_subcommand {
                                ("code", "arisenio")("scope", "arisenio")("table", "namebids")
                                ("lower_bound", newname.value)
                                ("upper_bound", newname.value + 1)
-                               // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy nodrsn versions
-                               // Change to newname.value when clrsn no longer needs to support nodrsn versions older than 1.5.0
+                               // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy aos versions
+                               // Change to newname.value when clrsn no longer needs to support aos versions older than 1.5.0
                                ("limit", 1));
          if ( print_json ) {
             std::cout << fc::json::to_pretty_string(rawResult) << std::endl;
             return;
          }
          auto result = rawResult.as<arisenio::chain_apis::read_only::get_table_rows_result>();
-         // Condition in if statement below can simply be res.rows.empty() when clrsn no longer needs to support nodrsn versions older than 1.5.0
+         // Condition in if statement below can simply be res.rows.empty() when clrsn no longer needs to support aos versions older than 1.5.0
          if( result.rows.empty() || result.rows[0].get_object()["newname"].as_string() != newname.to_string() ) {
             std::cout << "No bidname record found" << std::endl;
             return;
@@ -2158,7 +2158,7 @@ void get_account( const string& accountName, const string& coresym, bool json_fo
          auto net_total = to_asset(res.total_resources.get_object()["net_weight"].as_string());
 
          if( net_total.get_symbol() != unstaking.get_symbol() ) {
-            // Core symbol of nodrsn responding to the request is different than core symbol built into clrsn
+            // Core symbol of aos responding to the request is different than core symbol built into clrsn
             unstaking = asset( 0, net_total.get_symbol() ); // Correct core symbol for unstaking asset.
             staked = asset( 0, net_total.get_symbol() ); // Correct core symbol for staked asset.
          }
@@ -2540,7 +2540,7 @@ int main( int argc, char** argv ) {
             abi = fc::json::to_pretty_string(abi_d);
       }
       catch(chain::missing_chain_api_plugin_exception&) {
-         //see if this is an old nodrsn that doesn't support get_raw_code_and_abi
+         //see if this is an old aos that doesn't support get_raw_code_and_abi
          const auto old_result = call(get_code_func, fc::mutable_variant_object("account_name", accountName)("code_as_wasm",code_as_wasm));
          code_hash = old_result["code_hash"].as_string();
          if(code_as_wasm) {
@@ -3543,14 +3543,14 @@ int main( int argc, char** argv ) {
                                  ("table_key", "")
                                  ("lower_bound", name(proposal_name).value)
                                  ("upper_bound", name(proposal_name).value + 1)
-                                 // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy nodrsn versions
-                                 // Change to name(proposal_name).value when clrsn no longer needs to support nodrsn versions older than 1.5.0
+                                 // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy aos versions
+                                 // Change to name(proposal_name).value when clrsn no longer needs to support aos versions older than 1.5.0
                                  ("limit", 1)
                            );
       //std::cout << fc::json::to_pretty_string(result) << std::endl;
 
       const auto& rows1 = result1.get_object()["rows"].get_array();
-      // Condition in if statement below can simply be rows.empty() when clrsn no longer needs to support nodrsn versions older than 1.5.0
+      // Condition in if statement below can simply be rows.empty() when clrsn no longer needs to support aos versions older than 1.5.0
       if( rows1.empty() || rows1[0].get_object()["proposal_name"] != proposal_name ) {
          std::cerr << "Proposal not found" << std::endl;
          return;
@@ -3579,8 +3579,8 @@ int main( int argc, char** argv ) {
                                        ("table_key", "")
                                        ("lower_bound", name(proposal_name).value)
                                        ("upper_bound", name(proposal_name).value + 1)
-                                       // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy nodrsn versions
-                                       // Change to name(proposal_name).value when clrsn no longer needs to support nodrsn versions older than 1.5.0
+                                       // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy aos versions
+                                       // Change to name(proposal_name).value when clrsn no longer needs to support aos versions older than 1.5.0
                                        ("limit", 1)
                                  );
             rows2 = result2.get_object()["rows"].get_array();
@@ -3611,8 +3611,8 @@ int main( int argc, char** argv ) {
                                        ("table_key", "")
                                        ("lower_bound", name(proposal_name).value)
                                        ("upper_bound", name(proposal_name).value + 1)
-                                       // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy nodrsn versions
-                                       // Change to name(proposal_name).value when clrsn no longer needs to support nodrsn versions older than 1.5.0
+                                       // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy aos versions
+                                       // Change to name(proposal_name).value when clrsn no longer needs to support aos versions older than 1.5.0
                                        ("limit", 1)
                                  );
             const auto& rows3 = result3.get_object()["rows"].get_array();
@@ -3644,8 +3644,8 @@ int main( int argc, char** argv ) {
                                           ("table_key", "")
                                           ("lower_bound", a.first.value)
                                           ("upper_bound", a.first.value + 1)
-                                          // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy nodrsn versions
-                                          // Change to name(proposal_name).value when clrsn no longer needs to support nodrsn versions older than 1.5.0
+                                          // Less than ideal upper_bound usage preserved so clrsn can still work with old buggy aos versions
+                                          // Change to name(proposal_name).value when clrsn no longer needs to support aos versions older than 1.5.0
                                           ("limit", 1)
                                     );
                const auto& rows4 = result4.get_object()["rows"].get_array();

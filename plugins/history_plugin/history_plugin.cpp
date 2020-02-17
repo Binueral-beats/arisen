@@ -314,7 +314,7 @@ namespace arisenio {
             for( auto& s : fo ) {
                if( s == "*" || s == "\"*\"" ) {
                   my->bypass_filter = true;
-                  wlog( "--filter-on * enabled. This can fill shared_mem, causing nodrsn to stop." );
+                  wlog( "--filter-on * enabled. This can fill shared_mem, causing aos to stop." );
                   break;
                }
                std::vector<std::string> v;

@@ -39,7 +39,7 @@ fi
 
 prog=""
 RD=""
-for p in arisend ariseniod nodrsn; do
+for p in arisend ariseniod aos; do
     prog=$p
     RD=bin
     if [ -f $RD/$prog ]; then
@@ -55,7 +55,7 @@ for p in arisend ariseniod nodrsn; do
 done
 
 if [ \( -z "$prog" \) -o \( -z "$RD" \) ]; then
-    echo unable to locate binary for arisend or ariseniod or nodrsn
+    echo unable to locate binary for arisend or ariseniod or aos
     exit 1
 fi
 

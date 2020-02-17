@@ -11,7 +11,7 @@ import decimal
 import re
 
 ###############################################################
-# nodrsn_run_test
+# aos_run_test
 # --dump-error-details <Upon error print etc/arisenio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################

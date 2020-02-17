@@ -1,5 +1,5 @@
 #!/bin/bash
-# The purpose of this test is to ensure that the output of the "nodrsn --version" command matches the version string defined by our CMake files
+# The purpose of this test is to ensure that the output of the "aos --version" command matches the version string defined by our CMake files
 # If the environment variable BUILDKITE_TAG is empty or unset, this test will echo success
 echo '##### Nodrsn Version Label Test #####'
 if [[ "$BUILDKITE_TAG" == '' || "$BUILDKITE" != 'true' ]]; then
@@ -61,8 +61,8 @@ if [[ "$EXPECTED" == '' ]]; then
     exit 1
 fi
 echo "Expecting \"$EXPECTED\"..."
-# get nodrsn version
-ACTUAL=$($ARISENIO_ROOT/build/bin/nodrsn --version) || : # nodrsn currently returns -1 for --version
+# get aos version
+ACTUAL=$($ARISENIO_ROOT/build/bin/aos --version) || : # aos currently returns -1 for --version
 # test
 if [[ "$EXPECTED" == "$ACTUAL" ]]; then
     echo 'Passed with \"$ACTUAL\".'

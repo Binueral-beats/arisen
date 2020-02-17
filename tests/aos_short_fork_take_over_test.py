@@ -15,7 +15,7 @@ import re
 import signal
 
 ###############################################################
-# nodrsn_short_fork_take_over_test
+# aos_short_fork_take_over_test
 # --dump-error-details <Upon error print etc/arisenio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################

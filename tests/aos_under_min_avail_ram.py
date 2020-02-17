@@ -50,7 +50,7 @@ class NamedAccounts:
 
 
 ###############################################################
-# nodrsn_voting_test
+# aos_voting_test
 # --dump-error-details <Upon error print etc/arisenio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################
@@ -167,7 +167,7 @@ try:
                 if trans is None or not trans[0]:
                     timeOutCount+=1
                     if timeOutCount>=3:
-                        Print("Failed to push create action to arisenio contract for %d consecutive times, looks like nodrsn already exited." % (timeOutCount))
+                        Print("Failed to push create action to arisenio contract for %d consecutive times, looks like aos already exited." % (timeOutCount))
                         keepProcessing=False
                         break
 
@@ -184,7 +184,7 @@ try:
     #spread the actions to all accounts, to use each accounts tps bandwidth
     fromIndexStart=fromIndex+1 if fromIndex+1<namedAccounts.numAccounts else 0
 
-    # min and max are subjective, just assigned to make sure that many small changes in nodrsn don't 
+    # min and max are subjective, just assigned to make sure that many small changes in aos don't 
     # result in the test not correctly validating behavior
     if count < 5 or count > 20:
         strMsg="little" if count < 20 else "much"

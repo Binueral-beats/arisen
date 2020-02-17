@@ -101,7 +101,7 @@ def startNode(nodeIndex, account):
         '    --plugin arisenio::history_api_plugin'
     )
     cmd = (
-        args.nodrsn +
+        args.aos +
         '    --max-irreversible-block-age -1'
         '    --max-transaction-time=1000'
         '    --contracts-console'
@@ -279,7 +279,7 @@ def produceNewAccounts():
             f.write('        {"name":"%s", "pvt":"%s", "pub":"%s"},\n' % (name, r[1], r[2]))
 
 def stepKillAll():
-    run('killall krsnd nodrsn || true')
+    run('killall krsnd aos || true')
     sleep(1.5)
 def stepStartWallet():
     startWallet()
@@ -367,7 +367,7 @@ def stepLog():
 parser = argparse.ArgumentParser()
 
 commands = [
-    ('k', 'kill',               stepKillAll,                True,    "Kill all nodrsn and krsnd processes"),
+    ('k', 'kill',               stepKillAll,                True,    "Kill all aos and krsnd processes"),
     ('w', 'wallet',             stepStartWallet,            True,    "Start krsnd, create wallet, fill with keys"),
     ('b', 'boot',               stepStartBoot,              True,    "Start boot node"),
     ('s', 'sys',                createSystemAccounts,       True,    "Create system accounts (arisenio.*)"),
@@ -390,7 +390,7 @@ commands = [
 parser.add_argument('--public-key', metavar='', help="ARISENIO Public Key", default='rsn8Znrtgwt8TfpmbVpTKvA2oB8Nqey625CLN8bCN3TEbgx86Dsvr', dest="public_key")
 parser.add_argument('--private-Key', metavar='', help="ARISENIO Private Key", default='5K463ynhZoCDDa4RDcr63cUwWLTnKqmdcoTKTHBjqoKfv4u5V7p', dest="private_key")
 parser.add_argument('--clrsn', metavar='', help="Clrsn command", default='../../build/programs/clrsn/clrsn --wallet-url http://127.0.0.1:6666 ')
-parser.add_argument('--nodrsn', metavar='', help="Path to nodrsn binary", default='../../build/programs/nodrsn/nodrsn')
+parser.add_argument('--aos', metavar='', help="Path to aos binary", default='../../build/programs/aos/aos')
 parser.add_argument('--krsnd', metavar='', help="Path to krsnd binary", default='../../build/programs/krsnd/krsnd')
 parser.add_argument('--contracts-dir', metavar='', help="Path to contracts directory", default='../../build/contracts/')
 parser.add_argument('--nodes-dir', metavar='', help="Path to nodes directory", default='./nodes/')

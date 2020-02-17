@@ -6,8 +6,8 @@
 
 connected="0"
 
-rundir=programs/nodrsn
-prog=nodrsn
+rundir=programs/aos
+prog=aos
 
 # Quote any args that are "*", so they are not expanded
 qargs=`echo "$*" | sed -e 's/ \* / "*" /' -e 's/ \*$/ "*"/'`
@@ -18,7 +18,7 @@ if [ "$PWD" != "$arisenio_HOME" ]; then
 fi
 
 if [ ! -e $rundir/$prog ]; then
-    echo unable to locate binary for nodrsn
+    echo unable to locate binary for aos
     exit -1
 fi
 

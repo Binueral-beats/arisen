@@ -40,8 +40,8 @@ case "$1" in
     chown ${USER}:${GROUP} /var/lib/${PACKAGE}
     chown ${USER}:${GROUP} /etc/${PACKAGE}
     chown ${USER}:${GROUP} /etc/${PACKAGE}/node_00
-    chown ${USER} /usr/bin/nodrsn
-    chmod u+s /usr/bin/nodrsn
+    chown ${USER} /usr/bin/aos
+    chmod u+s /usr/bin/aos
   ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)

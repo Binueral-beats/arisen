@@ -111,10 +111,10 @@ INITA_PRV_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 # cleanup from last run
 cleanup
 
-# stand up nodrsn cluster
+# stand up aos cluster
 launcherOpts="-p $pnodes -n $total_nodes -s $topo -d $delay"
-echo Launcher options: --nodrsn \"--plugin arisenio::wallet_api_plugin\" $launcherOpts
-programs/arisenio-launcher/arisenio-launcher --nodrsn "--plugin arisenio::wallet_api_plugin" $launcherOpts
+echo Launcher options: --aos \"--plugin arisenio::wallet_api_plugin\" $launcherOpts
+programs/arisenio-launcher/arisenio-launcher --aos "--plugin arisenio::wallet_api_plugin" $launcherOpts
 sleep 7
 
 startPort=12618

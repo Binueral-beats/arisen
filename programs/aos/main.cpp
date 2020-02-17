@@ -78,11 +78,11 @@ enum return_codes {
 int main(int argc, char** argv)
 {
    try {
-      app().set_version(arisenio::nodrsn::config::version);
+      app().set_version(arisenio::aos::config::version);
 
       auto root = fc::app_path();
-      app().set_default_data_dir(root / "arisenio" / nodrsn::config::node_executable_name / "data" );
-      app().set_default_config_dir(root / "arisenio" / nodrsn::config::node_executable_name / "config" );
+      app().set_default_data_dir(root / "arisenio" / aos::config::node_executable_name / "data" );
+      app().set_default_config_dir(root / "arisenio" / aos::config::node_executable_name / "config" );
       http_plugin::set_defaults({
          .default_unix_socket_path = "",
          .default_http_port = 12618
@@ -90,9 +90,9 @@ int main(int argc, char** argv)
       if(!app().initialize<chain_plugin, net_plugin, producer_plugin>(argc, argv))
          return INITIALIZE_FAIL;
       initialize_logging();
-      ilog("${name} version ${ver}", ("name", nodrsn::config::node_executable_name)("ver", app().version_string()));
-      ilog("${name} using configuration file ${c}", ("name", nodrsn::config::node_executable_name)("c", app().full_config_file_path().string()));
-      ilog("${name} data directory is ${d}", ("name", nodrsn::config::node_executable_name)("d", app().data_dir().string()));
+      ilog("${name} version ${ver}", ("name", aos::config::node_executable_name)("ver", app().version_string()));
+      ilog("${name} using configuration file ${c}", ("name", aos::config::node_executable_name)("c", app().full_config_file_path().string()));
+      ilog("${name} data directory is ${d}", ("name", aos::config::node_executable_name)("d", app().data_dir().string()));
       app().startup();
       app().exec();
    } catch( const extract_genesis_state_exception& e ) {
@@ -138,6 +138,6 @@ int main(int argc, char** argv)
       return OTHER_FAIL;
    }
 
-   ilog("${name} successfully exiting", ("name", nodrsn::config::node_executable_name));
+   ilog("${name} successfully exiting", ("name", aos::config::node_executable_name));
    return SUCCESS;
 }

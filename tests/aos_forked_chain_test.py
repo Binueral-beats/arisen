@@ -15,7 +15,7 @@ import re
 import signal
 
 ###############################################################
-# nodrsn_forked_chain_test
+# aos_forked_chain_test
 # --dump-error-details <Upon error print etc/arisenio/node_*/config.ini and var/lib/node_*/stderr.log to stdout>
 # --keep-logs <Don't delete var/lib/node_* folders upon test completion>
 ###############################################################

@@ -10,7 +10,7 @@ if [ "$PWD" != "$arisenio_HOME" ]; then
     exit -1
 fi
 
-prog=nodrsn
+prog=aos
 
 DD=var/lib/node_$arisenio_NODE
 runtest=`cat $DD/$prog.pid`

@@ -51,12 +51,12 @@ EOF
 
 ### Launch producer
 ```bash
-$ ./nodrsn -d ~/arisen.data/producer_node --config-dir ~/arisen.data/producer_node -l ~/arisen.data/logging.json --http-server-address "" -p arisenio -e
+$ ./aos -d ~/arisen.data/producer_node --config-dir ~/arisen.data/producer_node -l ~/arisen.data/logging.json --http-server-address "" -p arisenio -e
 ```
 
 ### Launch non-producer that will generate transactions
 ```bash
-$ ./nodrsn -d ~/arisen.data/generator_node --config-dir ~/arisen.data/generator_node -l ~/arisen.data/logging.json --plugin arisenio::txn_test_gen_plugin --plugin arisenio::chain_api_plugin --p2p-peer-address localhost:6620 --p2p-listen-endpoint localhost:5555
+$ ./aos -d ~/arisen.data/generator_node --config-dir ~/arisen.data/generator_node -l ~/arisen.data/logging.json --plugin arisenio::txn_test_gen_plugin --plugin arisenio::chain_api_plugin --p2p-peer-address localhost:6620 --p2p-listen-endpoint localhost:5555
 ```
 
 ### Create a wallet on the non-producer and set bios contract

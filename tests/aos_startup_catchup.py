@@ -16,7 +16,7 @@ import math
 import re
 
 ###############################################################
-# nodrsn_startup_catchup
+# aos_startup_catchup
 #  Test configures a producing node and <--txn-plugins count> non-producing nodes with the
 #  txn_test_gen_plugin.  Each non-producing node starts generating transactions and sending them
 #  to the producing node.

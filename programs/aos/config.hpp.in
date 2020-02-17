@@ -9,8 +9,8 @@
 #ifndef CONFIG_HPP_IN
 #define CONFIG_HPP_IN
 
-namespace arisenio { namespace nodrsn { namespace config {
-  constexpr uint64_t version = 0x${nodrsn_BUILD_VERSION};
+namespace arisenio { namespace aos { namespace config {
+  constexpr uint64_t version = 0x${aos_BUILD_VERSION};
   const string node_executable_name = "${NODE_EXECUTABLE_NAME}";
 }}}
 

@@ -25,8 +25,8 @@ class Utils:
     rsnWalletName="krsnd"
     rsnWalletPath="programs/krsnd/"+ rsnWalletName
 
-    rsnServerName="nodrsn"
-    rsnServerPath="programs/nodrsn/"+ rsnServerName
+    rsnServerName="aos"
+    rsnServerPath="programs/aos/"+ rsnServerName
 
     rsnLauncherPath="programs/arisenio-launcher/arisenio-launcher"
     MongoPath="mongo"
