@@ -1,5 +1,5 @@
-add_subdirectory( nodrsn )
-add_subdirectory( clrsn )
-add_subdirectory( krsnd )
+add_subdirectory( aos )
+add_subdirectory( arisecli )
+add_subdirectory( awalletd )
 add_subdirectory( arisenio-launcher )
 add_subdirectory( arisenio-blocklog )
