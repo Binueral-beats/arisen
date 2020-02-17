@@ -1,6 +1,6 @@
 # Bios Boot Tutorial
 
-The `bios-boot-tutorial.py` script simulates the arisen bios boot sequence.
+The `bios-boot-tutorial.py` script simulates the ARISENIO bios boot sequence.
 
 ``Prerequisites``:
 
@@ -18,18 +18,18 @@ The `bios-boot-tutorial.py` script simulates the arisen bios boot sequence.
 
 ``Steps``:
 
-1. Install arisen binaries by following the steps outlined in below tutorial
-[Install arisen binaries](https://github.com/arisenio/arisen#mac-os-x-brew-install)
+1. Install arisenio binaries by following the steps outlined in below tutorial
+[Install arisenio binaries](https://github.com/ARISENIO/arisen#mac-os-x-brew-install)
 
-2. Install arisen.cdt binaries by following the steps outlined in below tutorial
-[Install arisen.cdt binaries](https://github.com/arisenio/arisenio.cdt#binary-releases)
+2. Install arisenio.cdt binaries by following the steps outlined in below tutorial
+[Install arisenio.cdt binaries](https://github.com/ARISENIO/arisenio.cdt#binary-releases)
 
-3. Compile arisen.contracts
+3. Compile arisenio.contracts
 
 ```bash
 $ cd ~
-$ git clone https://github.com/arisenio/arisenio.contracts.git
-$ cd ./arisen.contracts/
+$ git clone https://github.com/ARISENIO/arisenio.contracts.git
+$ cd ./arisenio.contracts/
 $ ./build.sh
 $ cd ./build/contracts/
 $ pwd
@@ -37,16 +37,16 @@ $ pwd
 ```
 
 4. Make note of the directory where the contracts were compiled
-The last command in the previous step printed on the bash console the contracts' directory, make note of it, we'll reference it from now on as `arisen_CONTRACTS_DIRECTORY`
+The last command in the previous step printed on the bash console the contracts' directory, make note of it, we'll reference it from now on as `arisenio_CONTRACTS_DIRECTORY`
 
 5. Launch the `bios-boot-tutorial.py` script
-Minimal command line to launch the script below, make sure you replace `arisen_CONTRACTS_DIRECTORY` with actual directory
+Minimal command line to launch the script below, make sure you replace `arisenio_CONTRACTS_DIRECTORY` with actual directory
 
 ```bash
 $ cd ~
-$ git clone https://github.com/arisenio/arisen.git
-$ cd ./rsn/tutorials/bios-boot-tutorial/
-$ python3 bios-boot-tutorial.py --arisecli="arisecli --wallet-url http://127.0.0.1:6666 " --aos=aos --awalletd=awalletd --contracts-dir="arisen_CONTRACTS_DIRECTORY" -w -a
+$ git clone https://github.com/ARISENIO/arisen.git
+$ cd ./arisen/tutorials/bios-boot-tutorial/
+$ python3 bios-boot-tutorial.py --clrsn="clrsn --wallet-url http://127.0.0.1:6666 " --nodrsn=nodrsn --krsnd=krsnd --contracts-dir="arisenio_CONTRACTS_DIRECTORY" -w -a
 ```
 
-See [arisen Documentation Wiki: Tutorial - Bios Boot](https://github.com/arisenio/arisen/wiki/Tutorial-Bios-Boot-Sequence) for additional information.
+See [ARISENIO Documentation Wiki: Tutorial - Bios Boot](https://github.com/ARISENIO/arisen/wiki/Tutorial-Bios-Boot-Sequence) for additional information.

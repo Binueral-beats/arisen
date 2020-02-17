@@ -1,5 +1,5 @@
 {
-    "rsn-multiversion-tests":
+    "arisen-multiversion-tests":
     {
         "environment":
         {
@@ -10,14 +10,14 @@
             "170=v1.7.0"
         ]
     },
-    "arisen-docker-builds":
+    "arisenio-docker-builds":
     {
         "environment":
         {
             "BUILDER_TAG": "v1.8.0"
         }
     },
-    "arisen-sync-tests":
+    "arisenio-sync-tests":
     {
         "environment":
         {
@@ -25,7 +25,7 @@
             "SKIP_V180": "false"
         }
     },
-    "arisen-replay-tests":
+    "arisenio-replay-tests":
     {
         "environment":
         {
@@ -33,7 +33,7 @@
             "SKIP_V180": "false"
         }
     },
-    "arisen-resume-from-state":
+    "arisenio-resume-from-state":
     {
         "test":
         [

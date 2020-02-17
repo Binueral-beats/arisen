@@ -17,7 +17,7 @@ fi
 
 NAME="${PROJECT}-${VERSION}.${MAC_VERSION}.bottle"
 
-mkdir -p ${PROJECT}/${VERSION}/opt/arisen/lib/cmake
+mkdir -p ${PROJECT}/${VERSION}/opt/arisenio/lib/cmake
 
 PREFIX="${PROJECT}/${VERSION}"
 SPREFIX="\/usr\/local"
@@ -33,7 +33,7 @@ export SSUBPREFIX
 
 hash=`openssl dgst -sha256 ${NAME}.tar.gz | awk 'NF>1{print $NF}'`
 
-echo "class Arisen < Formula
+echo "class arisenio < Formula
 
    homepage \"${URL}\"
    revision 0
@@ -57,6 +57,6 @@ echo "class Arisen < Formula
       raise \"Error, only supporting binary packages at this time\"
    end
 end
-__END__" &> arisen.rb
+__END__" &> arisenio.rb
 
 rm -r ${PROJECT} || exit 1

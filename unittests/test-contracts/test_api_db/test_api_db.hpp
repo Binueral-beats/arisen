@@ -1,46 +1,46 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 
-#include <arisen/arisen.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[arisen::contract]] test_api_db : public arisen::contract {
+class [[arisenio::contract]] test_api_db : public arisenio::contract {
 public:
-   using arisen::contract::contract;
+   using arisenio::contract::contract;
 
-   [[arisen::action("pg")]]
+   [[arisenio::action("pg")]]
    void primary_i64_general();
 
-   [[arisen::action("pl")]]
+   [[arisenio::action("pl")]]
    void primary_i64_lowerbound();
 
-   [[arisen::action("pu")]]
+   [[arisenio::action("pu")]]
    void primary_i64_upperbound();
 
-   [[arisen::action("s1g")]]
+   [[arisenio::action("s1g")]]
    void idx64_general();
 
-   [[arisen::action("s1l")]]
+   [[arisenio::action("s1l")]]
    void idx64_lowerbound();
 
-   [[arisen::action("s1u")]]
+   [[arisenio::action("s1u")]]
    void idx64_upperbound();
 
-   [[arisen::action("tia")]]
-   void test_invalid_access( arisen::name code, uint64_t val, uint32_t index, bool store );
+   [[arisenio::action("tia")]]
+   void test_invalid_access( arisenio::name code, uint64_t val, uint32_t index, bool store );
 
-   [[arisen::action("sdnancreate")]]
+   [[arisenio::action("sdnancreate")]]
    void idx_double_nan_create_fail();
 
-   [[arisen::action("sdnanmodify")]]
+   [[arisenio::action("sdnanmodify")]]
    void idx_double_nan_modify_fail();
 
-   [[arisen::action("sdnanlookup")]]
+   [[arisenio::action("sdnanlookup")]]
    void idx_double_nan_lookup_fail( uint32_t lookup_type );
 
-   [[arisen::action("sk32align")]]
+   [[arisenio::action("sk32align")]]
    void misaligned_secondary_key256_tests();
 
 };

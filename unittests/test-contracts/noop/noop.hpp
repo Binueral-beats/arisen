@@ -1,17 +1,17 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 
-#include <arisen/arisen.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[arisen::contract]] noop : public arisen::contract {
+class [[arisenio::contract]] noop : public arisenio::contract {
 public:
-   using arisen::contract::contract;
+   using arisenio::contract::contract;
 
-   [[arisen::action]]
-   void anyaction( arisen::name                       from,
-                   const arisen::ignore<std::string>& type,
-                   const arisen::ignore<std::string>& data );
+   [[arisenio::action]]
+   void anyaction( arisenio::name                       from,
+                   const arisenio::ignore<std::string>& type,
+                   const arisenio::ignore<std::string>& data );
 };

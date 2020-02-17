@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in arisen/LICENSE.txt
+ *  @copyright defined in arisen/LICENSE
  */
 
-#include <arisen/chain/genesis_state.hpp>
+#include <arisenio/chain/genesis_state.hpp>
 
-namespace arisen { namespace chain {
+namespace arisenio { namespace chain {
 
-const string genesis_state::arisen_root_key = "${ARISEN_ROOT_KEY}";
+const string genesis_state::ARISENIO_ROOT_key = "${ARISENIO_ROOT_KEY}";
 
-} } // namespace arisen::chain
+} } // namespace arisenio::chain

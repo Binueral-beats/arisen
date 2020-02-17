@@ -5,9 +5,9 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "ARISEN.IO"
-PROJECT_NUMBER         = "ARISEN ${DOXY_arisen_VERSION}"
+PROJECT_NUMBER         = "ARISENIO ${DOXY_rsn_VERSION}"
 PROJECT_BRIEF          =
-PROJECT_LOGO           = eos-logo.png
+PROJECT_LOGO           = arisen-logo.png
 OUTPUT_DIRECTORY       =
 CREATE_SUBDIRS         = NO
 ALLOW_UNICODE_NAMES    = NO
@@ -171,7 +171,7 @@ INPUT_FILTER           =
 FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
 FILTER_SOURCE_PATTERNS =
-USE_MDFILE_AS_MAINPAGE = contracts/arisenlib/mainpage.md
+USE_MDFILE_AS_MAINPAGE = contracts/ariseniolib/mainpage.md
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
 #---------------------------------------------------------------------------
@@ -210,8 +210,8 @@ HTML_INDEX_NUM_ENTRIES = 100
 GENERATE_DOCSET        = NO
 DOCSET_FEEDNAME        = "Doxygen generated docs"
 DOCSET_BUNDLE_ID       = io.arisen
-DOCSET_PUBLISHER_ID    = arisen.community
-DOCSET_PUBLISHER_NAME  = arisen.peers
+DOCSET_PUBLISHER_ID    = one.block
+DOCSET_PUBLISHER_NAME  = block.one
 GENERATE_HTMLHELP      = NO
 CHM_FILE               =
 HHC_LOCATION           =

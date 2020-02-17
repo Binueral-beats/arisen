@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 
 #include "payloadless.hpp"
 
-using namespace arisen;
+using namespace arisenio;
 
 void payloadless::doit() {
    print("Im a payloadless action");

@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.8 )
 
-project( arisen )
+project( ARISENIO )
 include(CTest) # suppresses DartConfiguration.tcl error
 enable_testing()
 
@@ -21,14 +21,14 @@ include( SetupTargetMacros )
 include( InstallDirectoryPermissions )
 include( MASSigning )
 
-set( BLOCKCHAIN_NAME "arisen" )
+set( BLOCKCHAIN_NAME "ARISENIO" )
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_EXTENSIONS ON )
 set( CXX_STANDARD_REQUIRED ON)
 
-set(VERSION_MAJOR 1)
-set(VERSION_MINOR 8)
-set(VERSION_PATCH 12)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 1)
+set(VERSION_PATCH 1)
 #set(VERSION_SUFFIX develop)
 
 if(VERSION_SUFFIX)
@@ -40,7 +40,7 @@ endif()
 set( CLI_CLIENT_EXECUTABLE_NAME arisecli )
 set( NODE_EXECUTABLE_NAME aos )
 set( KEY_STORE_EXECUTABLE_NAME awalletd )
-set( GUI_CLIENT_EXECUTABLE_NAME arisen )
+set( GUI_CLIENT_EXECUTABLE_NAME arisenio )
 set( CUSTOM_URL_SCHEME "gcs" )
 set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
 
@@ -121,7 +121,7 @@ link_libraries(Threads::Threads)
 
 if( WIN32 )
 
-    message( STATUS "Configuring arisen on WIN32")
+    message( STATUS "Configuring ARISENIO on WIN32")
     set( DB_VERSION 60 )
     set( BDB_STATIC_LIBS 1 )
 
@@ -156,11 +156,11 @@ else( WIN32 ) # Apple AND Linux
 
     if( APPLE )
         # Apple Specific Options Here
-        message( STATUS "Configuring arisen on OS X" )
+        message( STATUS "Configuring ARISENIO on OS X" )
         set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS} -Wall -Wno-deprecated-declarations" )
     else( APPLE )
         # Linux Specific Options Here
-        message( STATUS "Configuring arisen on Linux" )
+        message( STATUS "Configuring ARISENIO on Linux" )
         set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS} -Wall" )
         if ( FULL_STATIC_BUILD )
           set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
@@ -185,7 +185,7 @@ else( WIN32 ) # Apple AND Linux
 
 endif( WIN32 )
 
-set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build arisen for code coverage analysis")
+set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build ARISENIO for code coverage analysis")
 
 if(ENABLE_COVERAGE_TESTING)
   SET(CMAKE_CXX_FLAGS "--coverage ${CMAKE_CXX_FLAGS}")
@@ -208,11 +208,11 @@ endif()
 
 message( STATUS "Using '${CORE_SYMBOL_NAME}' as CORE symbol name" )
 
-if ("${arisen_ROOT_KEY}" STREQUAL "")
-   set(arisen_ROOT_KEY "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
+if ("${ARISENIO_ROOT_KEY}" STREQUAL "")
+   set(ARISENIO_ROOT_KEY "RSN6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV")
 endif()
 
-message( STATUS "Using '${arisen_ROOT_KEY}' as public key for 'arisen' account" )
+message( STATUS "Using '${ARISENIO_ROOT_KEY}' as public key for 'arisenio' account" )
 
 add_subdirectory( libraries )
 add_subdirectory( plugins )
@@ -223,48 +223,48 @@ add_subdirectory( tests )
 add_subdirectory( tools )
 add_subdirectory( debian )
 
-install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisen)
+install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisenio)
 
-install(FILES testnet.template DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisen/launcher)
-install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisen)
-install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisen/launcher)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/testnet.template ${CMAKE_CURRENT_BINARY_DIR}/etc/arisen/launcher/testnet.template COPYONLY)
+install(FILES testnet.template DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisenio/launcher)
+install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisenio)
+install_directory_permissions(DIRECTORY ${CMAKE_INSTALL_FULL_SYSCONFDIR}/arisenio/launcher)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/testnet.template ${CMAKE_CURRENT_BINARY_DIR}/etc/arisenio/launcher/testnet.template COPYONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/arisen.version.in ${CMAKE_CURRENT_BINARY_DIR}/arisen.version.hpp)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/arisen.version.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/arisenio.version.in ${CMAKE_CURRENT_BINARY_DIR}/arisenio.version.hpp)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/arisenio.version.hpp DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
 
-set(EOS_ROOT_DIR ${CMAKE_BINARY_DIR})
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisen-config.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/arisen-config.cmake @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisenTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisen/arisenTester.cmake @ONLY)
+set(RSN_ROOT_DIR ${CMAKE_BINARY_DIR})
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisenio-config.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisenio/arisenio-config.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisenioTesterBuild.cmake.in ${CMAKE_BINARY_DIR}/lib/cmake/arisenio/arisenioTester.cmake @ONLY)
 
-set(EOS_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisen-config.cmake.in ${CMAKE_BINARY_DIR}/modules/arisen-config.cmake @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/modules/arisen-config.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisen)
-configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisenTester.cmake.in ${CMAKE_BINARY_DIR}/modules/arisenTester.cmake @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/modules/arisenTester.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisen)
+set(RSN_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisenio-config.cmake.in ${CMAKE_BINARY_DIR}/modules/arisenio-config.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/modules/arisenio-config.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisenio)
+configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/arisenioTester.cmake.in ${CMAKE_BINARY_DIR}/modules/arisenioTester.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/modules/arisenioTester.cmake DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/arisenio)
 
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/arisenio/LICENSE COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/wabt/LICENSE
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.wabt COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/arisenio/LICENSE.wabt COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/softfloat/COPYING.txt
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.softfloat COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/arisenio/LICENSE.softfloat COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/wasm-jit/LICENSE
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.wavm COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/arisenio/LICENSE.wavm COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/fc/secp256k1/upstream/COPYING
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.secp256k1 COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/arisenio/LICENSE.secp256k1 COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/fc/src/network/LICENSE.go
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.go COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/arisenio/LICENSE.go COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libraries/yubihsm/LICENSE
-               ${CMAKE_BINARY_DIR}/licenses/arisen/LICENSE.yubihsm COPYONLY)
+               ${CMAKE_BINARY_DIR}/licenses/arisenio/LICENSE.yubihsm COPYONLY)
 
-install(FILES LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ COMPONENT base)
-install(FILES libraries/wabt/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.wabt COMPONENT base)
-install(FILES libraries/softfloat/COPYING.txt DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.softfloat COMPONENT base)
-install(FILES libraries/wasm-jit/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.wavm COMPONENT base)
-install(FILES libraries/fc/secp256k1/upstream/COPYING DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.secp256k1 COMPONENT base)
-install(FILES libraries/fc/src/network/LICENSE.go DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ COMPONENT base)
-install(FILES libraries/yubihsm/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisen/ RENAME LICENSE.yubihsm COMPONENT base)
+install(FILES LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisenio/ COMPONENT base)
+install(FILES libraries/wabt/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisenio/ RENAME LICENSE.wabt COMPONENT base)
+install(FILES libraries/softfloat/COPYING.txt DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisenio/ RENAME LICENSE.softfloat COMPONENT base)
+install(FILES libraries/wasm-jit/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisenio/ RENAME LICENSE.wavm COMPONENT base)
+install(FILES libraries/fc/secp256k1/upstream/COPYING DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisenio/ RENAME LICENSE.secp256k1 COMPONENT base)
+install(FILES libraries/fc/src/network/LICENSE.go DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisenio/ COMPONENT base)
+install(FILES libraries/yubihsm/LICENSE DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/licenses/arisenio/ RENAME LICENSE.yubihsm COMPONENT base)
 
 add_custom_target(base-install
   COMMAND "${CMAKE_COMMAND}" --build "${CMAKE_BINARY_DIR}"

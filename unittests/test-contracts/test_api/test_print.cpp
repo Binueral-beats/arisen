@@ -1,8 +1,8 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
-#include <ARISENlib/arisen.hpp>
+#include <ariseniolib/arisenio.hpp>
 
 #include "test_api.hpp"
 
@@ -61,25 +61,25 @@ void test_print::test_printui128() {
 }
 
 void test_print::test_printn() {
-   printn(arisen::name{"1"}.value);
-   printn(arisen::name{"5"}.value);
-   printn(arisen::name{"a"}.value);
-   printn(arisen::name{"z"}.value);
+   printn(arisenio::name{"1"}.value);
+   printn(arisenio::name{"5"}.value);
+   printn(arisenio::name{"a"}.value);
+   printn(arisenio::name{"z"}.value);
 
-   printn(arisen::name{"abc"}.value);
-   printn(arisen::name{"123"}.value);
+   printn(arisenio::name{"abc"}.value);
+   printn(arisenio::name{"123"}.value);
 
-   printn(arisen::name{"abc.123"}.value);
-   printn(arisen::name{"123.abc"}.value);
+   printn(arisenio::name{"abc.123"}.value);
+   printn(arisenio::name{"123.abc"}.value);
 
-   printn(arisen::name{"12345abcdefgj"}.value);
-   printn(arisen::name{"ijklmnopqrstj"}.value);
-   printn(arisen::name{"vwxyz.12345aj"}.value);
+   printn(arisenio::name{"12345abcdefgj"}.value);
+   printn(arisenio::name{"ijklmnopqrstj"}.value);
+   printn(arisenio::name{"vwxyz.12345aj"}.value);
 
-   printn(arisen::name{"111111111111j"}.value);
-   printn(arisen::name{"555555555555j"}.value);
-   printn(arisen::name{"aaaaaaaaaaaaj"}.value);
-   printn(arisen::name{"zzzzzzzzzzzzj"}.value);
+   printn(arisenio::name{"111111111111j"}.value);
+   printn(arisenio::name{"555555555555j"}.value);
+   printn(arisenio::name{"aaaaaaaaaaaaj"}.value);
+   printn(arisenio::name{"zzzzzzzzzzzzj"}.value);
 }
 
 
@@ -121,7 +121,7 @@ void test_print::test_printqf() {
 
 void test_print::test_print_simple() {
     const std::string cvalue = "cvalue";
-    arisen::print(cvalue);
+    arisenio::print(cvalue);
     std::string value = "value";
-    arisen::print(std::move(value));
+    arisenio::print(std::move(value));
 }

@@ -1,45 +1,45 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 
-#include <arisen/arisen.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[arisen::contract]] ram_restrictions_test : public arisen::contract {
+class [[arisenio::contract]] ram_restrictions_test : public arisenio::contract {
 public:
-   struct [[arisen::table]] data {
+   struct [[arisenio::table]] data {
       uint64_t           key;
       std::vector<char>  value;
 
       uint64_t primary_key() const { return key; }
    };
 
-   typedef arisen::multi_index<"tablea"_n, data> tablea;
-   typedef arisen::multi_index<"tableb"_n, data> tableb;
+   typedef arisenio::multi_index<"tablea"_n, data> tablea;
+   typedef arisenio::multi_index<"tableb"_n, data> tableb;
 
 public:
-   using arisen::contract::contract;
+   using arisenio::contract::contract;
 
-   [[arisen::action]]
+   [[arisenio::action]]
    void noop();
 
-   [[arisen::action]]
-   void setdata( uint32_t len1, uint32_t len2, arisen::name payer );
+   [[arisenio::action]]
+   void setdata( uint32_t len1, uint32_t len2, arisenio::name payer );
 
-   [[arisen::action]]
-   void notifysetdat( arisen::name acctonotify, uint32_t len1, uint32_t len2, arisen::name payer );
+   [[arisenio::action]]
+   void notifysetdat( arisenio::name acctonotify, uint32_t len1, uint32_t len2, arisenio::name payer );
 
-   [[arisen::on_notify("tester2::notifysetdat")]]
-   void on_notify_setdata( arisen::name acctonotify, uint32_t len1, uint32_t len2, arisen::name payer );
+   [[arisenio::on_notify("tester2::notifysetdat")]]
+   void on_notify_setdata( arisenio::name acctonotify, uint32_t len1, uint32_t len2, arisenio::name payer );
 
-   [[arisen::action]]
-   void senddefer( uint64_t senderid, arisen::name payer );
+   [[arisenio::action]]
+   void senddefer( uint64_t senderid, arisenio::name payer );
 
-   [[arisen::action]]
-   void notifydefer( arisen::name acctonotify, uint64_t senderid, arisen::name payer );
+   [[arisenio::action]]
+   void notifydefer( arisenio::name acctonotify, uint64_t senderid, arisenio::name payer );
 
-   [[arisen::on_notify("tester2::notifydefer")]]
-   void on_notifydefer( arisen::name acctonotify, uint64_t senderid, arisen::name payer );
+   [[arisenio::on_notify("tester2::notifydefer")]]
+   void on_notifydefer( arisenio::name acctonotify, uint64_t senderid, arisenio::name payer );
 
 };

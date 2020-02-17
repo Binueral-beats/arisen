@@ -66,12 +66,12 @@ verifyErrorCode()
 
 killAll()
 {
-  programs/arisen-launcher/arisen-launcher -k 15
+  programs/arisenio-launcher/arisenio-launcher -k 15
 }
 
 cleanup()
 {
-    rm -rf etc/arisen/node_*
+    rm -rf etc/arisenio/node_*
     rm -rf var/lib/node_*
 }
 
@@ -79,8 +79,8 @@ cleanup()
 # result stored in HEAD_BLOCK_NUM
 getHeadBlockNum()
 {
-  INFO="$(programs/arisecli/arisecli get info)"
-  verifyErrorCode "arisecli get info"
+  INFO="$(programs/clrsn/clrsn get info)"
+  verifyErrorCode "clrsn get info"
   HEAD_BLOCK_NUM="$(echo "$INFO" | awk '/head_block_num/ {print $2}')"
   # remove trailing coma
   HEAD_BLOCK_NUM=${HEAD_BLOCK_NUM%,}
@@ -111,10 +111,10 @@ INITA_PRV_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 # cleanup from last run
 cleanup
 
-# stand up aos cluster
+# stand up nodrsn cluster
 launcherOpts="-p $pnodes -n $total_nodes -s $topo -d $delay"
-echo Launcher options: --aos \"--plugin arisen::wallet_api_plugin\" $launcherOpts
-programs/arisen-launcher/arisen-launcher --aos "--plugin arisen::wallet_api_plugin" $launcherOpts
+echo Launcher options: --nodrsn \"--plugin arisenio::wallet_api_plugin\" $launcherOpts
+programs/arisenio-launcher/arisenio-launcher --nodrsn "--plugin arisenio::wallet_api_plugin" $launcherOpts
 sleep 7
 
 startPort=12618
@@ -126,22 +126,22 @@ echo endPort: $endPort
 port2=$startPort
 while [ $port2  -ne $endport ]; do
     echo Request block 1 from node on port $port2
-    TRANS_INFO="$(programs/arisecli/arisecli --port $port2 get block 1)"
-    verifyErrorCode "arisecli get block"
+    TRANS_INFO="$(programs/clrsn/clrsn --port $port2 get block 1)"
+    verifyErrorCode "clrsn get block"
     port2=`expr $port2 + 1`
 done
 
 # create 3 keys
-KEYS="$(programs/arisecli/arisecli create key)"
-verifyErrorCode "arisecli create key"
+KEYS="$(programs/clrsn/clrsn create key)"
+verifyErrorCode "clrsn create key"
 PRV_KEY1="$(echo "$KEYS" | awk '/Private/ {print $3}')"
 PUB_KEY1="$(echo "$KEYS" | awk '/Public/ {print $3}')"
-KEYS="$(programs/arisecli/arisecli create key)"
-verifyErrorCode "arisecli create key"
+KEYS="$(programs/clrsn/clrsn create key)"
+verifyErrorCode "clrsn create key"
 PRV_KEY2="$(echo "$KEYS" | awk '/Private/ {print $3}')"
 PUB_KEY2="$(echo "$KEYS" | awk '/Public/ {print $3}')"
-KEYS="$(programs/arisecli/arisecli create key)"
-verifyErrorCode "arisecli create key"
+KEYS="$(programs/clrsn/clrsn create key)"
+verifyErrorCode "clrsn create key"
 PRV_KEY3="$(echo "$KEYS" | awk '/Private/ {print $3}')"
 PUB_KEY3="$(echo "$KEYS" | awk '/Public/ {print $3}')"
 if [ -z "$PRV_KEY1" ] || [ -z "$PRV_KEY2" ] || [ -z "$PRV_KEY3" ] || [ -z "$PUB_KEY1" ] || [ -z "$PUB_KEY2" ] || [ -z "$PUB_KEY3" ]; then
@@ -150,21 +150,21 @@ fi
 
 
 # create wallet for inita
-PASSWORD_INITA="$(programs/arisecli/arisecli wallet create --name inita)"
-verifyErrorCode "arisecli wallet create"
+PASSWORD_INITA="$(programs/clrsn/clrsn wallet create --name inita)"
+verifyErrorCode "clrsn wallet create"
 # strip out password from output
 PASSWORD_INITA="$(echo "$PASSWORD_INITA" | awk '/PW/ {print $1}')"
 # remove leading/trailing quotes
 PASSWORD_INITA=${PASSWORD_INITA#\"}
 PASSWORD_INITA=${PASSWORD_INITA%\"}
-programs/arisecli/arisecli wallet import --name inita --private-key $INITA_PRV_KEY
-verifyErrorCode "arisecli wallet import"
-programs/arisecli/arisecli wallet import --name inita --private-key $PRV_KEY1
-verifyErrorCode "arisecli wallet import"
-programs/arisecli/arisecli wallet import --name inita --private-key $PRV_KEY2
-verifyErrorCode "arisecli wallet import"
-programs/arisecli/arisecli wallet import --name inita --private-key $PRV_KEY3
-verifyErrorCode "arisecli wallet import"
+programs/clrsn/clrsn wallet import --name inita --private-key $INITA_PRV_KEY
+verifyErrorCode "clrsn wallet import"
+programs/clrsn/clrsn wallet import --name inita --private-key $PRV_KEY1
+verifyErrorCode "clrsn wallet import"
+programs/clrsn/clrsn wallet import --name inita --private-key $PRV_KEY2
+verifyErrorCode "clrsn wallet import"
+programs/clrsn/clrsn wallet import --name inita --private-key $PRV_KEY3
+verifyErrorCode "clrsn wallet import"
 
 #
 # Account and Transfer Tests
@@ -172,12 +172,12 @@ verifyErrorCode "arisecli wallet import"
 
 # create new account
 echo Creating account testera
-ACCOUNT_INFO="$(programs/arisecli/arisecli create account inita testera $PUB_KEY1 $PUB_KEY3)"
-verifyErrorCode "arisecli create account"
+ACCOUNT_INFO="$(programs/clrsn/clrsn create account inita testera $PUB_KEY1 $PUB_KEY3)"
+verifyErrorCode "clrsn create account"
 waitForNextBlock
 # verify account created
-ACCOUNT_INFO="$(programs/arisecli/arisecli get account testera)"
-verifyErrorCode "arisecli get account"
+ACCOUNT_INFO="$(programs/clrsn/clrsn get account testera)"
+verifyErrorCode "clrsn get account"
 count=`echo $ACCOUNT_INFO | grep -c "staked_balance"`
 if [ $count == 0 ]; then
   error "FAILURE - account creation failed: $ACCOUNT_INFO"
@@ -189,8 +189,8 @@ echo Producing node port: $pPort
 while [ $port  -ne $endport ]; do
 
     echo Sending transfer request to node on port $port.
-    TRANSFER_INFO="$(programs/arisecli/arisecli transfer inita testera 975321 "test transfer")"
-    verifyErrorCode "arisecli transfer"
+    TRANSFER_INFO="$(programs/clrsn/clrsn transfer inita testera 975321 "test transfer")"
+    verifyErrorCode "clrsn transfer"
     getTransactionId "$TRANSFER_INFO"
     echo Transaction id: $TRANS_ID
 
@@ -200,8 +200,8 @@ while [ $port  -ne $endport ]; do
     port2=$startPort
     while [ $port2  -ne $endport ]; do
 	echo Verifying transaction exists on node on port $port2
-   TRANS_INFO="$(programs/arisecli/arisecli --port $port2 get transaction $TRANS_ID)"
-   verifyErrorCode "arisecli get transaction trans_id of <$TRANS_INFO> from node on port $port2"
+   TRANS_INFO="$(programs/clrsn/clrsn --port $port2 get transaction $TRANS_ID)"
+   verifyErrorCode "clrsn get transaction trans_id of <$TRANS_INFO> from node on port $port2"
 	port2=`expr $port2 + 1`
     done
 

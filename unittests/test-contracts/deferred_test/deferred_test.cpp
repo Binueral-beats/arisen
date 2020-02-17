@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include "deferred_test.hpp"
-#include <arisen/transaction.hpp>
-#include <arisen/datastream.hpp>
-#include <arisen/crypto.hpp>
+#include <arisenio/transaction.hpp>
+#include <arisenio/datastream.hpp>
+#include <arisenio/crypto.hpp>
 
-using namespace arisen;
+using namespace arisenio;
 
 void deferred_test::defercall( name payer, uint64_t sender_id, name contract, uint64_t payload ) {
    print( "defercall called on ", get_self(), "\n" );

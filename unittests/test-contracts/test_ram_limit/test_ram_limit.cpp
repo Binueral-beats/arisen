@@ -1,19 +1,19 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include <utility>
 #include <vector>
 #include <string>
 
-#include <ARISENlib/arisen.hpp>
+#include <ariseniolib/arisenio.hpp>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wsign-conversion"
 #pragma clang diagnostic ignored "-Wshorten-64-to-32"
 #pragma clang diagnostic ignored "-Wsign-compare"
 
-using namespace arisen;
+using namespace arisenio;
 
 CONTRACT test_ram_limit : public contract {
    public:
@@ -23,7 +23,7 @@ CONTRACT test_ram_limit : public contract {
 
       ACTION setentry( name payer, uint64_t from, uint64_t to, uint64_t size ) {
          const auto self = get_self();
-         arisen::print("test_ram_limit::setentry ", arisen::name{self}, "\n");
+         arisenio::print("test_ram_limit::setentry ", arisenio::name{self}, "\n");
          test_table table( self, self.value );
          for ( int key = from; key <=to; ++key ) {
             auto itr = table.find(key);
@@ -42,24 +42,24 @@ CONTRACT test_ram_limit : public contract {
 
       ACTION rmentry( uint64_t from, uint64_t to ) {
          const auto self = get_self();
-         arisen::print("test_ram_limit::rmentry ", arisen::name{self}, "\n");
+         arisenio::print("test_ram_limit::rmentry ", arisenio::name{self}, "\n");
          test_table table( self, self.value );
          for ( int key = from; key <=to; ++key ) {
             auto itr = table.find(key);
-            ARISEN_assert ( itr != table.end(), "could not find test_table entry" );
+            arisenio_assert ( itr != table.end(), "could not find test_table entry" );
             table.erase(itr);
          }
       }
 
       ACTION printentry( uint64_t from, uint64_t to ) {
          const auto self = get_self();
-         arisen::print("test_ram_limit::printout ", arisen::name{self}, ":");
+         arisenio::print("test_ram_limit::printout ", arisenio::name{self}, ":");
          test_table table( self, self.value );
          for ( int key = from; key <= to; ++key ) {
             auto itr = table.find(key);
-            arisen::print("\nkey=", key);
-            ARISEN_assert ( itr != table.end(), "could not find test_table entry" );
-            arisen::print(" size=", itr->data.size());
+            arisenio::print("\nkey=", key);
+            arisenio_assert ( itr != table.end(), "could not find test_table entry" );
+            arisenio::print(" size=", itr->data.size());
          }
       }
 
@@ -70,11 +70,11 @@ CONTRACT test_ram_limit : public contract {
 
          uint64_t primary_key()const { return key; }
 
-         EOSLIB_SERIALIZE( test, (key)(data) )
+         rsnLIB_SERIALIZE( test, (key)(data) )
       };
-      typedef arisen::multi_index< "test.table"_n, test> test_table;
+      typedef arisenio::multi_index< "test.table"_n, test> test_table;
 };
 
 #pragma clang diagnostic pop
 
-ARISEN_DISPATCH( test_ram_limit, (setentry)(rmentry)(printentry) )
+arisenio_DISPATCH( test_ram_limit, (setentry)(rmentry)(printentry) )

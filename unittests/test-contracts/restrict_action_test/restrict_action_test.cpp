@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include "restrict_action_test.hpp"
-#include <arisen/transaction.hpp>
+#include <arisenio/transaction.hpp>
 
-using namespace arisen;
+using namespace arisenio;
 
 void restrict_action_test::noop( ) {
 

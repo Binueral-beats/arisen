@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 
-#include <arisen/testing/tester.hpp>
+#include <arisenio/testing/tester.hpp>
 
-using namespace arisen::chain;
-using namespace arisen::testing;
+using namespace arisenio::chain;
+using namespace arisenio::testing;
 
 private_key_type get_private_key( name keyname, string role );
 

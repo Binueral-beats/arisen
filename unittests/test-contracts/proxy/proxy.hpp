@@ -1,54 +1,54 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 
-#include <arisen/arisen.hpp>
-#include <arisen/singleton.hpp>
-#include <arisen/asset.hpp>
+#include <arisenio/arisenio.hpp>
+#include <arisenio/singleton.hpp>
+#include <arisenio/asset.hpp>
 
-// Extacted from arisen.token contract:
-namespace arisen {
-   class [[arisen::contract("arisen.token")]] token : public arisen::contract {
+// Extacted from arisenio.token contract:
+namespace arisenio {
+   class [[arisenio::contract("arisenio.token")]] token : public arisenio::contract {
    public:
-      using arisen::contract::contract;
+      using arisenio::contract::contract;
 
-      [[arisen::action]]
-      void transfer( arisen::name        from,
-                     arisen::name        to,
-                     arisen::asset       quantity,
+      [[arisenio::action]]
+      void transfer( arisenio::name        from,
+                     arisenio::name        to,
+                     arisenio::asset       quantity,
                      const std::string& memo );
-      using transfer_action = arisen::action_wrapper<"transfer"_n, &token::transfer>;
+      using transfer_action = arisenio::action_wrapper<"transfer"_n, &token::transfer>;
    };
 }
 
 // This contract:
-class [[arisen::contract]] proxy : public arisen::contract {
+class [[arisenio::contract]] proxy : public arisenio::contract {
 public:
-   proxy( arisen::name self, arisen::name first_receiver, arisen::datastream<const char*> ds );
+   proxy( arisenio::name self, arisenio::name first_receiver, arisenio::datastream<const char*> ds );
 
-   [[arisen::action]]
-   void setowner( arisen::name owner, uint32_t delay );
+   [[arisenio::action]]
+   void setowner( arisenio::name owner, uint32_t delay );
 
-   [[arisen::on_notify("arisen.token::transfer")]]
-   void on_transfer( arisen::name        from,
-                     arisen::name        to,
-                     arisen::asset       quantity,
+   [[arisenio::on_notify("arisenio.token::transfer")]]
+   void on_transfer( arisenio::name        from,
+                     arisenio::name        to,
+                     arisenio::asset       quantity,
                      const std::string& memo );
 
-   [[arisen::on_notify("arisen::onerror")]]
-   void on_error( uint128_t sender_id, arisen::ignore<std::vector<char>> sent_trx );
+   [[arisenio::on_notify("arisenio::onerror")]]
+   void on_error( uint128_t sender_id, arisenio::ignore<std::vector<char>> sent_trx );
 
-   struct [[arisen::table]] config {
-      arisen::name owner;
+   struct [[arisenio::table]] config {
+      arisenio::name owner;
       uint32_t    delay   = 0;
       uint32_t    next_id = 0;
 
-      EOSLIB_SERIALIZE( config, (owner)(delay)(next_id) )
+      rsnLIB_SERIALIZE( config, (owner)(delay)(next_id) )
    };
 
-   using config_singleton = arisen::singleton< "config"_n,  config >;
+   using config_singleton = arisenio::singleton< "config"_n,  config >;
 
 protected:
    config_singleton _config;

@@ -36,7 +36,7 @@ TEST_LABEL="[helpers]"
   [[ ! -z $(echo "${output}" | grep "home") ]] || exit
   NONINTERACTIVE=false
   PROCEED=false
-  INSTALL_LOCATION="/etc/rsn"
+  INSTALL_LOCATION="/etc/arisen"
   run install-directory-prompt
   # Function received given input.
   [[ ! -z $(echo "${output}") ]] || exit
@@ -49,10 +49,10 @@ TEST_LABEL="[helpers]"
   run previous-install-prompt
   [[ -z $(echo "${output}") ]] || exit
   # Exists, prompt
-  mkdir -p $arisen_INSTALL_DIR
+  mkdir -p $ARISENIO_INSTALL_DIR
   run previous-install-prompt
-  [[ ! -z $(echo "${output}" | grep "arisen has already been installed into ${arisen_INSTALL_DIR}") ]] || exit
-  rm -rf $arisen_INSTALL_DIR
+  [[ ! -z $(echo "${output}" | grep "ARISENIO has already been installed into ${ARISENIO_INSTALL_DIR}") ]] || exit
+  rm -rf $ARISENIO_INSTALL_DIR
 }
 
 @test "${TEST_LABEL} > TEMP_DIR" {

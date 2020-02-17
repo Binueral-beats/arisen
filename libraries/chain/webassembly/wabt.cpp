@@ -1,20 +1,20 @@
-#include <arisen/chain/webassembly/wabt.hpp>
-#include <arisen/chain/apply_context.hpp>
-#include <arisen/chain/wasm_arisen_constraints.hpp>
+#include <arisenio/chain/webassembly/wabt.hpp>
+#include <arisenio/chain/apply_context.hpp>
+#include <arisenio/chain/wasm_arisenio_constraints.hpp>
 
 //wabt includes
 #include <src/interp.h>
 #include <src/binary-reader-interp.h>
 #include <src/error-formatter.h>
 
-namespace arisen { namespace chain { namespace webassembly { namespace wabt_runtime {
+namespace arisenio { namespace chain { namespace webassembly { namespace wabt_runtime {
 
 //yep 🤮
 static wabt_apply_instance_vars* static_wabt_vars;
 
 using namespace wabt;
 using namespace wabt::interp;
-namespace wasm_constraints = arisen::chain::wasm_constraints;
+namespace wasm_constraints = arisenio::chain::wasm_constraints;
 
 class wabt_instantiated_module : public wasm_instantiated_module_interface {
    public:
@@ -28,7 +28,7 @@ class wabt_instantiated_module : public wasm_instantiated_module_interface {
                continue;
             _initial_globals.emplace_back(_env->GetGlobal(i), _env->GetGlobal(i)->typed_value);
          }
-         
+
          if(_env->GetMemoryCount())
             _initial_memory_configuration = _env->GetMemory(0)->page_limits;
       }
@@ -50,9 +50,9 @@ class wabt_instantiated_module : public wasm_instantiated_module_interface {
             memcpy(memory->data.data(), _initial_memory.data(), _initial_memory.size());
          }
 
-         _params[0].set_i64(uint64_t(context.receiver));
-         _params[1].set_i64(uint64_t(context.act.account));
-         _params[2].set_i64(uint64_t(context.act.name));
+         _params[0].set_i64(uint64_t(context.get_receiver()));
+         _params[1].set_i64(uint64_t(context.get_action().account));
+         _params[2].set_i64(uint64_t(context.get_action().name));
 
          ExecResult res = _executor.RunStartFunction(_instatiated_module);
          RSN_ASSERT( res.result == interp::Result::Ok, wasm_execution_error, "wabt start function failure (${s})", ("s", ResultToString(res.result)) );
@@ -92,8 +92,12 @@ std::unique_ptr<wasm_instantiated_module_interface> wabt_runtime::instantiate_mo
 
    wabt::Result res = ReadBinaryInterp(env.get(), code_bytes, code_size, read_binary_options, &errors, &instantiated_module);
    RSN_ASSERT( Succeeded(res), wasm_execution_error, "Error building wabt interp: ${e}", ("e", wabt::FormatErrorsToString(errors, Location::Type::Binary)) );
-   
+
    return std::make_unique<wabt_instantiated_module>(std::move(env), initial_memory, instantiated_module);
+}
+
+void wabt_runtime::immediately_exit_currently_running_module() {
+   throw wasm_exit();
 }
 
 }}}}

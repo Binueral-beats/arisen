@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include "asserter.hpp"
 
-using namespace arisen;
+using namespace arisenio;
 
 static int global_variable = 45;
 

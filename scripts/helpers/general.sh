@@ -301,7 +301,7 @@ function ensure-brew-packages() {
                             * ) echo "Please type 'y' for yes or 'n' for no.";;
                         esac
                     done
-                    execute brew tap arisen/arisen
+                    execute brew tap arisenio/arisenio
                     echo "${COLOR_CYAN}[Installing HomeBrew Dependencies]${COLOR_NC}"
                     execute eval $BREW install $DEPS
                     IFS="$OIFS"

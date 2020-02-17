@@ -1,14 +1,14 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
-#include <arisen/chain/asset.hpp>
-#include <arisen/chain/authority.hpp>
-#include <arisen/chain/authority_checker.hpp>
-#include <arisen/chain/chain_config.hpp>
-#include <arisen/chain/types.hpp>
-#include <arisen/chain/thread_utils.hpp>
-#include <arisen/testing/tester.hpp>
+#include <arisenio/chain/asset.hpp>
+#include <arisenio/chain/authority.hpp>
+#include <arisenio/chain/authority_checker.hpp>
+#include <arisenio/chain/chain_config.hpp>
+#include <arisenio/chain/types.hpp>
+#include <arisenio/chain/thread_utils.hpp>
+#include <arisenio/testing/tester.hpp>
 
 #include <fc/io/json.hpp>
 #include <fc/log/logger_config.hpp>
@@ -22,8 +22,8 @@
 #define TESTER validating_tester
 #endif
 
-using namespace arisen::chain;
-using namespace arisen::testing;
+using namespace arisenio::chain;
+using namespace arisenio::testing;
 
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
@@ -82,7 +82,7 @@ FC_REFLECT( base_reflect, (bv) )
 FC_REFLECT_DERIVED( derived_reflect, (base_reflect), (dv) )
 FC_REFLECT_DERIVED( final_reflect, (derived_reflect), (fv) )
 
-namespace arisen
+namespace arisenio
 {
 using namespace chain;
 using namespace std;
@@ -640,22 +640,22 @@ BOOST_AUTO_TEST_CASE(transaction_test) { try {
    variant pretty_trx = fc::mutable_variant_object()
       ("actions", fc::variants({
          fc::mutable_variant_object()
-            ("account", "arisen")
+            ("account", "arisenio")
             ("name", "reqauth")
             ("authorization", fc::variants({
                fc::mutable_variant_object()
-                  ("actor", "arisen")
+                  ("actor", "arisenio")
                   ("permission", "active")
             }))
             ("data", fc::mutable_variant_object()
-               ("from", "arisen")
+               ("from", "arisenio")
             )
          })
       )
       // lets also push a context free action, the multi chain test will then also include a context free action
       ("context_free_actions", fc::variants({
          fc::mutable_variant_object()
-            ("account", "arisen")
+            ("account", "arisenio")
             ("name", "nonce")
             ("data", fc::raw::pack(std::string("dummy")))
          })
@@ -785,21 +785,21 @@ BOOST_AUTO_TEST_CASE(transaction_metadata_test) { try {
    variant pretty_trx = fc::mutable_variant_object()
       ("actions", fc::variants({
          fc::mutable_variant_object()
-            ("account", "arisen")
+            ("account", "arisenio")
             ("name", "reqauth")
             ("authorization", fc::variants({
                fc::mutable_variant_object()
-                  ("actor", "arisen")
+                  ("actor", "arisenio")
                   ("permission", "active")
             }))
             ("data", fc::mutable_variant_object()
-               ("from", "arisen")
+               ("from", "arisenio")
             )
          })
       )
       ("context_free_actions", fc::variants({
          fc::mutable_variant_object()
-            ("account", "arisen")
+            ("account", "arisenio")
             ("name", "nonce")
             ("data", fc::raw::pack(std::string("dummy data")))
          })
@@ -1123,4 +1123,4 @@ BOOST_AUTO_TEST_CASE(stable_priority_queue_test) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace arisen
+} // namespace arisenio

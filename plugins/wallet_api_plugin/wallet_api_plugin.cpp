@@ -1,28 +1,28 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
-#include <arisen/wallet_api_plugin/wallet_api_plugin.hpp>
-#include <arisen/wallet_plugin/wallet_manager.hpp>
-#include <arisen/chain/exceptions.hpp>
-#include <arisen/chain/transaction.hpp>
+#include <arisenio/wallet_api_plugin/wallet_api_plugin.hpp>
+#include <arisenio/wallet_plugin/wallet_manager.hpp>
+#include <arisenio/chain/exceptions.hpp>
+#include <arisenio/chain/transaction.hpp>
 
 #include <fc/variant.hpp>
 #include <fc/io/json.hpp>
 
 #include <chrono>
 
-namespace arisen { namespace detail {
+namespace arisenio { namespace detail {
   struct wallet_api_plugin_empty {};
 }}
 
-FC_REFLECT(arisen::detail::wallet_api_plugin_empty, );
+FC_REFLECT(arisenio::detail::wallet_api_plugin_empty, );
 
-namespace arisen {
+namespace arisenio {
 
 static appbase::abstract_plugin& _wallet_api_plugin = app().register_plugin<wallet_api_plugin>();
 
-using namespace arisen;
+using namespace arisenio;
 
 #define CALL(api_name, api_handle, call_name, INVOKE, http_response_code) \
 {std::string("/v1/" #api_name "/" #call_name), \
@@ -52,21 +52,21 @@ using namespace arisen;
 
 #define INVOKE_V_R(api_handle, call_name, in_param) \
      api_handle.call_name(fc::json::from_string(body).as<in_param>()); \
-     arisen::detail::wallet_api_plugin_empty result;
+     arisenio::detail::wallet_api_plugin_empty result;
 
 #define INVOKE_V_R_R(api_handle, call_name, in_param0, in_param1) \
      const auto& vs = fc::json::json::from_string(body).as<fc::variants>(); \
      api_handle.call_name(vs.at(0).as<in_param0>(), vs.at(1).as<in_param1>()); \
-     arisen::detail::wallet_api_plugin_empty result;
+     arisenio::detail::wallet_api_plugin_empty result;
 
 #define INVOKE_V_R_R_R(api_handle, call_name, in_param0, in_param1, in_param2) \
      const auto& vs = fc::json::json::from_string(body).as<fc::variants>(); \
      api_handle.call_name(vs.at(0).as<in_param0>(), vs.at(1).as<in_param1>(), vs.at(2).as<in_param2>()); \
-     arisen::detail::wallet_api_plugin_empty result;
+     arisenio::detail::wallet_api_plugin_empty result;
 
 #define INVOKE_V_V(api_handle, call_name) \
      api_handle.call_name(); \
-     arisen::detail::wallet_api_plugin_empty result;
+     arisenio::detail::wallet_api_plugin_empty result;
 
 
 void wallet_api_plugin::plugin_startup() {

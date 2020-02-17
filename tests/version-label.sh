@@ -1,7 +1,7 @@
 #!/bin/bash
-# The purpose of this test is to ensure that the output of the "aos --version" command matches the version string defined by our CMake files
+# The purpose of this test is to ensure that the output of the "nodrsn --version" command matches the version string defined by our CMake files
 # If the environment variable BUILDKITE_TAG is empty or unset, this test will echo success
-echo '##### Aos Version Label Test #####'
+echo '##### Nodrsn Version Label Test #####'
 if [[ "$BUILDKITE_TAG" == '' || "$BUILDKITE" != 'true' ]]; then
     echo 'This test is only run in Buildkite against tagged builds.'
     [[ "$BUILDKITE" != 'true' ]] && echo 'This is not Buildkite.'
@@ -11,16 +11,16 @@ if [[ "$BUILDKITE_TAG" == '' || "$BUILDKITE" != 'true' ]]; then
 fi
 echo 'Tagged build detected, running test.'
 # orient ourselves
-[[ "$arisen_ROOT" == '' ]] && arisen_ROOT=$(echo $(pwd)/ | grep -ioe '.*/rsn/')
-[[ "$arisen_ROOT" == '' ]] && arisen_ROOT=$(echo $(pwd)/ | grep -ioe '.*/arisen/arisen/')
-[[ "$arisen_ROOT" == '' ]] && arisen_ROOT=$(echo $(pwd)/ | grep -ioe '.*/build/' | sed 's,/build/,,')
-echo "Using arisen_ROOT=\"$arisen_ROOT\"."
+[[ "$ARISENIO_ROOT" == '' ]] && ARISENIO_ROOT=$(echo $(pwd)/ | grep -ioe '.*/arisen/')
+[[ "$ARISENIO_ROOT" == '' ]] && ARISENIO_ROOT=$(echo $(pwd)/ | grep -ioe '.*/ARISENIO/arisenio/')
+[[ "$ARISENIO_ROOT" == '' ]] && ARISENIO_ROOT=$(echo $(pwd)/ | grep -ioe '.*/build/' | sed 's,/build/,,')
+echo "Using ARISENIO_ROOT=\"$ARISENIO_ROOT\"."
 # determine expected value
-CMAKE_CACHE="$arisen_ROOT/build/CMakeCache.txt"
-CMAKE_LISTS="$arisen_ROOT/CMakeLists.txt"
-if [[ -f "$CMAKE_CACHE" && $(cat "$CMAKE_CACHE" | grep -c 'DOXY_EOS_VERSION') > 0 ]]; then
+CMAKE_CACHE="$ARISENIO_ROOT/build/CMakeCache.txt"
+CMAKE_LISTS="$ARISENIO_ROOT/CMakeLists.txt"
+if [[ -f "$CMAKE_CACHE" && $(cat "$CMAKE_CACHE" | grep -c 'DOXY_rsn_VERSION') > 0 ]]; then
     echo "Parsing \"$CMAKE_CACHE\"..."
-    EXPECTED="v$(cat "$CMAKE_CACHE" | grep 'DOXY_EOS_VERSION' | cut -d '=' -f 2)"
+    EXPECTED="v$(cat "$CMAKE_CACHE" | grep 'DOXY_rsn_VERSION' | cut -d '=' -f 2)"
 elif [[ -f "$CMAKE_LISTS" ]]; then
     echo "Parsing \"$CMAKE_LISTS\"..."
     export $(cat $CMAKE_LISTS | grep -ie 'set *( *VERSION_MAJOR' | cut -d '(' -f 2 | cut -d ')' -f 1 | awk '{print $1"="$2}')
@@ -40,7 +40,7 @@ fi
 if [[ "$EXPECTED" == '' ]]; then
     echo 'ERROR: Could not determine expected value for version label!'
     set +e
-    echo "arisen_ROOT=\"$arisen_ROOT\""
+    echo "ARISENIO_ROOT=\"$ARISENIO_ROOT\""
     echo "CMAKE_CACHE=\"$CMAKE_CACHE\""
     echo "CMAKE_LISTS=\"$CMAKE_LISTS\""
     echo ''
@@ -50,19 +50,19 @@ if [[ "$EXPECTED" == '' ]]; then
     echo "VERSION_SUFFIX=\"$VERSION_SUFFIX\""
     echo "VERSION_FULL=\"$VERSION_FULL\""
     echo ''
-    echo '$ cat "$CMAKE_CACHE" | grep "DOXY_EOS_VERSION"'
-    cat "$CMAKE_CACHE" | grep "DOXY_EOS_VERSION"
+    echo '$ cat "$CMAKE_CACHE" | grep "DOXY_rsn_VERSION"'
+    cat "$CMAKE_CACHE" | grep "DOXY_rsn_VERSION"
     echo '$ pwd'
     pwd
-    echo '$ ls -la "$arisen_ROOT"'
-    ls -la "$arisen_ROOT"
-    echo '$ ls -la "$arisen_ROOT/build"'
-    ls -la "$arisen_ROOT/build"
+    echo '$ ls -la "$ARISENIO_ROOT"'
+    ls -la "$ARISENIO_ROOT"
+    echo '$ ls -la "$ARISENIO_ROOT/build"'
+    ls -la "$ARISENIO_ROOT/build"
     exit 1
 fi
 echo "Expecting \"$EXPECTED\"..."
-# get aos version
-ACTUAL=$($arisen_ROOT/build/bin/aos --version) || : # aos currently returns -1 for --version
+# get nodrsn version
+ACTUAL=$($ARISENIO_ROOT/build/bin/nodrsn --version) || : # nodrsn currently returns -1 for --version
 # test
 if [[ "$EXPECTED" == "$ACTUAL" ]]; then
     echo 'Passed with \"$ACTUAL\".'

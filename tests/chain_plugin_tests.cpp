@@ -1,17 +1,17 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE.txt
+ *  @copyright defined in arisen/LICENSE.txt
  */
 #include <boost/test/unit_test.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
-#include <arisen/testing/tester.hpp>
-#include <arisen/chain/abi_serializer.hpp>
-#include <arisen/chain/wasm_arisen_constraints.hpp>
-#include <arisen/chain/resource_limits.hpp>
-#include <arisen/chain/exceptions.hpp>
-#include <arisen/chain/wast_to_wasm.hpp>
-#include <arisen/chain_plugin/chain_plugin.hpp>
+#include <arisenio/testing/tester.hpp>
+#include <arisenio/chain/abi_serializer.hpp>
+#include <arisenio/chain/wasm_arisenio_constraints.hpp>
+#include <arisenio/chain/resource_limits.hpp>
+#include <arisenio/chain/exceptions.hpp>
+#include <arisenio/chain/wast_to_wasm.hpp>
+#include <arisenio/chain_plugin/chain_plugin.hpp>
 
 #include <contracts.hpp>
 
@@ -31,9 +31,9 @@
 #define TESTER validating_tester
 #endif
 
-using namespace arisen;
-using namespace arisen::chain;
-using namespace arisen::testing;
+using namespace arisenio;
+using namespace arisenio::chain;
+using namespace arisenio::testing;
 using namespace fc;
 
 BOOST_AUTO_TEST_SUITE(chain_plugin_tests)

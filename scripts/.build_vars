@@ -1,11 +1,11 @@
-# See install-directory-prompt for logic that sets ARISEN_INSTALL_DIR
-export SRC_DIR=${ARISEN_INSTALL_DIR}/src
-export OPT_DIR=${ARISEN_INSTALL_DIR}/opt
-export VAR_DIR=${ARISEN_INSTALL_DIR}/var
-export ETC_DIR=${ARISEN_INSTALL_DIR}/etc
-export BIN_DIR=${ARISEN_INSTALL_DIR}/bin
-export LIB_DIR=${ARISEN_INSTALL_DIR}/lib
-export DATA_DIR=${ARISEN_INSTALL_DIR}/data
+# See install-directory-prompt for logic that sets ARISENIO_INSTALL_DIR
+export SRC_DIR=${ARISENIO_INSTALL_DIR}/src
+export OPT_DIR=${ARISENIO_INSTALL_DIR}/opt
+export VAR_DIR=${ARISENIO_INSTALL_DIR}/var
+export ETC_DIR=${ARISENIO_INSTALL_DIR}/etc
+export BIN_DIR=${ARISENIO_INSTALL_DIR}/bin
+export LIB_DIR=${ARISENIO_INSTALL_DIR}/lib
+export DATA_DIR=${ARISENIO_INSTALL_DIR}/data
 
 # CMAKE
 export CMAKE_VERSION_MAJOR=3

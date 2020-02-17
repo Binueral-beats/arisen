@@ -1,18 +1,18 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
-#include <arisen/chain/types.hpp>
+#include <arisenio/chain/types.hpp>
 
-#include <arisen/net_plugin/net_plugin.hpp>
-#include <arisen/net_plugin/protocol.hpp>
-#include <arisen/chain/controller.hpp>
-#include <arisen/chain/exceptions.hpp>
-#include <arisen/chain/block.hpp>
-#include <arisen/chain/plugin_interface.hpp>
-#include <arisen/chain/thread_utils.hpp>
-#include <arisen/producer_plugin/producer_plugin.hpp>
-#include <arisen/chain/contract_types.hpp>
+#include <arisenio/net_plugin/net_plugin.hpp>
+#include <arisenio/net_plugin/protocol.hpp>
+#include <arisenio/chain/controller.hpp>
+#include <arisenio/chain/exceptions.hpp>
+#include <arisenio/chain/block.hpp>
+#include <arisenio/chain/plugin_interface.hpp>
+#include <arisenio/chain/thread_utils.hpp>
+#include <arisenio/producer_plugin/producer_plugin.hpp>
+#include <arisenio/chain/contract_types.hpp>
 
 #include <fc/network/message_buffer.hpp>
 #include <fc/network/ip.hpp>
@@ -28,9 +28,9 @@
 #include <boost/asio/ip/host_name.hpp>
 #include <boost/asio/steady_timer.hpp>
 
-using namespace arisen::chain::plugin_interface::compat;
+using namespace arisenio::chain::plugin_interface::compat;
 
-namespace arisen {
+namespace arisenio {
    static appbase::abstract_plugin& _net_plugin = app().register_plugin<net_plugin>();
 
    using std::vector;
@@ -42,8 +42,8 @@ namespace arisen {
 
    using fc::time_point;
    using fc::time_point_sec;
-   using arisen::chain::transaction_id_type;
-   using arisen::chain::sha256_less;
+   using arisenio::chain::transaction_id_type;
+   using arisenio::chain::sha256_less;
 
    class connection;
 
@@ -147,7 +147,7 @@ namespace arisen {
       channels::transaction_ack::channel_type::handle  incoming_transaction_ack_subscription;
 
       uint16_t                                  thread_pool_size = 1;
-      optional<arisen::chain::named_thread_pool> thread_pool;
+      optional<arisenio::chain::named_thread_pool> thread_pool;
 
       void connect( const connection_ptr& c );
       void connect( const connection_ptr& c, const std::shared_ptr<tcp::resolver>& resolver, tcp::resolver::results_type endpoints );
@@ -353,10 +353,10 @@ namespace arisen {
    };
 
    typedef multi_index_container<
-      arisen::peer_block_state,
+      arisenio::peer_block_state,
       indexed_by<
-         ordered_unique< tag<by_id>, member<arisen::peer_block_state, block_id_type, &arisen::peer_block_state::id >, sha256_less >,
-         ordered_unique< tag<by_block_num>, member<arisen::peer_block_state, uint32_t, &arisen::peer_block_state::block_num > >
+         ordered_unique< tag<by_id>, member<arisenio::peer_block_state, block_id_type, &arisenio::peer_block_state::id >, sha256_less >,
+         ordered_unique< tag<by_block_num>, member<arisenio::peer_block_state, uint32_t, &arisenio::peer_block_state::block_num > >
          >
       > peer_block_state_index;
 
@@ -433,7 +433,7 @@ namespace arisen {
             fill_out_buffer( bufs, _sync_write_queue );
          } else { // postpone real_time write_queue if sync queue is not empty
             fill_out_buffer( bufs, _write_queue );
-            EOS_ASSERT( _write_queue_size == 0, plugin_exception, "write queue size expected to be zero" );
+            RSN_ASSERT( _write_queue_size == 0, plugin_exception, "write queue size expected to be zero" );
          }
       }
 
@@ -627,16 +627,16 @@ namespace arisen {
       msg_handler( net_plugin_impl &imp, const connection_ptr& conn) : impl(imp), c(conn) {}
 
       void operator()( const signed_block& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
+         RSN_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
       }
       void operator()( signed_block& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
+         RSN_ASSERT( false, plugin_config_exception, "operator()(signed_block&&) should be called" );
       }
       void operator()( const packed_transaction& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
+         RSN_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
       }
       void operator()( packed_transaction& msg ) const {
-         EOS_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
+         RSN_ASSERT( false, plugin_config_exception, "operator()(packed_transaction&&) should be called" );
       }
 
       void operator()( signed_block&& msg ) const {
@@ -1241,7 +1241,7 @@ namespace arisen {
       ,state(in_sync)
    {
       chain_plug = app().find_plugin<chain_plugin>();
-      EOS_ASSERT( chain_plug, chain::missing_chain_plugin_exception, ""  );
+      RSN_ASSERT( chain_plug, chain::missing_chain_plugin_exception, ""  );
    }
 
    constexpr auto sync_manager::stage_str(stages s) {
@@ -2099,7 +2099,7 @@ namespace arisen {
                         fc_elog( logger,"async_read_some callback: bytes_transfered = ${bt}, buffer.bytes_to_write = ${btw}",
                                  ("bt",bytes_transferred)("btw",conn->pending_message_buffer.bytes_to_write()) );
                      }
-                     EOS_ASSERT(bytes_transferred <= conn->pending_message_buffer.bytes_to_write(), plugin_exception, "");
+                     RSN_ASSERT(bytes_transferred <= conn->pending_message_buffer.bytes_to_write(), plugin_exception, "");
                      conn->pending_message_buffer.advance_write_ptr(bytes_transferred);
                      while (conn->pending_message_buffer.bytes_to_read() > 0) {
                         uint32_t bytes_in_buffer = conn->pending_message_buffer.bytes_to_read();
@@ -3020,17 +3020,17 @@ namespace arisen {
 
          if( options.count( "p2p-listen-endpoint" ) && options.at("p2p-listen-endpoint").as<string>().length()) {
             my->p2p_address = options.at( "p2p-listen-endpoint" ).as<string>();
-            EOS_ASSERT( my->p2p_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
+            RSN_ASSERT( my->p2p_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
                         "p2p-listen-endpoint to long, must be less than ${m}", ("m", max_p2p_address_length) );
          }
          if( options.count( "p2p-server-address" ) ) {
             my->p2p_server_address = options.at( "p2p-server-address" ).as<string>();
-            EOS_ASSERT( my->p2p_server_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
+            RSN_ASSERT( my->p2p_server_address.length() <= max_p2p_address_length, chain::plugin_config_exception,
                         "p2p_server_address to long, must be less than ${m}", ("m", max_p2p_address_length) );
          }
 
          my->thread_pool_size = options.at( "net-threads" ).as<uint16_t>();
-         EOS_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
+         RSN_ASSERT( my->thread_pool_size > 0, chain::plugin_config_exception,
                      "net-threads ${num} must be greater than 0", ("num", my->thread_pool_size) );
 
          if( options.count( "p2p-peer-address" )) {
@@ -3038,7 +3038,7 @@ namespace arisen {
          }
          if( options.count( "agent-name" )) {
             my->user_agent_name = options.at( "agent-name" ).as<string>();
-            EOS_ASSERT( my->user_agent_name.length() <= max_handshake_str_length, chain::plugin_config_exception,
+            RSN_ASSERT( my->user_agent_name.length() <= max_handshake_str_length, chain::plugin_config_exception,
                         "agent-name to long, must be less than ${m}", ("m", max_handshake_str_length) );
          }
 
@@ -3057,7 +3057,7 @@ namespace arisen {
          }
 
          if( my->allowed_connections & net_plugin_impl::Specified )
-            EOS_ASSERT( options.count( "peer-key" ),
+            RSN_ASSERT( options.count( "peer-key" ),
                         plugin_config_exception,
                        "At least one peer-key must accompany 'allowed-connection=specified'" );
 
@@ -3078,7 +3078,7 @@ namespace arisen {
          }
 
          my->chain_plug = app().find_plugin<chain_plugin>();
-         EOS_ASSERT( my->chain_plug, chain::missing_chain_plugin_exception, ""  );
+         RSN_ASSERT( my->chain_plug, chain::missing_chain_plugin_exception, ""  );
          my->chain_id = my->chain_plug->get_chain_id();
          fc::rand_pseudo_bytes( my->node_id.data(), my->node_id.data_size());
          fc_ilog( logger, "my node_id is ${id}", ("id", my->node_id ));

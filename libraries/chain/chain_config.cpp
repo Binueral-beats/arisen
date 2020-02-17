@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in arisen/LICENSE.txt
+ *  @copyright defined in arisen/LICENSE
  */
 
-#include <arisen/chain/chain_config.hpp>
-#include <arisen/chain/exceptions.hpp>
+#include <arisenio/chain/chain_config.hpp>
+#include <arisenio/chain/exceptions.hpp>
 
-namespace arisen { namespace chain {
+namespace arisenio { namespace chain {
 
    void chain_config::validate()const {
       RSN_ASSERT( target_block_net_usage_pct <= config::percent_100, action_validate_exception,
@@ -43,4 +43,4 @@ namespace arisen { namespace chain {
                   "max authority depth should be at least 1" );
 }
 
-} } // namespace arisen::chain
+} } // namespace arisenio::chain

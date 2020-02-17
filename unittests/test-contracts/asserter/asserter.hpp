@@ -1,18 +1,18 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 
-#include <arisen/arisen.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[arisen::contract]] asserter : public arisen::contract {
+class [[arisenio::contract]] asserter : public arisenio::contract {
 public:
-   using arisen::contract::contract;
+   using arisenio::contract::contract;
 
-   [[arisen::action]]
+   [[arisenio::action]]
    void procassert( int8_t condition, std::string message );
 
-   [[arisen::action]]
+   [[arisenio::action]]
    void provereset();
 };

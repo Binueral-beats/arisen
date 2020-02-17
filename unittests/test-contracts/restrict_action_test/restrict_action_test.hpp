@@ -1,34 +1,34 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 
-#include <arisen/arisen.hpp>
+#include <arisenio/arisenio.hpp>
 
-class [[arisen::contract]] restrict_action_test : public arisen::contract {
+class [[arisenio::contract]] restrict_action_test : public arisenio::contract {
 public:
-   using arisen::contract::contract;
+   using arisenio::contract::contract;
 
-   [[arisen::action]]
+   [[arisenio::action]]
    void noop( );
 
-   [[arisen::action]]
-   void sendinline( arisen::name authorizer );
+   [[arisenio::action]]
+   void sendinline( arisenio::name authorizer );
 
-   [[arisen::action]]
-   void senddefer( arisen::name authorizer, uint32_t senderid );
+   [[arisenio::action]]
+   void senddefer( arisenio::name authorizer, uint32_t senderid );
 
 
-   [[arisen::action]]
-   void notifyinline( arisen::name acctonotify, arisen::name authorizer );
+   [[arisenio::action]]
+   void notifyinline( arisenio::name acctonotify, arisenio::name authorizer );
 
-   [[arisen::action]]
-   void notifydefer( arisen::name acctonotify, arisen::name authorizer, uint32_t senderid );
+   [[arisenio::action]]
+   void notifydefer( arisenio::name acctonotify, arisenio::name authorizer, uint32_t senderid );
 
-   [[arisen::on_notify("testacc::notifyinline")]]
-   void on_notify_inline( arisen::name acctonotify, arisen::name authorizer );
+   [[arisenio::on_notify("testacc::notifyinline")]]
+   void on_notify_inline( arisenio::name acctonotify, arisenio::name authorizer );
 
-   [[arisen::on_notify("testacc::notifydefer")]]
-   void on_notify_defer( arisen::name acctonotify, arisen::name authorizer, uint32_t senderid );
+   [[arisenio::on_notify("testacc::notifydefer")]]
+   void on_notify_defer( arisenio::name acctonotify, arisenio::name authorizer, uint32_t senderid );
 };

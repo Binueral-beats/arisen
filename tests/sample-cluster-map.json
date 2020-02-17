@@ -5,7 +5,7 @@
     },
     "nodes": [
         {"port": 12618, "host": "localhost"},
-        {"port": 8889, "host": "localhost"},
+        {"port": 12618, "host": "localhost"},
         {"port": 8890, "host": "localhost"}
     ]
 }

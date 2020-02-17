@@ -1,13 +1,13 @@
 #include <boost/test/unit_test.hpp>
-#include <arisen/testing/tester.hpp>
-#include <arisen/chain/abi_serializer.hpp>
-#include <arisen/chain/permission_object.hpp>
-#include <arisen/chain/authorization_manager.hpp>
+#include <arisenio/testing/tester.hpp>
+#include <arisenio/chain/abi_serializer.hpp>
+#include <arisenio/chain/permission_object.hpp>
+#include <arisenio/chain/authorization_manager.hpp>
 
-#include <arisen/chain/resource_limits.hpp>
-#include <arisen/chain/resource_limits_private.hpp>
+#include <arisenio/chain/resource_limits.hpp>
+#include <arisenio/chain/resource_limits_private.hpp>
 
-#include <arisen/testing/tester_network.hpp>
+#include <arisenio/testing/tester_network.hpp>
 
 #ifdef NON_VALIDATING_TEST
 #define TESTER tester
@@ -15,9 +15,9 @@
 #define TESTER validating_tester
 #endif
 
-using namespace arisen;
-using namespace arisen::chain;
-using namespace arisen::testing;
+using namespace arisenio;
+using namespace arisenio::chain;
+using namespace arisenio::testing;
 
 BOOST_AUTO_TEST_SUITE(auth_tests)
 
@@ -239,18 +239,18 @@ BOOST_AUTO_TEST_CASE(link_auths) { try {
 
    // Send req auth action with alice's spending key, it should fail
    BOOST_CHECK_THROW(chain.push_reqauth("alice", { permission_level{N(alice), "spending"} }, { spending_priv_key }), irrelevant_auth_exception);
-   // Link authority for arisen reqauth action with alice's spending key
-   chain.link_authority("alice", "arisen", "spending",  "reqauth");
+   // Link authority for arisenio reqauth action with alice's spending key
+   chain.link_authority("alice", "arisenio", "spending",  "reqauth");
    // Now, req auth action with alice's spending key should succeed
    chain.push_reqauth("alice", { permission_level{N(alice), "spending"} }, { spending_priv_key });
 
    chain.produce_block();
 
    // Relink the same auth should fail
-   BOOST_CHECK_THROW( chain.link_authority("alice", "arisen", "spending",  "reqauth"), action_validate_exception);
+   BOOST_CHECK_THROW( chain.link_authority("alice", "arisenio", "spending",  "reqauth"), action_validate_exception);
 
-   // Unlink alice with arisen reqauth
-   chain.unlink_authority("alice", "arisen", "reqauth");
+   // Unlink alice with arisenio reqauth
+   chain.unlink_authority("alice", "arisenio", "reqauth");
    // Now, req auth action with alice's spending key should fail
    BOOST_CHECK_THROW(chain.push_reqauth("alice", { permission_level{N(alice), "spending"} }, { spending_priv_key }), irrelevant_auth_exception);
 
@@ -258,8 +258,8 @@ BOOST_AUTO_TEST_CASE(link_auths) { try {
 
    // Send req auth action with scud key, it should fail
    BOOST_CHECK_THROW(chain.push_reqauth("alice", { permission_level{N(alice), "scud"} }, { scud_priv_key }), irrelevant_auth_exception);
-   // Link authority for any arisen action with alice's scud key
-   chain.link_authority("alice", "arisen", "scud");
+   // Link authority for any arisenio action with alice's scud key
+   chain.link_authority("alice", "arisenio", "scud");
    // Now, req auth action with alice's scud key should succeed
    chain.push_reqauth("alice", { permission_level{N(alice), "scud"} }, { scud_priv_key });
    // req auth action with alice's spending key should also be fine, since it is the parent of alice's scud key
@@ -279,7 +279,7 @@ BOOST_AUTO_TEST_CASE(link_then_update_auth) { try {
 
    chain.set_authority("alice", "first", first_pub_key, "active");
 
-   chain.link_authority("alice", "arisen", "first",  "reqauth");
+   chain.link_authority("alice", "arisenio", "first",  "reqauth");
    chain.push_reqauth("alice", { permission_level{N(alice), "first"} }, { first_priv_key });
 
    chain.produce_blocks(13); // Wait at least 6 seconds for first push_reqauth transaction to expire.
@@ -323,12 +323,12 @@ try {
                          fc_exception_message_is("account names can only be 12 chars long"));
 
 
-   // Creating account with arisen. prefix with privileged account
-   chain.create_account("arisen.test1");
+   // Creating account with arisenio. prefix with privileged account
+   chain.create_account("arisenio.test1");
 
-   // Creating account with arisen. prefix with non-privileged account, should fail
-   BOOST_CHECK_EXCEPTION(chain.create_account("arisen.test2", "joe"), action_validate_exception,
-                         fc_exception_message_is("only privileged accounts can have names that start with 'arisen.'"));
+   // Creating account with arisenio. prefix with non-privileged account, should fail
+   BOOST_CHECK_EXCEPTION(chain.create_account("arisenio.test2", "joe"), action_validate_exception,
+                         fc_exception_message_is("only privileged accounts can have names that start with 'arisenio.'"));
 
 } FC_LOG_AND_RETHROW() }
 
@@ -353,10 +353,10 @@ BOOST_AUTO_TEST_CASE( any_auth ) { try {
 
    //test.push_reqauth( N(alice), { permission_level{N(alice),"spending"} }, { spending_priv_key });
 
-   chain.link_authority( "alice", "arisen", "arisen.any", "reqauth" );
-   chain.link_authority( "bob", "arisen", "arisen.any", "reqauth" );
+   chain.link_authority( "alice", "arisenio", "arisenio.any", "reqauth" );
+   chain.link_authority( "bob", "arisenio", "arisenio.any", "reqauth" );
 
-   /// this should succeed because arisen::reqauth is linked to any permission
+   /// this should succeed because arisenio::reqauth is linked to any permission
    chain.push_reqauth("alice", { permission_level{N(alice), "spending"} }, { spending_priv_key });
 
    /// this should fail because bob cannot authorize for alice, the permission given must be one-of alices
@@ -385,8 +385,8 @@ try {
 
    const chainbase::database &db = chain.control->db();
 
-   using resource_usage_object = arisen::chain::resource_limits::resource_usage_object;
-   using by_owner = arisen::chain::resource_limits::by_owner;
+   using resource_usage_object = arisenio::chain::resource_limits::resource_usage_object;
+   using by_owner = arisenio::chain::resource_limits::by_owner;
 
    auto create_acc = [&](account_name a) {
 
@@ -502,11 +502,11 @@ BOOST_AUTO_TEST_CASE( linkauth_special ) { try {
       BOOST_REQUIRE_EXCEPTION(
          chain.push_action(config::system_account_name, linkauth::get_name(), tester_account, fc::mutable_variant_object()
                ("account", "tester")
-               ("code", "arisen")
+               ("code", "arisenio")
                ("type", type)
                ("requirement", "first")),
          action_validate_exception,
-         fc_exception_message_is(std::string("Cannot link arisen::") + std::string(type) + std::string(" to a minimum permission"))
+         fc_exception_message_is(std::string("Cannot link arisenio::") + std::string(type) + std::string(" to a minimum permission"))
       );
    };
 

@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
-#include <arisen/template_plugin/template_plugin.hpp>
+#include <arisenio/template_plugin/template_plugin.hpp>
 
-namespace arisen {
+namespace arisenio {
    static appbase::abstract_plugin& _template_plugin = app().register_plugin<template_plugin>();
 
 class template_plugin_impl {

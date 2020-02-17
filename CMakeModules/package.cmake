@@ -1,6 +1,6 @@
 set(VENDOR "block.one")
-set(PROJECT_NAME "arisen")
-set(DESC "Software for the RSN.IO network")
+set(PROJECT_NAME "arisenio")
+set(DESC "Software for the ARISEN.IO network")
 set(URL "https://github.com/arisenio/arisen")
 set(EMAIL "support@block.one")
 

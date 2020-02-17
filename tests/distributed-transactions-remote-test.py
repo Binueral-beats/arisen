@@ -26,7 +26,7 @@ killAll=args.clean_run
 
 Utils.Debug=debug
 
-killEosInstances=not dontKill
+killrsnInstances=not dontKill
 topo="mesh"
 delay=1
 prodCount=1 # producers per producer node
@@ -41,7 +41,7 @@ clusterMapJsonTemplate="""{
     },
     "nodes": [
         {"port": 12618, "host": "localhost"},
-        {"port": 8889, "host": "localhost"},
+        {"port": 12618, "host": "localhost"},
         {"port": 8890, "host": "localhost"}
     ]
 }
@@ -59,7 +59,7 @@ try:
            (pnodes, total_nodes-pnodes, topo, delay))
     Print("Stand up cluster")
     if cluster.launch(pnodes=pnodes, totalNodes=total_nodes, prodCount=prodCount, topo=topo, delay=delay) is False:
-        errorExit("Failed to stand up rsn cluster.")
+        errorExit("Failed to stand up arisen cluster.")
 
     Print ("Wait for Cluster stabilization")
     # wait for cluster to start producing blocks
@@ -86,6 +86,6 @@ try:
     Print("\nEND")
 finally:
     os.remove(nodesFile)
-    TestHelper.shutdown(cluster, None, testSuccessful, killEosInstances, False, False, killAll, dumpErrorDetails)
+    TestHelper.shutdown(cluster, None, testSuccessful, killrsnInstances, False, False, killAll, dumpErrorDetails)
 
 exit(0)

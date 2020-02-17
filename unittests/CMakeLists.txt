@@ -3,16 +3,16 @@ find_package( Gperftools QUIET )
 ### Build contracts with cdt if available ###
 include(ExternalProject)
 
-if( ARISEN_COMPILE_TEST_CONTRACTS )
-   set(ARISEN_WASM_OLD_BEHAVIOR "Off")
-   find_package(arisen.cdt REQUIRED)
+if( arisenio_COMPILE_TEST_CONTRACTS )
+   set(arisenio_WASM_OLD_BEHAVIOR "Off")
+   find_package(arisenio.cdt REQUIRED)
 
-   message( STATUS "Building contracts in directory `rsn/unittests/test-contracts/`" )
+   message( STATUS "Building contracts in directory `arisen/unittests/test-contracts/`" )
    ExternalProject_Add(
       test_contracts_project
       SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-contracts
       BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/test-contracts
-      CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${ARISEN_CDT_ROOT}/lib/cmake/arisen.cdt/ARISENWasmToolchain.cmake -DARISEN_COMPILE_TEST_CONTRACTS=${ARISEN_COMPILE_TEST_CONTRACTS}
+      CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${arisenio_CDT_ROOT}/lib/cmake/arisenio.cdt/arisenioWasmToolchain.cmake -Darisenio_COMPILE_TEST_CONTRACTS=${arisenio_COMPILE_TEST_CONTRACTS}
       UPDATE_COMMAND ""
       PATCH_COMMAND ""
       TEST_COMMAND ""
@@ -20,7 +20,7 @@ if( ARISEN_COMPILE_TEST_CONTRACTS )
       BUILD_ALWAYS 1
    )
 else()
-  message( STATUS "Not building contracts in directory `rsn/unittests/test-contracts/`" )
+  message( STATUS "Not building contracts in directory `arisen/unittests/test-contracts/`" )
   add_subdirectory(test-contracts)
 endif()
 
@@ -41,9 +41,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/contracts.hpp.in ${CMAKE_CURRENT_BINA
 file(GLOB UNIT_TESTS "*.cpp") # find all unit test suites
 add_executable( unit_test ${UNIT_TESTS}) # build unit tests as one executable
 
-target_link_libraries( unit_test ARISEN_chain chainbase ARISEN_testing fc appbase ${PLATFORM_SPECIFIC_LIBS} )
+target_link_libraries( unit_test arisenio_chain chainbase arisenio_testing fc appbase ${PLATFORM_SPECIFIC_LIBS} )
 
-target_compile_options(unit_test PUBLIC -DDISABLE_EOSLIB_SERIALIZE)
+target_compile_options(unit_test PUBLIC -DDISABLE_rsnLIB_SERIALIZE)
 target_include_directories( unit_test PUBLIC
                             ${CMAKE_SOURCE_DIR}/libraries/testing/include
                             ${CMAKE_SOURCE_DIR}/test-contracts

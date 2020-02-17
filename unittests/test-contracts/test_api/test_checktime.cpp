@@ -1,12 +1,12 @@
 /**
  * @file
- * @copyright defined in rsn/LICENSE
+ * @copyright defined in arisen/LICENSE
  */
 #include <vector>
 
-#include <ARISENlib/crypto.h>
-#include <ARISENlib/arisen.hpp>
-#include <ARISENlib/print.h>
+#include <ariseniolib/crypto.h>
+#include <ariseniolib/arisenio.hpp>
+#include <ariseniolib/print.h>
 
 #include "test_api.hpp"
 
@@ -15,7 +15,7 @@ void test_checktime::checktime_pass() {
    for ( int i = 0; i < 10000; i++ )
       p += i;
 
-   arisen::print(p);
+   arisenio::print(p);
 }
 
 
@@ -28,7 +28,7 @@ void test_checktime::checktime_failure() {
       for ( unsigned long long j = 0; j < bound; j++ )
          p += i+j+bound;
 
-   arisen::print(p);
+   arisenio::print(p);
 }
 
 constexpr size_t size = 20000000;

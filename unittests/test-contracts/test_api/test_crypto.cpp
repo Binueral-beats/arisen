@@ -1,10 +1,10 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
-#include <ARISENlib/crypto.h>
-#include <ARISENlib/arisen.hpp>
-#include <ARISENlib/print.hpp>
+#include <ariseniolib/crypto.h>
+#include <ariseniolib/arisenio.hpp>
+#include <ariseniolib/print.hpp>
 
 #include "test_api.hpp"
 
@@ -202,7 +202,7 @@ void test_crypto::test_recover_key_assert_false() {
    sig_hash_key sh;
    read_action_data( (char*)&sh, sizeof(sh) );
    assert_recover_key( &sh.hash, (const char*)&sh.sig, sizeof(sh.sig), (const char*)&sh.pk, sizeof(sh.pk) );
-   ARISEN_assert( false, "should have thrown an error" );
+   arisenio_assert( false, "should have thrown an error" );
 }
 
 void test_crypto::test_recover_key() {
@@ -212,211 +212,211 @@ void test_crypto::test_recover_key() {
    recover_key( &sh.hash, (const char*)&sh.sig, sizeof(sh.sig), pk.data, sizeof(pk) );
    for ( uint32_t i=0; i < sizeof(pk); i++ )
       if ( pk.data[i] != sh.pk.data[i] )
-         ARISEN_assert( false, "public key does not match" );
+         arisenio_assert( false, "public key does not match" );
 }
 
 void test_crypto::test_sha1() {
-   arisen::checksum160 tmp;
+   arisenio::checksum160 tmp;
 
-   tmp = arisen::sha1( test1, my_strlen(test1) );
-   ARISEN_assert( my_memcmp((void *)test1_ok_1, &tmp, sizeof(arisen::checksum160)), "sha1 test1" );
+   tmp = arisenio::sha1( test1, my_strlen(test1) );
+   arisenio_assert( my_memcmp((void *)test1_ok_1, &tmp, sizeof(arisenio::checksum160)), "sha1 test1" );
 
-   tmp = arisen::sha1( test3, my_strlen(test3) );
-   ARISEN_assert( my_memcmp((void *)test3_ok_1, &tmp, sizeof(arisen::checksum160)), "sha1 test3" );
+   tmp = arisenio::sha1( test3, my_strlen(test3) );
+   arisenio_assert( my_memcmp((void *)test3_ok_1, &tmp, sizeof(arisenio::checksum160)), "sha1 test3" );
 
-   tmp = arisen::sha1( test4, my_strlen(test4) );
-   ARISEN_assert( my_memcmp((void *)test4_ok_1, &tmp, sizeof(arisen::checksum160)), "sha1 test4" );
+   tmp = arisenio::sha1( test4, my_strlen(test4) );
+   arisenio_assert( my_memcmp((void *)test4_ok_1, &tmp, sizeof(arisenio::checksum160)), "sha1 test4" );
 
-   tmp = arisen::sha1( test5, my_strlen(test5) );
-   ARISEN_assert( my_memcmp((void *)test5_ok_1, &tmp, sizeof(arisen::checksum160)), "sha1 test5" );
+   tmp = arisenio::sha1( test5, my_strlen(test5) );
+   arisenio_assert( my_memcmp((void *)test5_ok_1, &tmp, sizeof(arisenio::checksum160)), "sha1 test5" );
 }
 
 void test_crypto::test_sha256() {
-  arisen::checksum256 tmp;
+  arisenio::checksum256 tmp;
 
-  tmp = arisen::sha256( test1, my_strlen(test1) );
-  ARISEN_assert( my_memcmp((void *)test1_ok_256, &tmp, sizeof(arisen::checksum256)), "sha256 test1" );
+  tmp = arisenio::sha256( test1, my_strlen(test1) );
+  arisenio_assert( my_memcmp((void *)test1_ok_256, &tmp, sizeof(arisenio::checksum256)), "sha256 test1" );
 
-  tmp = arisen::sha256( test3, my_strlen(test3) );
-  ARISEN_assert( my_memcmp((void *)test3_ok_256, &tmp, sizeof(arisen::checksum256)), "sha256 test3" );
+  tmp = arisenio::sha256( test3, my_strlen(test3) );
+  arisenio_assert( my_memcmp((void *)test3_ok_256, &tmp, sizeof(arisenio::checksum256)), "sha256 test3" );
 
-  tmp = arisen::sha256( test4, my_strlen(test4) );
-  ARISEN_assert( my_memcmp((void *)test4_ok_256, &tmp, sizeof(arisen::checksum256)), "sha256 test4" );
+  tmp = arisenio::sha256( test4, my_strlen(test4) );
+  arisenio_assert( my_memcmp((void *)test4_ok_256, &tmp, sizeof(arisenio::checksum256)), "sha256 test4" );
 
-  tmp = arisen::sha256( test5, my_strlen(test5) );
-  ARISEN_assert( my_memcmp((void *)test5_ok_256, &tmp, sizeof(arisen::checksum256)), "sha256 test5" );
+  tmp = arisenio::sha256( test5, my_strlen(test5) );
+  arisenio_assert( my_memcmp((void *)test5_ok_256, &tmp, sizeof(arisenio::checksum256)), "sha256 test5" );
 }
 
 void test_crypto::test_sha512() {
-  arisen::checksum512 tmp;
+  arisenio::checksum512 tmp;
 
-  tmp = arisen::sha512( test1, my_strlen(test1) );
-  ARISEN_assert( my_memcmp((void *)test1_ok_512, &tmp, sizeof(arisen::checksum512)), "sha512 test1" );
+  tmp = arisenio::sha512( test1, my_strlen(test1) );
+  arisenio_assert( my_memcmp((void *)test1_ok_512, &tmp, sizeof(arisenio::checksum512)), "sha512 test1" );
 
-  tmp = arisen::sha512( test3, my_strlen(test3) );
-  ARISEN_assert( my_memcmp((void *)test3_ok_512, &tmp, sizeof(arisen::checksum512)), "sha512 test3" );
+  tmp = arisenio::sha512( test3, my_strlen(test3) );
+  arisenio_assert( my_memcmp((void *)test3_ok_512, &tmp, sizeof(arisenio::checksum512)), "sha512 test3" );
 
-  tmp = arisen::sha512( test4, my_strlen(test4) );
-  ARISEN_assert( my_memcmp((void *)test4_ok_512, &tmp, sizeof(arisen::checksum512)), "sha512 test4" );
+  tmp = arisenio::sha512( test4, my_strlen(test4) );
+  arisenio_assert( my_memcmp((void *)test4_ok_512, &tmp, sizeof(arisenio::checksum512)), "sha512 test4" );
 
-  tmp = arisen::sha512( test5, my_strlen(test5) );
-  ARISEN_assert( my_memcmp((void *)test5_ok_512, &tmp, sizeof(arisen::checksum512)), "sha512 test5" );
+  tmp = arisenio::sha512( test5, my_strlen(test5) );
+  arisenio_assert( my_memcmp((void *)test5_ok_512, &tmp, sizeof(arisenio::checksum512)), "sha512 test5" );
 }
 
 void test_crypto::test_ripemd160() {
-  arisen::checksum160 tmp;
+  arisenio::checksum160 tmp;
 
-  tmp = arisen::ripemd160( test1, my_strlen(test1) );
-  ARISEN_assert( my_memcmp((void *)test1_ok_ripe, &tmp, sizeof(arisen::checksum160)), "ripemd160 test1" );
+  tmp = arisenio::ripemd160( test1, my_strlen(test1) );
+  arisenio_assert( my_memcmp((void *)test1_ok_ripe, &tmp, sizeof(arisenio::checksum160)), "ripemd160 test1" );
 
-  tmp = arisen::ripemd160( test3, my_strlen(test3) );
-  ARISEN_assert( my_memcmp((void *)test3_ok_ripe, &tmp, sizeof(arisen::checksum160)), "ripemd160 test3" );
+  tmp = arisenio::ripemd160( test3, my_strlen(test3) );
+  arisenio_assert( my_memcmp((void *)test3_ok_ripe, &tmp, sizeof(arisenio::checksum160)), "ripemd160 test3" );
 
-  tmp = arisen::ripemd160( test4, my_strlen(test4) );
-  ARISEN_assert( my_memcmp((void *)test4_ok_ripe, &tmp, sizeof(arisen::checksum160)), "ripemd160 test4" );
+  tmp = arisenio::ripemd160( test4, my_strlen(test4) );
+  arisenio_assert( my_memcmp((void *)test4_ok_ripe, &tmp, sizeof(arisenio::checksum160)), "ripemd160 test4" );
 
-  tmp = arisen::ripemd160( test5, my_strlen(test5) );
-  ARISEN_assert( my_memcmp((void *)test5_ok_ripe, &tmp, sizeof(arisen::checksum160)), "ripemd160 test5" );
+  tmp = arisenio::ripemd160( test5, my_strlen(test5) );
+  arisenio_assert( my_memcmp((void *)test5_ok_ripe, &tmp, sizeof(arisenio::checksum160)), "ripemd160 test5" );
 }
 
 void test_crypto::sha256_null() {
-  arisen::checksum256 tmp;
-  tmp = arisen::sha256( nullptr, 100);
-  ARISEN_assert( false, "should've thrown an error" );
+  arisenio::checksum256 tmp;
+  tmp = arisenio::sha256( nullptr, 100);
+  arisenio_assert( false, "should've thrown an error" );
 }
 
 void test_crypto::sha1_no_data() {
-  arisen::checksum160 tmp;
+  arisenio::checksum160 tmp;
 
-  tmp = arisen::sha1( test2, my_strlen(test2) );
-  ARISEN_assert( my_memcmp((void *)test2_ok_1, &tmp, sizeof(arisen::checksum160)), "sha1 test2" );
+  tmp = arisenio::sha1( test2, my_strlen(test2) );
+  arisenio_assert( my_memcmp((void *)test2_ok_1, &tmp, sizeof(arisenio::checksum160)), "sha1 test2" );
 }
 
 void test_crypto::sha256_no_data() {
-  arisen::checksum256 tmp;
+  arisenio::checksum256 tmp;
 
-  tmp = arisen::sha256( test2, my_strlen(test2) );
-  ARISEN_assert( my_memcmp((void *)test2_ok_256, &tmp, sizeof(arisen::checksum256)), "sha256 test2" );
+  tmp = arisenio::sha256( test2, my_strlen(test2) );
+  arisenio_assert( my_memcmp((void *)test2_ok_256, &tmp, sizeof(arisenio::checksum256)), "sha256 test2" );
 }
 
 void test_crypto::sha512_no_data() {
-  arisen::checksum512 tmp;
+  arisenio::checksum512 tmp;
 
-  tmp = arisen::sha512( test2, my_strlen(test2) );
-  ARISEN_assert( my_memcmp((void *)test2_ok_512, &tmp, sizeof(arisen::checksum512)), "sha512 test2" );
+  tmp = arisenio::sha512( test2, my_strlen(test2) );
+  arisenio_assert( my_memcmp((void *)test2_ok_512, &tmp, sizeof(arisenio::checksum512)), "sha512 test2" );
 }
 
 void test_crypto::ripemd160_no_data() {
-  arisen::checksum160 tmp;
+  arisenio::checksum160 tmp;
 
-  tmp = arisen::ripemd160( test2, my_strlen(test2) );
-  ARISEN_assert( my_memcmp((void *)test2_ok_ripe, &tmp, sizeof(arisen::checksum160)), "ripemd160 test2" );
+  tmp = arisenio::ripemd160( test2, my_strlen(test2) );
+  arisenio_assert( my_memcmp((void *)test2_ok_ripe, &tmp, sizeof(arisenio::checksum160)), "ripemd160 test2" );
 }
 
 
 void test_crypto::assert_sha256_false() {
-  arisen::checksum256 tmp;
+  arisenio::checksum256 tmp;
 
-  tmp = arisen::sha256( test1, my_strlen(test1) );
+  tmp = arisenio::sha256( test1, my_strlen(test1) );
   tmp.data()[0] ^= (uint64_t)(-1);
   assert_sha256( test1, my_strlen(test1), tmp );
    
-  ARISEN_assert( false, "should have failed" );
+  arisenio_assert( false, "should have failed" );
 }
 
 void test_crypto::assert_sha256_true() {
-  arisen::checksum256 tmp;
+  arisenio::checksum256 tmp;
 
-  tmp = arisen::sha256( test1, my_strlen(test1) );
+  tmp = arisenio::sha256( test1, my_strlen(test1) );
   assert_sha256( test1, my_strlen(test1), tmp );
 
-  tmp = arisen::sha256( test3, my_strlen(test3) );
+  tmp = arisenio::sha256( test3, my_strlen(test3) );
   assert_sha256( test3, my_strlen(test3), tmp );
 
-  tmp = arisen::sha256( test4, my_strlen(test4) );
+  tmp = arisenio::sha256( test4, my_strlen(test4) );
   assert_sha256( test4, my_strlen(test4), tmp );
 
-  tmp = arisen::sha256( test5, my_strlen(test5) );
+  tmp = arisenio::sha256( test5, my_strlen(test5) );
   assert_sha256( test5, my_strlen(test5), tmp );
 }
 
 void test_crypto::assert_sha1_false() {
-  arisen::checksum160 tmp;
+  arisenio::checksum160 tmp;
 
-  tmp = arisen::sha1( test1, my_strlen(test1) );
+  tmp = arisenio::sha1( test1, my_strlen(test1) );
   tmp.data()[0] ^= (uint64_t)(-1);
   assert_sha1( test1, my_strlen(test1), tmp );
    
-  ARISEN_assert( false, "should have failed" );
+  arisenio_assert( false, "should have failed" );
 }
 
 
 void test_crypto::assert_sha1_true() {
-  arisen::checksum160 tmp;
+  arisenio::checksum160 tmp;
 
-  tmp = arisen::sha1( test1, my_strlen(test1) );
+  tmp = arisenio::sha1( test1, my_strlen(test1) );
   assert_sha1( test1, my_strlen(test1), tmp );
 
-  tmp = arisen::sha1( test3, my_strlen(test3) );
+  tmp = arisenio::sha1( test3, my_strlen(test3) );
   assert_sha1( test3, my_strlen(test3), tmp );
 
-  tmp = arisen::sha1( test4, my_strlen(test4) );
+  tmp = arisenio::sha1( test4, my_strlen(test4) );
   assert_sha1( test4, my_strlen(test4), tmp );
 
-  tmp = arisen::sha1( test5, my_strlen(test5) );
+  tmp = arisenio::sha1( test5, my_strlen(test5) );
   assert_sha1( test5, my_strlen(test5), tmp );
 }
 
 void test_crypto::assert_sha512_false() { 
-  arisen::checksum512 tmp;
+  arisenio::checksum512 tmp;
 
-  tmp = arisen::sha512( test1, my_strlen(test1) );
+  tmp = arisenio::sha512( test1, my_strlen(test1) );
   tmp.data()[0] ^= (uint64_t)(-1);
   assert_sha512( test1, my_strlen(test1), tmp );
    
-  ARISEN_assert(false, "should have failed");
+  arisenio_assert(false, "should have failed");
 }
 
 
 void test_crypto::assert_sha512_true() {
-  arisen::checksum512 tmp;
+  arisenio::checksum512 tmp;
 
-  tmp = arisen::sha512( test1, my_strlen(test1) );
+  tmp = arisenio::sha512( test1, my_strlen(test1) );
   assert_sha512( test1, my_strlen(test1), tmp );
 
-  tmp = arisen::sha512( test3, my_strlen(test3) );
+  tmp = arisenio::sha512( test3, my_strlen(test3) );
   assert_sha512( test3, my_strlen(test3), tmp );
 
-  tmp = arisen::sha512( test4, my_strlen(test4) );
+  tmp = arisenio::sha512( test4, my_strlen(test4) );
   assert_sha512( test4, my_strlen(test4), tmp );
 
-  tmp = arisen::sha512( test5, my_strlen(test5) );
+  tmp = arisenio::sha512( test5, my_strlen(test5) );
   assert_sha512( test5, my_strlen(test5), tmp );
 }
 
 void test_crypto::assert_ripemd160_false() {
-  arisen::checksum160 tmp;
+  arisenio::checksum160 tmp;
 
-  tmp = arisen::ripemd160( test1, my_strlen(test1) );
+  tmp = arisenio::ripemd160( test1, my_strlen(test1) );
   tmp.data()[0] ^= (uint64_t)(-1);
   assert_ripemd160( test1, my_strlen(test1), tmp );
    
-  ARISEN_assert( false, "should have failed" );
+  arisenio_assert( false, "should have failed" );
 }
 
 
 void test_crypto::assert_ripemd160_true() {
-  arisen::checksum160 tmp;
+  arisenio::checksum160 tmp;
 
-  tmp = arisen::ripemd160( test1, my_strlen(test1) );
+  tmp = arisenio::ripemd160( test1, my_strlen(test1) );
   assert_ripemd160( test1, my_strlen(test1), tmp );
 
-  tmp = arisen::ripemd160( test3, my_strlen(test3) );
+  tmp = arisenio::ripemd160( test3, my_strlen(test3) );
   assert_ripemd160( test3, my_strlen(test3), tmp );
 
-  tmp = arisen::ripemd160( test4, my_strlen(test4) );
+  tmp = arisenio::ripemd160( test4, my_strlen(test4) );
   assert_ripemd160( test4, my_strlen(test4), tmp );
 
-  tmp = arisen::ripemd160( test5, my_strlen(test5) );
+  tmp = arisenio::ripemd160( test5, my_strlen(test5) );
   assert_ripemd160( test5, my_strlen(test5), tmp );
 }

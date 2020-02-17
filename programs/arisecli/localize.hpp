@@ -1,13 +1,13 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #pragma once
 
 #include <libintl.h>
 #include <fc/variant.hpp>
 
-namespace arisen { namespace client { namespace localize {
+namespace arisenio { namespace client { namespace localize {
    #if !defined(_)
    #define _(str) str
    #endif

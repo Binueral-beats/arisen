@@ -1,14 +1,14 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
-#include <arisen/test_control_plugin/test_control_plugin.hpp>
+#include <arisenio/test_control_plugin/test_control_plugin.hpp>
 #include <fc/optional.hpp>
 #include <atomic>
 
 namespace fc { class variant; }
 
-namespace arisen {
+namespace arisenio {
 
 static appbase::abstract_plugin& _test_control_plugin = app().register_plugin<test_control_plugin>();
 
@@ -140,4 +140,4 @@ read_write::kill_node_on_producer_results read_write::kill_node_on_producer(cons
 
 } // namespace test_control_apis
 
-} // namespace arisen
+} // namespace arisenio

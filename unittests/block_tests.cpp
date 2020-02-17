@@ -1,11 +1,11 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include <boost/test/unit_test.hpp>
-#include <arisen/testing/tester.hpp>
+#include <arisenio/testing/tester.hpp>
 
-using namespace arisen;
+using namespace arisenio;
 using namespace testing;
 using namespace chain;
 

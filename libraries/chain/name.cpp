@@ -1,10 +1,10 @@
-#include <arisen/chain/name.hpp>
+#include <arisenio/chain/name.hpp>
 #include <fc/variant.hpp>
 #include <boost/algorithm/string.hpp>
 #include <fc/exception/exception.hpp>
-#include <arisen/chain/exceptions.hpp>
+#include <arisenio/chain/exceptions.hpp>
 
-namespace arisen { namespace chain { 
+namespace arisenio { namespace chain { 
 
    void name::set( const char* str ) {
       const auto len = strnlen(str, 14);
@@ -32,9 +32,9 @@ namespace arisen { namespace chain {
       return str;
    }
 
-} } /// arisen::chain
+} } /// arisenio::chain
 
 namespace fc {
-  void to_variant(const arisen::chain::name& c, fc::variant& v) { v = std::string(c); }
-  void from_variant(const fc::variant& v, arisen::chain::name& check) { check = v.get_string(); }
+  void to_variant(const arisenio::chain::name& c, fc::variant& v) { v = std::string(c); }
+  void from_variant(const fc::variant& v, arisenio::chain::name& check) { check = v.get_string(); }
 } // fc

@@ -1,32 +1,136 @@
 /**
  *  @file
- *  @copyright defined in arisen/LICENSE.txt
+ *  @copyright defined in arisen/LICENSE
  */
 
-#include <arisen/chain/authorization_manager.hpp>
-#include <arisen/chain/exceptions.hpp>
-#include <arisen/chain/permission_object.hpp>
-#include <arisen/chain/permission_link_object.hpp>
-#include <arisen/chain/authority_checker.hpp>
-#include <arisen/chain/controller.hpp>
-#include <arisen/chain/global_property_object.hpp>
-#include <arisen/chain/contract_types.hpp>
-#include <arisen/chain/generated_transaction_object.hpp>
+#include <arisenio/chain/authorization_manager.hpp>
+#include <arisenio/chain/exceptions.hpp>
+#include <arisenio/chain/permission_object.hpp>
+#include <arisenio/chain/permission_link_object.hpp>
+#include <arisenio/chain/authority_checker.hpp>
+#include <arisenio/chain/controller.hpp>
+#include <arisenio/chain/global_property_object.hpp>
+#include <arisenio/chain/contract_types.hpp>
+#include <arisenio/chain/generated_transaction_object.hpp>
 #include <boost/tuple/tuple_io.hpp>
+#include <arisenio/chain/database_utils.hpp>
 
-namespace arisen { namespace chain {
+
+namespace arisenio { namespace chain {
+
+   using authorization_index_set = index_set<
+      permission_index,
+      permission_usage_index,
+      permission_link_index
+   >;
 
    authorization_manager::authorization_manager(controller& c, database& d)
    :_control(c),_db(d){}
 
    void authorization_manager::add_indices() {
-      _db.add_index<permission_index>();
-      _db.add_index<permission_usage_index>();
-      _db.add_index<permission_link_index>();
+      authorization_index_set::add_indices(_db);
    }
 
    void authorization_manager::initialize_database() {
       _db.create<permission_object>([](auto&){}); /// reserve perm 0 (used else where)
+   }
+
+   namespace detail {
+      template<>
+      struct snapshot_row_traits<permission_object> {
+         using value_type = permission_object;
+         using snapshot_type = snapshot_permission_object;
+
+         static snapshot_permission_object to_snapshot_row(const permission_object& value, const chainbase::database& db) {
+            snapshot_permission_object res;
+            res.name = value.name;
+            res.owner = value.owner;
+            res.last_updated = value.last_updated;
+            res.auth = value.auth.to_authority();
+
+            // lookup parent name
+            const auto& parent = db.get(value.parent);
+            res.parent = parent.name;
+
+            // lookup the usage object
+            const auto& usage = db.get<permission_usage_object>(value.usage_id);
+            res.last_used = usage.last_used;
+
+            return res;
+         };
+
+         static void from_snapshot_row(snapshot_permission_object&& row, permission_object& value, chainbase::database& db) {
+            value.name = row.name;
+            value.owner = row.owner;
+            value.last_updated = row.last_updated;
+            value.auth = row.auth;
+
+            value.parent = 0;
+            if (value.id == 0) {
+               RSN_ASSERT(row.parent == permission_name(), snapshot_exception, "Unexpected parent name on reserved permission 0");
+               RSN_ASSERT(row.name == permission_name(), snapshot_exception, "Unexpected permission name on reserved permission 0");
+               RSN_ASSERT(row.owner == name(), snapshot_exception, "Unexpected owner name on reserved permission 0");
+               RSN_ASSERT(row.auth.accounts.size() == 0,  snapshot_exception, "Unexpected auth accounts on reserved permission 0");
+               RSN_ASSERT(row.auth.keys.size() == 0,  snapshot_exception, "Unexpected auth keys on reserved permission 0");
+               RSN_ASSERT(row.auth.waits.size() == 0,  snapshot_exception, "Unexpected auth waits on reserved permission 0");
+               RSN_ASSERT(row.auth.threshold == 0,  snapshot_exception, "Unexpected auth threshold on reserved permission 0");
+               RSN_ASSERT(row.last_updated == time_point(),  snapshot_exception, "Unexpected auth last updated on reserved permission 0");
+               value.parent = 0;
+            } else if ( row.parent != permission_name()){
+               const auto& parent = db.get<permission_object, by_owner>(boost::make_tuple(row.owner, row.parent));
+
+               RSN_ASSERT(parent.id != 0, snapshot_exception, "Unexpected mapping to reserved permission 0");
+               value.parent = parent.id;
+            }
+
+            if (value.id != 0) {
+               // create the usage object
+               const auto& usage = db.create<permission_usage_object>([&](auto& p) {
+                  p.last_used = row.last_used;
+               });
+               value.usage_id = usage.id;
+            } else {
+               value.usage_id = 0;
+            }
+         }
+      };
+   }
+
+   void authorization_manager::add_to_snapshot( const snapshot_writer_ptr& snapshot ) const {
+      authorization_index_set::walk_indices([this, &snapshot]( auto utils ){
+         using section_t = typename decltype(utils)::index_t::value_type;
+
+         // skip the permission_usage_index as its inlined with permission_index
+         if (std::is_same<section_t, permission_usage_object>::value) {
+            return;
+         }
+
+         snapshot->write_section<section_t>([this]( auto& section ){
+            decltype(utils)::walk(_db, [this, &section]( const auto &row ) {
+               section.add_row(row, _db);
+            });
+         });
+      });
+   }
+
+   void authorization_manager::read_from_snapshot( const snapshot_reader_ptr& snapshot ) {
+      authorization_index_set::walk_indices([this, &snapshot]( auto utils ){
+         using section_t = typename decltype(utils)::index_t::value_type;
+
+         // skip the permission_usage_index as its inlined with permission_index
+         if (std::is_same<section_t, permission_usage_object>::value) {
+            return;
+         }
+
+         snapshot->read_section<section_t>([this]( auto& section ) {
+            bool more = !section.empty();
+            while(more) {
+               decltype(utils)::create(_db, [this, &section, &more]( auto &row ) {
+                  more = section.read_row(row, _db);
+               });
+            }
+         });
+      });
    }
 
    const permission_object& authorization_manager::create_permission( account_name account,
@@ -115,13 +219,13 @@ namespace arisen { namespace chain {
    { try {
       RSN_ASSERT( !level.actor.empty() && !level.permission.empty(), invalid_permission, "Invalid permission" );
       return _db.find<permission_object, by_owner>( boost::make_tuple(level.actor,level.permission) );
-   } RSN_RETHROW_EXCEPTIONS( chain::permission_query_exception, "Failed to retrieve permission: ${level}", ("level", level) ) }
+   } rsn_RETHROW_EXCEPTIONS( chain::permission_query_exception, "Failed to retrieve permission: ${level}", ("level", level) ) }
 
    const permission_object&  authorization_manager::get_permission( const permission_level& level )const
    { try {
       RSN_ASSERT( !level.actor.empty() && !level.permission.empty(), invalid_permission, "Invalid permission" );
       return _db.get<permission_object, by_owner>( boost::make_tuple(level.actor,level.permission) );
-   } RSN_RETHROW_EXCEPTIONS( chain::permission_query_exception, "Failed to retrieve permission: ${level}", ("level", level) ) }
+   } rsn_RETHROW_EXCEPTIONS( chain::permission_query_exception, "Failed to retrieve permission: ${level}", ("level", level) ) }
 
    optional<permission_name> authorization_manager::lookup_linked_permission( account_name authorizer_account,
                                                                               account_name scope,
@@ -169,7 +273,7 @@ namespace arisen { namespace chain {
          if( !linked_permission )
             return config::active_name;
 
-         if( *linked_permission == config::arisen_any_name )
+         if( *linked_permission == config::arisenio_any_name )
             return optional<permission_name>();
 
          return linked_permission;
@@ -227,20 +331,24 @@ namespace arisen { namespace chain {
       RSN_ASSERT( auth.actor == link.account, irrelevant_auth_exception,
                   "the owner of the linked permission needs to be the actor of the declared authorization" );
 
-      RSN_ASSERT( link.type != updateauth::get_name(),  action_validate_exception,
-                  "Cannot link arisen::updateauth to a minimum permission" );
-      RSN_ASSERT( link.type != deleteauth::get_name(),  action_validate_exception,
-                  "Cannot link arisen::deleteauth to a minimum permission" );
-      RSN_ASSERT( link.type != linkauth::get_name(),    action_validate_exception,
-                  "Cannot link arisen::linkauth to a minimum permission" );
-      RSN_ASSERT( link.type != unlinkauth::get_name(),  action_validate_exception,
-                  "Cannot link arisen::unlinkauth to a minimum permission" );
-      RSN_ASSERT( link.type != canceldelay::get_name(), action_validate_exception,
-                  "Cannot link arisen::canceldelay to a minimum permission" );
+      if( link.code == config::system_account_name
+            || !_control.is_builtin_activated( builtin_protocol_feature_t::fix_linkauth_restriction ) ) 
+      {
+         RSN_ASSERT( link.type != updateauth::get_name(),  action_validate_exception,
+                     "Cannot link arisenio::updateauth to a minimum permission" );
+         RSN_ASSERT( link.type != deleteauth::get_name(),  action_validate_exception,
+                     "Cannot link arisenio::deleteauth to a minimum permission" );
+         RSN_ASSERT( link.type != linkauth::get_name(),    action_validate_exception,
+                     "Cannot link arisenio::linkauth to a minimum permission" );
+         RSN_ASSERT( link.type != unlinkauth::get_name(),  action_validate_exception,
+                     "Cannot link arisenio::unlinkauth to a minimum permission" );
+         RSN_ASSERT( link.type != canceldelay::get_name(), action_validate_exception,
+                     "Cannot link arisenio::canceldelay to a minimum permission" );
+      }
 
       const auto linked_permission_name = lookup_minimum_permission(link.account, link.code, link.type);
 
-      if( !linked_permission_name ) // if action is linked to arisen.any permission
+      if( !linked_permission_name ) // if action is linked to arisenio.any permission
          return;
 
       RSN_ASSERT( get_permission(auth).satisfies( get_permission({link.account, *linked_permission_name}),
@@ -265,7 +373,7 @@ namespace arisen { namespace chain {
                   "cannot unlink non-existent permission link of account '${account}' for actions matching '${code}::${action}'",
                   ("account", unlink.account)("code", unlink.code)("action", unlink.type) );
 
-      if( *unlinked_permission_name == config::arisen_any_name )
+      if( *unlinked_permission_name == config::arisenio_any_name )
          return;
 
       RSN_ASSERT( get_permission(auth).satisfies( get_permission({unlink.account, *unlinked_permission_name}),
@@ -327,7 +435,8 @@ namespace arisen { namespace chain {
                                                const flat_set<permission_level>&    provided_permissions,
                                                fc::microseconds                     provided_delay,
                                                const std::function<void()>&         _checktime,
-                                               bool                                 allow_unused_keys
+                                               bool                                 allow_unused_keys,
+                                               const flat_set<permission_level>&    satisfied_authorizations
                                              )const
    {
       const auto& checktime = ( static_cast<bool>(_checktime) ? _checktime : _noop_checktime );
@@ -374,7 +483,7 @@ namespace arisen { namespace chain {
 
             if( !special_case ) {
                auto min_permission_name = lookup_minimum_permission(declared_auth.actor, act.account, act.name);
-               if( min_permission_name ) { // since special cases were already handled, it should only be false if the permission is arisen.any
+               if( min_permission_name ) { // since special cases were already handled, it should only be false if the permission is arisenio.any
                   const auto& min_permission = get_permission({declared_auth.actor, *min_permission_name});
                   RSN_ASSERT( get_permission(declared_auth).satisfies( min_permission,
                                                                        _db.get_index<permission_index>().indices() ),
@@ -384,9 +493,11 @@ namespace arisen { namespace chain {
                }
             }
 
-            auto res = permissions_to_satisfy.emplace( declared_auth, delay );
-            if( !res.second && res.first->second > delay) { // if the declared_auth was already in the map and with a higher delay
-               res.first->second = delay;
+            if( satisfied_authorizations.find( declared_auth ) == satisfied_authorizations.end() ) {
+               auto res = permissions_to_satisfy.emplace( declared_auth, delay );
+               if( !res.second && res.first->second > delay) { // if the declared_auth was already in the map and with a higher delay
+                  res.first->second = delay;
+               }
             }
          }
       }
@@ -485,4 +596,4 @@ namespace arisen { namespace chain {
       return checker.used_keys();
    }
 
-} } /// namespace arisen::chain
+} } /// namespace arisenio::chain

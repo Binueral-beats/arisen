@@ -1,16 +1,16 @@
 /**
  *  @file
- *  @copyright defined in rsn/LICENSE
+ *  @copyright defined in arisen/LICENSE
  */
 #include <algorithm>
 #include <iterator>
 #include <vector>
 
-#include <arisen/chain/controller.hpp>
-#include <arisen/chain/exceptions.hpp>
-#include <arisen/chain/permission_object.hpp>
-#include <arisen/chain/global_property_object.hpp>
-#include <arisen/testing/tester.hpp>
+#include <arisenio/chain/controller.hpp>
+#include <arisenio/chain/exceptions.hpp>
+#include <arisenio/chain/permission_object.hpp>
+#include <arisenio/chain/global_property_object.hpp>
+#include <arisenio/testing/tester.hpp>
 
 #include <fc/crypto/digest.hpp>
 
@@ -19,9 +19,9 @@
 #include <boost/range/algorithm/permutation.hpp>
 #include <boost/test/unit_test.hpp>
 
-using namespace arisen;
+using namespace arisenio;
 using namespace chain;
-using tester = arisen::testing::tester;
+using tester = arisenio::testing::tester;
 
 BOOST_AUTO_TEST_SUITE(special_account_tests)
 

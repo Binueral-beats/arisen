@@ -19,25 +19,25 @@ class Utils:
     Debug=False
     FNull = open(os.devnull, 'w')
 
-    EosClientPath="programs/arisecli/arisecli"
-    MiscEosClientArgs="--no-auto-awalletd"
+    rsnClientPath="programs/clrsn/clrsn"
+    MiscrsnClientArgs="--no-auto-krsnd"
 
-    EosWalletName="awalletd"
-    EosWalletPath="programs/awalletd/"+ EosWalletName
+    rsnWalletName="krsnd"
+    rsnWalletPath="programs/krsnd/"+ rsnWalletName
 
-    EosServerName="aos"
-    EosServerPath="programs/aos/"+ EosServerName
+    rsnServerName="nodrsn"
+    rsnServerPath="programs/nodrsn/"+ rsnServerName
 
-    EosLauncherPath="programs/arisen-launcher/arisen-launcher"
+    rsnLauncherPath="programs/arisenio-launcher/arisenio-launcher"
     MongoPath="mongo"
     ShuttingDown=False
     CheckOutputDeque=deque(maxlen=10)
 
-    EosBlockLogPath="programs/arisen-blocklog/arisen-blocklog"
+    rsnBlockLogPath="programs/arisenio-blocklog/arisenio-blocklog"
 
     FileDivider="================================================================="
     DataDir="var/lib/"
-    ConfigDir="etc/arisen/"
+    ConfigDir="etc/arisenio/"
 
     @staticmethod
     def Print(*args, **kwargs):
@@ -273,7 +273,7 @@ class Utils:
     @staticmethod
     def getBlockLog(blockLogLocation, silentErrors=False, exitOnError=False):
         assert(isinstance(blockLogLocation, str))
-        cmd="%s --blocks-dir %s --as-json-array" % (Utils.EosBlockLogPath, blockLogLocation)
+        cmd="%s --blocks-dir %s --as-json-array" % (Utils.rsnBlockLogPath, blockLogLocation)
         if Utils.Debug: Utils.Print("cmd: %s" % (cmd))
         rtn=None
         try:
